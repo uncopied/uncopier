@@ -1,0 +1,4 @@
+Made a kmd client
+Created wallet 'mylinuxwallet' with ID: 0377a9874ab7818c861ba465647e7e7b
+Generated address C2MCKQYJCU4RNWCQVWWSWEHGPAD37BEMQTIMVD6XF36AUIPKOXWIZOO7ZE
+
