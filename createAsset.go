@@ -68,7 +68,7 @@ func main() {
 	freeze := addr // specified address can freeze or unfreeze user asset holdings
 	clawback := addr // specified address can revoke user asset holdings and send them to other addresses
 	manager := addr // specified address can change reserve, freeze, clawback, and manager
-	unitName := "lady-1/15" // used to display asset units to user
+	unitName := "lady-1" // used to display asset units to user
 	assetName := "Portrait of a Lady (1/15)" // "friendly name" of asset
 	note := []byte("test asset create") // arbitrary data to be stored in the transaction; here, none is stored
 	assetURL := "https://uncopied.org/xEkMZ.png" // optional string pointing to a URL relating to the asset. 32 character length.
