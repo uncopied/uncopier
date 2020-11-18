@@ -71,7 +71,7 @@ func main() {
 	unitName := "lady-1/15" // used to display asset units to user
 	assetName := "Portrait of a Lady (1/15)" // "friendly name" of asset
 	note := []byte("test asset create") // arbitrary data to be stored in the transaction; here, none is stored
-	assetURL := "https://uncopied.org/970e1687-ba6b-410d-bb74-6e23d5291fef.png" // optional string pointing to a URL relating to the asset
+	assetURL := "https://uncopied.org/xEkMZ.png" // optional string pointing to a URL relating to the asset. 32 character length.
 	assetMetadataHash := "0bc777329a2919fd6ffa96bace9a4779" // optional hash commitment of some sort relating to the asset. 32 character length.
 
 	// Get the suggested transaction parameters
