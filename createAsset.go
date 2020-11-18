@@ -2,17 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/algorand/go-algorand-sdk/future"
-
+	transaction "github.com/algorand/go-algorand-sdk/future"
 	"github.com/algorand/go-algorand-sdk/client/algod"
 	"github.com/algorand/go-algorand-sdk/client/kmd"
 )
 
-// CHANGE ME
-const kmdAddress = "http://ns383889.ip-46-105-120.eu:7833"
-const kmdToken = "206ba3f9ad1d83523fb2a303dd055cd99ce10c5be01e35ee88285fe51438f02a"
-const algodAddress = "http://ns383889.ip-46-105-120.eu:8080"
-const algodToken = "3005189549ea62dc24fac6102493c941f68840304d3819727b83d3eb74de8e6d"
 
 func main() {
 	// Create a kmd client
@@ -37,6 +31,7 @@ func main() {
 		return
 	}
 
+
 	// Find our wallet name in the list
 	var exampleWalletID string
 	fmt.Printf("Got %d wallet(s):\n", len(listResponse.Wallets))
@@ -59,9 +54,20 @@ func main() {
 
 	// Extract the wallet handle
 	exampleWalletHandleToken := initResponse.WalletHandleToken
+	addr := "C2MCKQYJCU4RNWCQVWWSWEHGPAD37BEMQTIMVD6XF36AUIPKOXWIZOO7ZE"
 
-	fromAddr := "C2MCKQYJCU4RNWCQVWWSWEHGPAD37BEMQTIMVD6XF36AUIPKOXWIZOO7ZE"
-	toAddr := "H65XWDPZDEV7MXWDOUSLEL6UL6UO6CNK2ZILCENCFBKNCD4RATZIZZSIWQ"
+	defaultFrozen := false // whether user accounts will need to be unfrozen before transacting
+	totalIssuance := uint64(1) // total number of this asset in circulation
+	decimals := uint32(0) // hint to GUIs for interpreting base unit
+	reserve := addr // specified address is considered the asset reserve (it has no special privileges, this is only informational)
+	freeze := addr // specified address can freeze or unfreeze user asset holdings
+	clawback := addr // specified address can revoke user asset holdings and send them to other addresses
+	manager := addr // specified address can change reserve, freeze, clawback, and manager
+	unitName := "lady-1/15" // used to display asset units to user
+	assetName := "Portrait of a Lady,nGreat Artist Name, 11-2020 (1/15)" // "friendly name" of asset
+	note := []byte("test asset create") // arbitrary data to be stored in the transaction; here, none is stored
+	assetURL := "https://uncopied.org/970e1687-ba6b-410d-bb74-6e23d5291fef.png" // optional string pointing to a URL relating to the asset
+	assetMetadataHash := "0bc777329a2919fd6ffa96bace9a4779" // optional hash commitment of some sort relating to the asset. 32 character length.
 
 	// Get the suggested transaction parameters
 	txParams, err := algodClient.BuildSuggestedParams()
@@ -70,15 +76,17 @@ func main() {
 		return
 	}
 
-	// Make transaction
-	tx, err := future.MakePaymentTxn(fromAddr, toAddr, 1000, nil, "", txParams)
+	// signing and sending "txn" allows "addr" to create an asset
+	txn, err := transaction.MakeAssetCreateTxn(addr, note, txParams,
+		totalIssuance, decimals, defaultFrozen, manager, reserve, freeze, clawback,
+		unitName, assetName, assetURL, assetMetadataHash)
 	if err != nil {
-		fmt.Printf("Error creating transaction: %s\n", err)
+		fmt.Printf("Failed to make asset: %s\n", err)
 		return
 	}
-
+	fmt.Printf("Asset created AssetName: %s\n", txn.AssetConfigTxnFields.AssetParams.AssetName)
 	// Sign the transaction
-	signResponse, err := kmdClient.SignTransaction(exampleWalletHandleToken, "testpassword", tx)
+	signResponse, err := kmdClient.SignTransaction(exampleWalletHandleToken, "password123", txn)
 	if err != nil {
 		fmt.Printf("Failed to sign transaction with kmd: %s\n", err)
 		return

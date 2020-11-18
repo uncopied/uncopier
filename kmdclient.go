@@ -7,11 +7,6 @@ import (
 	"github.com/algorand/go-algorand-sdk/types"
 )
 
-// These constants represent the kmdd REST endpoint and the corresponding API
-// token. You can retrieve these from the `kmd.net` and `kmd.token` files in
-// the kmd data directory.
-const kmdAddress = "http://localhost:7833"
-const kmdToken = "206ba3f9ad1d83523fb2a303dd055cd99ce10c5be01e35ee88285fe51438f02a"
 
 func main() {
 	// Create a kmd client
