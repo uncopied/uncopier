@@ -20,12 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5e677f-c316-463c-9758-5b7ecae58590" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/algodclient.go" beforeDir="false" afterPath="$PROJECT_DIR$/algodclient.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kmdclient.go" beforeDir="false" afterPath="$PROJECT_DIR$/kmdclient.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transact.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/transact2.go" beforeDir="false" afterPath="$PROJECT_DIR$/createAsset.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transact3.go" beforeDir="false" afterPath="$PROJECT_DIR$/transact3.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/createAsset.go" beforeDir="false" afterPath="$PROJECT_DIR$/createAsset.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
