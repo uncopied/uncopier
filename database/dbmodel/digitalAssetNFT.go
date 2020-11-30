@@ -1,10 +1,10 @@
-package model
+package dbmodel
 
 import (
 	"gorm.io/gorm"
 )
 
-// DigitalAsset data model (ex. a limited edition copy 1/15)
+// DigitalAsset data dbmodel (ex. a limited edition copy 1/15)
 type DigitalAsset struct {
 	gorm.Model
 
@@ -16,5 +16,5 @@ type DigitalAsset struct {
 	AssetMetadataHash  string  `sql:"type:text;"` // optional hash commitment of some sort relating to the asset. 32 character length.
 
 	DigitalAssetRoot   DigitalAssetRoot `gorm:"foreignKey:DigitalAssetRootID"`
-	DigitalAssetRootID int
+	DigitalAssetRootID uint
 }

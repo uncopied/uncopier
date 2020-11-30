@@ -3,7 +3,8 @@ package apiv1
 import (
 	"github.com/gin-gonic/gin"
 	"./auth"
-	"./posts"
+	"./assets"
+	"./cert"
 )
 
 func ping(c *gin.Context) {
@@ -18,6 +19,7 @@ func ApplyRoutes(r *gin.RouterGroup) {
 	{
 		v1.GET("/ping", ping)
 		auth.ApplyRoutes(v1)
-		posts.ApplyRoutes(v1)
+		assets.ApplyRoutes(v1)
+		cert.ApplyRoutes(v1)
 	}
 }

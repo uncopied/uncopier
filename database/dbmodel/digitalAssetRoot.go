@@ -1,10 +1,10 @@
-package model
+package dbmodel
 
 import (
 	"gorm.io/gorm"
 )
 
-// DigitalAssetRoot data model (ex. a raw image)
+// DigitalAssetRoot data dbmodel (ex. a raw image)
 type DigitalAssetRoot struct {
 	gorm.Model
 
@@ -13,7 +13,7 @@ type DigitalAssetRoot struct {
 	NotePrefix string  `sql:"type:text;"` // arbitrary data to be stored in the transaction; here, none is stored
 
 	User User `gorm:"foreignKey:UserID"`
-	UserID int
+	UserID uint
 
 }
 

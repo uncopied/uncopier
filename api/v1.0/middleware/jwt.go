@@ -4,12 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"strings"
-	"github.com/gbrlsnchs/jwt/v3"
+	"github.com/gbrlsnchs/jwt"
 	"../auth"
 	"time"
 )
 
-var hs = jwt.NewHS256([]byte("secret"))
+const secret = "secret"
+var hs = jwt.NewHS256([]byte(secret))
 
 func validateToken(token string) (string, error) {
 	var pl auth.CustomPayload

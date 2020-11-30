@@ -3,9 +3,9 @@ package database
 import (
 	"fmt"
 	"os"
-
 	"gorm.io/gorm"
 	"gorm.io/driver/postgres"
+	model "./dbmodel"
 )
 
 // Initialize initializes the database
@@ -16,24 +16,20 @@ func Initialize() (*gorm.DB, error) {
 		panic(err)
 	}
 	fmt.Println("Connected to database")
-	db.AutoMigrate(&User{}, &DigitalAssetRoot{}, &DigitalAsset{})
-	adminUser :=&User{
-		Username:     "uncopied",
-		DisplayName:  "Uncopied Admin",
+	db.AutoMigrate(&model.User{}, &model.DigitalAssetRoot{}, &model.DigitalAsset{}, &model.Certificate{})
+	adminUser :=&model.User{
+		UserName:     "uncopied",
+		DisplayName:  "Elian Carsenat",
 		EmailAddress: "contact@uncopied.art",
-		PasswordHash: "####",
 	}
 	db.Create(adminUser)
-	uncopiedAsset := &DigitalAssetRoot{
+	uncopiedAsset := &model.DigitalAssetRoot{
 		AssetNamePrefix:   "uncopied",
 		UnitNamePrefix:    "uncopied",
 		NotePrefix:        "uncopied",
-		AssetURL:          "http://uncopied.art",
-		AssetMetadataHash: "####",
 		User:              *adminUser,
 	}
 	db.Create(uncopiedAsset)
-
 	return db, err
 }
 

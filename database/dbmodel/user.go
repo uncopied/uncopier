@@ -1,10 +1,10 @@
-package model
+package dbmodel
 
 import (
 	"gorm.io/gorm"
 )
 
-// User data model
+// User data dbmodel
 type User struct {
 	gorm.Model
 	UserName string

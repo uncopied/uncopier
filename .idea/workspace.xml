@@ -20,28 +20,57 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5e677f-c316-463c-9758-5b7ecae58590" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/dbmodel/certificate.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uncopiedSign.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/assets/asset.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/assets/asset.ctrl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/auth/auth.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/auth/auth.ctrl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/middleware/jwt.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/middleware/jwt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/v1.0.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/v1.0.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetNFT.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/digitalAssetNFT.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetRoot.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/digitalAssetRoot.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openapi3.json" beforeDir="false" afterPath="$PROJECT_DIR$/openapi3.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemaValidator.go" beforeDir="false" afterPath="$PROJECT_DIR$/schemaValidator.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.tmpl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transactAsset.go" beforeDir="false" afterPath="$PROJECT_DIR$/transactAsset.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uncopiedKeys.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopiedKeys.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uncopier.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopier.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
   <component name="GOROOT" path="$PROJECT_DIR$/../../Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1kSZT5RDlYOHS5D2rXm1ILlbgZR" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/api/v1.0/cert" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -51,8 +80,65 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\git\uncopier\api\v1.0\cert" />
       <recent name="D:\git\uncopier" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\git\uncopier\database\model" />
+      <recent name="D:\git\uncopier\database" />
+      <recent name="D:\git\uncopier\templates" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go Build.go build uncopiedSign.go">
+    <configuration name="go build database.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="uncopier" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/database/database.go" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build schemaValidator.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="uncopier" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/schemaValidator.go" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build uncopiedKeys.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="uncopier" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/uncopiedKeys.go" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build uncopiedSign.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="uncopier" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/uncopiedSign.go" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build uncopier.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="uncopier" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/uncopier.go" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build uncopiedSign.go" />
+        <item itemvalue="Go Build.go build uncopier.go" />
+        <item itemvalue="Go Build.go build uncopiedKeys.go" />
+        <item itemvalue="Go Build.go build database.go" />
+        <item itemvalue="Go Build.go build schemaValidator.go" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
@@ -68,5 +154,67 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="716" y="342" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1606420289776">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="716" y="342" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1606420289776" />
+    <state x="740" y="295" key="FileChooserDialogImpl" timestamp="1606216805333">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1606216805333" />
+    <state width="938" height="363" key="GridCell.Tab.0.bottom" timestamp="1606765712623">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="938" height="363" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
+    <state width="938" height="363" key="GridCell.Tab.0.center" timestamp="1606765712623">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="938" height="363" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
+    <state width="938" height="363" key="GridCell.Tab.0.left" timestamp="1606765712622">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="938" height="363" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712622" />
+    <state width="938" height="363" key="GridCell.Tab.0.right" timestamp="1606765712623">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="938" height="363" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
+    <state width="938" height="363" key="GridCell.Tab.1.bottom" timestamp="1606765712623">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="938" height="363" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
+    <state width="938" height="363" key="GridCell.Tab.1.center" timestamp="1606765712623">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="938" height="363" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
+    <state width="938" height="363" key="GridCell.Tab.1.left" timestamp="1606765712623">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="938" height="363" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
+    <state width="938" height="363" key="GridCell.Tab.1.right" timestamp="1606765712623">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="938" height="363" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
+    <state width="498" height="446" key="SwitcherDM" timestamp="1606746553288">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="498" height="446" key="SwitcherDM/0.0.1920.1080@0.0.1920.1080" timestamp="1606746553288" />
+    <state x="734" y="354" key="com.goide.refactor.move.GoMoveDeclarationDialog" timestamp="1606553960131">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="734" y="354" key="com.goide.refactor.move.GoMoveDeclarationDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1606553960131" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/api/v1.0/assets/asset.ctrl.go</url>
+          <line>11</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
