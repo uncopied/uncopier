@@ -9,6 +9,6 @@ func ApplyRoutes(r *gin.RouterGroup) {
 	cert:= r.Group("/cert")
 	{
 		cert.POST("/issue", issue)
-		cert.GET("/:token/*action", action)
+		cert.GET("/:cert/:token", action)
 	}
 }

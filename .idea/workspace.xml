@@ -20,27 +20,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5e677f-c316-463c-9758-5b7ecae58590" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/dbmodel/certificate.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uncopiedSign.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/dbmodel/certificateToken.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stringCompare.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/assets/asset.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/assets/asset.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/auth/auth.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/auth/auth.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/middleware/jwt.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/middleware/jwt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/api.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/api.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/cert/cert.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/v1.0/v1.0.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/v1.0.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/certificate.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/certificate.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetNFT.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/digitalAssetNFT.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetRoot.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/digitalAssetRoot.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openapi3.json" beforeDir="false" afterPath="$PROJECT_DIR$/openapi3.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemaValidator.go" beforeDir="false" afterPath="$PROJECT_DIR$/schemaValidator.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactAsset.go" beforeDir="false" afterPath="$PROJECT_DIR$/transactAsset.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uncopiedKeys.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopiedKeys.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uncopier.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopier.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +46,7 @@
   <component name="GOROOT" path="$PROJECT_DIR$/../../Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="ProjectId" id="1kSZT5RDlYOHS5D2rXm1ILlbgZR" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -79,30 +69,30 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\git\uncopier\api\v1.0\cert" />
-      <recent name="D:\git\uncopier" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\git\uncopier\database\model" />
       <recent name="D:\git\uncopier\database" />
       <recent name="D:\git\uncopier\templates" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\git\uncopier\api\v1.0\cert" />
+      <recent name="D:\git\uncopier" />
+    </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build uncopiedSign.go">
-    <configuration name="go build database.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Build.go build uncopier.go">
+    <configuration name="go build jwtRoundtrip.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/database/database.go" />
+      <filePath value="$PROJECT_DIR$/jwtRoundtrip.go" />
       <directory value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
-    <configuration name="go build schemaValidator.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+    <configuration name="go build stringCompare.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/schemaValidator.go" />
+      <filePath value="$PROJECT_DIR$/stringCompare.go" />
       <directory value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
@@ -132,11 +122,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build uncopiedSign.go" />
         <item itemvalue="Go Build.go build uncopier.go" />
+        <item itemvalue="Go Build.go build stringCompare.go" />
+        <item itemvalue="Go Build.go build jwtRoundtrip.go" />
+        <item itemvalue="Go Build.go build uncopiedSign.go" />
         <item itemvalue="Go Build.go build uncopiedKeys.go" />
-        <item itemvalue="Go Build.go build database.go" />
-        <item itemvalue="Go Build.go build schemaValidator.go" />
       </list>
     </recent_temporary>
   </component>
@@ -165,56 +155,89 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1606216805333" />
-    <state width="938" height="363" key="GridCell.Tab.0.bottom" timestamp="1606765712623">
+    <state width="938" height="363" key="GridCell.Tab.-1.bottom" timestamp="1607010672337">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="938" height="363" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
-    <state width="938" height="363" key="GridCell.Tab.0.center" timestamp="1606765712623">
+    <state width="938" height="363" key="GridCell.Tab.-1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1607010672337" />
+    <state width="938" height="363" key="GridCell.Tab.-1.center" timestamp="1607010672337">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="938" height="363" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
-    <state width="938" height="363" key="GridCell.Tab.0.left" timestamp="1606765712622">
+    <state width="938" height="363" key="GridCell.Tab.-1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1607010672337" />
+    <state width="938" height="363" key="GridCell.Tab.-1.left" timestamp="1607010672337">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="938" height="363" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712622" />
-    <state width="938" height="363" key="GridCell.Tab.0.right" timestamp="1606765712623">
+    <state width="938" height="363" key="GridCell.Tab.-1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1607010672337" />
+    <state width="938" height="363" key="GridCell.Tab.-1.right" timestamp="1607010672337">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="938" height="363" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
-    <state width="938" height="363" key="GridCell.Tab.1.bottom" timestamp="1606765712623">
+    <state width="938" height="363" key="GridCell.Tab.-1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1607010672337" />
+    <state width="938" height="363" key="GridCell.Tab.0.bottom" timestamp="1607019462917">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="938" height="363" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
-    <state width="938" height="363" key="GridCell.Tab.1.center" timestamp="1606765712623">
+    <state width="938" height="363" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1607019462917" />
+    <state width="938" height="363" key="GridCell.Tab.0.center" timestamp="1607019462916">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="938" height="363" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
-    <state width="938" height="363" key="GridCell.Tab.1.left" timestamp="1606765712623">
+    <state width="938" height="363" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1607019462916" />
+    <state width="938" height="363" key="GridCell.Tab.0.left" timestamp="1607019462916">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="938" height="363" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
-    <state width="938" height="363" key="GridCell.Tab.1.right" timestamp="1606765712623">
+    <state width="938" height="363" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1607019462916" />
+    <state width="938" height="363" key="GridCell.Tab.0.right" timestamp="1607019462916">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="938" height="363" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1606765712623" />
-    <state width="498" height="446" key="SwitcherDM" timestamp="1606746553288">
+    <state width="938" height="363" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1607019462916" />
+    <state width="938" height="363" key="GridCell.Tab.1.bottom" timestamp="1607019462917">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="498" height="446" key="SwitcherDM/0.0.1920.1080@0.0.1920.1080" timestamp="1606746553288" />
-    <state x="734" y="354" key="com.goide.refactor.move.GoMoveDeclarationDialog" timestamp="1606553960131">
+    <state width="938" height="363" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1607019462917" />
+    <state width="938" height="363" key="GridCell.Tab.1.center" timestamp="1607019462917">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="734" y="354" key="com.goide.refactor.move.GoMoveDeclarationDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1606553960131" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/api/v1.0/assets/asset.ctrl.go</url>
-          <line>11</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <state width="938" height="363" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1607019462917" />
+    <state width="938" height="363" key="GridCell.Tab.1.left" timestamp="1607019462917">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="938" height="363" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1607019462917" />
+    <state width="938" height="363" key="GridCell.Tab.1.right" timestamp="1607019462917">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="938" height="363" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1607019462917" />
+    <state width="909" height="316" key="GridCell.Tab.2.bottom" timestamp="1607011006423">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="909" height="316" key="GridCell.Tab.2.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1607011006423" />
+    <state width="909" height="316" key="GridCell.Tab.2.center" timestamp="1607011006423">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="909" height="316" key="GridCell.Tab.2.center/0.0.1920.1080@0.0.1920.1080" timestamp="1607011006423" />
+    <state width="909" height="316" key="GridCell.Tab.2.left" timestamp="1607011006423">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="909" height="316" key="GridCell.Tab.2.left/0.0.1920.1080@0.0.1920.1080" timestamp="1607011006423" />
+    <state width="909" height="316" key="GridCell.Tab.2.right" timestamp="1607011006423">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="909" height="316" key="GridCell.Tab.2.right/0.0.1920.1080@0.0.1920.1080" timestamp="1607011006423" />
+    <state width="498" height="446" key="SwitcherDM" timestamp="1607013909099">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="498" height="446" key="SwitcherDM/0.0.1920.1080@0.0.1920.1080" timestamp="1607013909099" />
+    <state width="968" height="548" key="XDebugger.FullValuePopup" timestamp="1607014423846">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="968" height="548" key="XDebugger.FullValuePopup/0.0.1920.1080@0.0.1920.1080" timestamp="1607014423846" />
+    <state x="734" y="354" key="com.goide.refactor.move.GoMoveDeclarationDialog" timestamp="1606991973534">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="734" y="354" key="com.goide.refactor.move.GoMoveDeclarationDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1606991973534" />
+    <state x="906" y="628" width="925" height="383" key="dock-window-1" timestamp="1607011113677">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="906" y="628" width="925" height="383" key="dock-window-1/0.0.1920.1080@0.0.1920.1080" timestamp="1607011113677" />
+    <state x="301" y="639" width="925" height="383" key="dock-window-2" timestamp="1607014495695">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="301" y="639" width="925" height="383" key="dock-window-2/0.0.1920.1080@0.0.1920.1080" timestamp="1607014495695" />
   </component>
 </project>

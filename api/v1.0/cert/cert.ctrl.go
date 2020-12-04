@@ -1,18 +1,20 @@
 package cert
-
 import (
 	"../../../database/dbmodel"
 	"crypto/rsa"
+	"crypto/md5"
 	"crypto/x509"
+	"encoding/hex"
 	"encoding/pem"
 	"fmt"
 	"github.com/gbrlsnchs/jwt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log"
+	"strconv"
 	"time"
 )
-
+const UncopiedOrg = "uncopied.org"
 const secret = `
 -----BEGIN PRIVATE KEY-----
 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCjwdu1Mh8d3I08
@@ -48,11 +50,10 @@ var privPEMData = []byte(secret)
 
 type CustomPayload struct {
 	jwt.Payload
-	IssuerName string `json:"foo,omitempty"`
-	UserRole   string `json:"foo,omitempty"`
-	CertificateID uint `json:"foo,omitempty"`
+	IssuerName string
+	UserRole   string
+	CertificateID uint
 }
-
 
 func validateToken(token string) (CustomPayload, error) {
 	block, rest := pem.Decode(privPEMData)
@@ -90,8 +91,7 @@ func validateToken(token string) (CustomPayload, error) {
 	return pl, nil
 }
 
-
-func generateTokens(userName string, userRole string, certificateId uint) (string) {
+func generateTokens(certificate dbmodel.Certificate, userRole string) (dbmodel.CertificateToken) {
 	block, rest := pem.Decode(privPEMData)
 	if block == nil || block.Type != "PRIVATE KEY" {
 		log.Fatal("failed to decode PEM block containing public key")
@@ -107,25 +107,35 @@ func generateTokens(userName string, userRole string, certificateId uint) (strin
 	//var hs = jwt.NewHS256([]byte(secret))
 	var hs = jwt.NewRS256(jwt.RSAPublicKey(&privateKeyRsa.PublicKey), jwt.RSAPrivateKey(privateKeyRsa))
 	now := time.Now()
-	pl := CustomPayload{Payload: jwt.Payload{
-		Issuer:         "uncopied",
-		Subject:        "someone",
+	pl := CustomPayload{
+		Payload: jwt.Payload{
+		Issuer:         UncopiedOrg,
+		Subject:        certificate.CertificateLabel,
 		Audience:       jwt.Audience{"https://uncopied.org", "https://uncopied.art"},
 		ExpirationTime: jwt.NumericDate(now.Add(24 * 30 * 12 * time.Hour)),
 		NotBefore:      jwt.NumericDate(now.Add(30 * time.Minute)),
 		IssuedAt:       jwt.NumericDate(now),
-		JWTID:          "uncopied",
+		JWTID:          string(certificate.ID)+"/"+userRole,
 	},
-		IssuerName: userName,
+		IssuerName: certificate.Issuer.UserName,
 		UserRole:   userRole,
-		CertificateID: certificateId,
+		CertificateID: certificate.ID,
 	}
 	token, err := jwt.Sign(pl, hs)
 	if err != nil {
 		// ...
-		fmt.Println("error generating JWT token for ", userName," role ",userRole)
+		fmt.Println("error generating JWT token for ", certificate.Issuer.UserName," role ",userRole)
 	}
-	return string(token)
+	var h = md5.New()
+	h.Write(token)
+	tokenHash := hex.EncodeToString(h.Sum(nil))
+	certificateToken := dbmodel.CertificateToken{
+		Certificate:   certificate,
+		Role:          userRole,
+		Token:         string(token),
+		TokenHash:     tokenHash,
+	}
+	return certificateToken
 }
 
 func issue(c *gin.Context) {
@@ -142,7 +152,7 @@ func issue(c *gin.Context) {
 	// additional checks on user?
 
 	type RequestBody struct {
-		Documentation  string `json:"documentation" binding:"required"`
+		CertificateLabel  string `json:"label" binding:"required"`
 	}
 
 	var body RequestBody
@@ -151,47 +161,61 @@ func issue(c *gin.Context) {
 		return
 	}
 
-	// create user
+	// create certificate
 	certificate := dbmodel.Certificate{
-		Documentation: body.Documentation,
-		Issuer:        user,
+		Issuer:                        user,
+		Printer:                       user,
+		PrimaryConservator:            user,
+		SecondaryConservator:          user,
+		CertificateLabel:              body.CertificateLabel,
 	}
 	db.Create(&certificate)
 
+	issuerToken := generateTokens(certificate, "Issuer")
+	ownerToken := generateTokens(certificate, "Owner")
+	primaryAssetVerifierToken := generateTokens(certificate, "PrimaryAssetVerifier")
+	secondaryAssetVerifierToken := generateTokens(certificate, "SecondaryAssetVerifier")
+	primaryOwnerVerifierToken := generateTokens(certificate, "PrimaryOwnerVerifier")
+	secondaryOwnerVerifierToken := generateTokens(certificate, "SecondaryOwnerVerifier")
+	primaryIssuerVerifierToken := generateTokens(certificate, "PrimaryIssuerVerifier")
+	secondaryIssuerVerifierToken := generateTokens(certificate, "SecondaryIssuerVerifier")
+
+	db.Create(&issuerToken)
+	db.Create(&ownerToken)
+	db.Create(&primaryAssetVerifierToken)
+	db.Create(&secondaryAssetVerifierToken)
+	db.Create(&primaryOwnerVerifierToken)
+	db.Create(&secondaryOwnerVerifierToken)
+	db.Create(&primaryIssuerVerifierToken)
+	db.Create(&secondaryIssuerVerifierToken)
+
+	certificate.IssuerTokenID = issuerToken.ID
+	certificate.OwnerTokenID = ownerToken.ID
+	certificate.PrimaryAssetVerifierTokenID = primaryAssetVerifierToken.ID
+	certificate.SecondaryAssetVerifierTokenID = secondaryAssetVerifierToken.ID
+	certificate.PrimaryOwnerVerifierTokenID = primaryOwnerVerifierToken.ID
+	certificate.SecondaryOwnerVerifierTokenID = secondaryOwnerVerifierToken.ID
+	certificate.PrimaryIssuerVerifierTokenID = primaryIssuerVerifierToken.ID
+	certificate.SecondaryIssuerVerifierTokenID = secondaryIssuerVerifierToken.ID
+
+	db.Updates(&certificate)
+
 	type RequestResponse struct {
 		Certificate dbmodel.Certificate
-		IssuerToken string
-		OwnerToken string
-		IssuerVerifierTokenLeft string
-		AssetVerifierTokenLeft string
-		OwnerVerifierTokenLeft string
-		IssuerVerifierTokenRight string
-		AssetVerifierTokenRight string
-		OwnerVerifierTokenRight string
 	}
 
 	requestResponse := RequestResponse{
 		Certificate:              certificate,
-		IssuerToken:              generateTokens(user.UserName, "Issuer", certificate.ID),
-		OwnerToken:               generateTokens(user.UserName, "Owner", certificate.ID),
-		IssuerVerifierTokenLeft:  generateTokens(user.UserName, "IssuerVerifierLeft", certificate.ID),
-		AssetVerifierTokenLeft:   generateTokens(user.UserName, "AssetVerifierLeft", certificate.ID),
-		OwnerVerifierTokenLeft:   generateTokens(user.UserName, "AssetVerifierLeft", certificate.ID),
-		IssuerVerifierTokenRight: generateTokens(user.UserName, "IssuerVerifierRight", certificate.ID),
-		AssetVerifierTokenRight:  generateTokens(user.UserName, "AssetVerifierRight", certificate.ID),
-		OwnerVerifierTokenRight:  generateTokens(user.UserName, "OwnerVerifierRight", certificate.ID),
 	}
 
 	c.JSON(200, requestResponse)
 }
 
-
-
 func action(c *gin.Context) {
 	fmt.Println("control")
 	db := c.MustGet("db").(*gorm.DB)
+	certId := c.Param("cert")
 	token := c.Param("token")
-	action := c.Param("action")
 
 	userName := c.MustGet("user")
 	// check if user
@@ -201,42 +225,52 @@ func action(c *gin.Context) {
 		c.AbortWithStatus(409)
 		return
 	}
-	// additional checks on user?
-
-	actionToken,err := validateToken(token)
-	if err!=nil {
-		log.Fatal(err)
-	}
 
 	var cert dbmodel.Certificate
-	if err := db.Where("certificate_id = ?", actionToken.CertificateID).First(&cert).Error; err != nil {
-		fmt.Println("Certificate not found ",actionToken.CertificateID)
+	if err := db.Where("id = ?", certId).First(&cert).Error; err != nil {
+		fmt.Println("Certificate not found ",certId)
 		c.AbortWithStatus(409)
 		return
 	}
 
-	var changeOwner = false
-	var certifyAsset = false
-	if actionToken.UserRole == "Owner" && action == "ChangeOwner" {
-		// unlock change owner feature
-		changeOwner = true
-	}
-	if actionToken.UserRole == "Issuer" && action == "CertifyAsset" {
-		// unlock change owner feature
-		certifyAsset = true
+	var certToken dbmodel.CertificateToken
+	if err := db.Where("certificate_id = ? AND token_hash = ? ", certId, token).First(&certToken).Error; err != nil {
+		fmt.Printf("Certificate token not found certId = %s token = %s \n", certId, token)
+		c.AbortWithStatus(409)
+		return
 	}
 
-	c.SetCookie("token", token, 60*60*24*7, "/", "uncopied.org", false, false)
+	// additional checks on token
+	actionToken,err := validateToken(certToken.Token)
+	if err!=nil {
+		log.Fatal(err)
+	}
+
+	certIdInt, err := strconv.Atoi(certId)
+	if err != nil {
+		fmt.Printf("Certificate id unreadable %v \n", certId)
+		c.AbortWithStatus(409)
+		return
+	}
+	if  int(actionToken.CertificateID) != certIdInt {
+		fmt.Printf("Certificate id mismatch not found %v != %v \n", certId, actionToken.CertificateID)
+		c.AbortWithStatus(409)
+		return
+	}
+
+	// add a cookie for the given role
+	cookieName := actionToken.UserRole+"Token"
+	c.SetCookie(cookieName, certToken.Token, 60*60*24*7, "/", "uncopied.org", false, false)
 	type RequestResponse struct {
 		Certificate dbmodel.Certificate
-		ChangeOwner bool
-		CertifyAsset bool
+		UserRole string
+		UserRoleToken string
 	}
 
 	response :=RequestResponse{
-		Certificate:  cert,
-		ChangeOwner:  changeOwner,
-		CertifyAsset: certifyAsset,
+		Certificate :  cert,
+		UserRole : actionToken.UserRole,
+		UserRoleToken : certToken.Token,
 	}
 	c.JSON(200, response)
 }

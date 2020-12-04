@@ -17,4 +17,5 @@ type DigitalAsset struct {
 
 	DigitalAssetRoot   DigitalAssetRoot `gorm:"foreignKey:DigitalAssetRootID"`
 	DigitalAssetRootID uint
+
 }
