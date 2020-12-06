@@ -82,7 +82,7 @@ func create(c *gin.Context) {
 const IPFSRootURL = "https://ipfs.io/ipfs"
 const IPFSNode = "localhost:5001"
 
-const LocalCacheDIR = "d:/ifps_cache"
+const LocalCacheDIR = "./ifps_cache"
 const MaxContentLength = 25000000
 const ThumbnailWidthHeight = 720
 
