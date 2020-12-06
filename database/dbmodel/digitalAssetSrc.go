@@ -16,6 +16,7 @@ type DigitalAssetSrc struct {
 	AuthorProfileURL string `sql:"type:text;"` // public profile of author, ex. Wikipedia
 	SourceLicense string `sql:"type:text;"` // license terms friendly name
 	SourceLicenseURL string `sql:"type:text;"` // source file license terms
+	IsProxy bool // the asset is a proxy
 
 	// the Issuer will have several options to 'upload' the asset file
 	IPFSUploader string `sql:"type:text;"`

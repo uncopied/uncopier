@@ -20,15 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5e677f-c316-463c-9758-5b7ecae58590" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/database/dbmodel/digitalAssetSrc.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/assets/asset.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/src/assetSrc.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/assets/asset.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/src/assetSrc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/v1.0.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/v1.0.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/certificate.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/certificate.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetNFT.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/digitalAssetNFT.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetRoot.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetSrc.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/digitalAssetSrc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stringCompare.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uncopiedSign.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +55,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
+    <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../ipfs-cluster" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
