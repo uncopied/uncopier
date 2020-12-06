@@ -15,7 +15,7 @@ type DigitalAsset struct {
 	AssetURL string  `sql:"type:text;"`  // optional string pointing to a URL relating to the asset. 32 character length.
 	AssetMetadataHash  string  `sql:"type:text;"` // optional hash commitment of some sort relating to the asset. 32 character length.
 
-	DigitalAssetRoot   DigitalAssetRoot `gorm:"foreignKey:DigitalAssetRootID"`
+	DigitalAssetRoot   DigitalAssetSrc `gorm:"foreignKey:DigitalAssetRootID"`
 	DigitalAssetRootID uint
 
 }

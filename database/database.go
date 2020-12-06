@@ -16,20 +16,13 @@ func Initialize() (*gorm.DB, error) {
 		panic(err)
 	}
 	fmt.Println("Connected to database")
-	db.AutoMigrate(&model.User{}, &model.DigitalAssetRoot{}, &model.DigitalAsset{}, &model.Certificate{}, &model.CertificateToken{})
+	db.AutoMigrate(&model.User{}, &model.DigitalAssetSrc{}, &model.DigitalAsset{}, &model.Certificate{}, &model.CertificateToken{})
 	adminUser :=&model.User{
 		UserName:     "uncopied",
 		DisplayName:  "Elian Carsenat",
 		EmailAddress: "contact@uncopied.art",
 	}
 	db.Create(adminUser)
-	uncopiedAsset := &model.DigitalAssetRoot{
-		AssetNamePrefix:   "uncopied",
-		UnitNamePrefix:    "uncopied",
-		NotePrefix:        "uncopied",
-		User:              *adminUser,
-	}
-	db.Create(uncopiedAsset)
 	return db, err
 }
 
