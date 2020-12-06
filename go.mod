@@ -6,7 +6,7 @@ require (
 	github.com/algorand/go-algorand-sdk v1.5.1
 	github.com/auyer/steganography v1.0.0
 	github.com/gabriel-vasile/mimetype v1.1.2
-	github.com/gbrlsnchs/jwt v1.1.0
+	github.com/gbrlsnchs/jwt/v3 v3.0.0
 	github.com/gin-contrib/static v0.0.0-20200916080430-d45d9a37d28e
 	github.com/gin-gonic/gin v1.6.3
 	github.com/ipfs/go-ipfs-api v0.2.0

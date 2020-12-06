@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/pem"
 	"fmt"
-	"github.com/gbrlsnchs/jwt"
+	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log"

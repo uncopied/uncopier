@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/gbrlsnchs/jwt"
+	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gin-gonic/gin"
 	"github.com/uncopied/uncopier/api/v1.0/auth"
 	"log"

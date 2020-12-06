@@ -1,10 +1,10 @@
 package auth
 
 import (
-	"github.com/uncopied/uncopier/database/dbmodel"
 	"fmt"
-	"github.com/gbrlsnchs/jwt"
+	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gin-gonic/gin"
+	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
 	"time"
 	//https://www.gregorygaines.com/blog/posts/2020/6/11/how-to-hash-and-salt-passwords-in-golang-using-sha512-and-why-you-shouldnt
