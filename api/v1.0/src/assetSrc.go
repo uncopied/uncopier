@@ -1,8 +1,8 @@
 package src
 
 import (
-	"github.com/uncopied/uncopier/middleware"
 	"github.com/gin-gonic/gin"
+	"github.com/uncopied/uncopier/api/v1.0/middleware"
 )
 
 // ApplyRoutes applies router to the gin Engine

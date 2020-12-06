@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/uncopied/uncopier/api/v1.0"
 )
 
 

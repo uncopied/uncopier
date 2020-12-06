@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/gbrlsnchs/jwt"
 	"github.com/gin-gonic/gin"
-	"github.com/uncopied/uncopier/auth"
+	"github.com/uncopied/uncopier/api/v1.0/auth"
 	"log"
 	"strings"
 	"time"

@@ -2,9 +2,9 @@ package apiv1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/uncopied/uncopier/auth"
-	"github.com/uncopied/uncopier/src"
-	"github.com/uncopied/uncopier/cert"
+	"github.com/uncopied/uncopier/api/v1.0/auth"
+	"github.com/uncopied/uncopier/api/v1.0/src"
+	"github.com/uncopied/uncopier/api/v1.0/cert"
 )
 
 

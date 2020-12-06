@@ -5,7 +5,7 @@ import (
 	"os"
 	"gorm.io/gorm"
 	"gorm.io/driver/postgres"
-	"github.com/uncopied/uncopier/dbmodel"
+	"github.com/uncopied/uncopier/database/dbmodel"
 )
 
 // Initialize initializes the database
