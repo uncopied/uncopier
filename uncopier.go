@@ -1,8 +1,8 @@
 package main
 
 import (
-	"./api"
-	"./api/v1.0/middleware"
+	"github.com/uncopied/uncopier/api"
+	"github.com/uncopied/uncopier/api/v1.0/middleware"
 	database "./database"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
