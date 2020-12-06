@@ -11,5 +11,7 @@ func ApplyRoutes(r *gin.RouterGroup) {
 		auth.POST("/register", register)
 		auth.POST("/login", login)
 		auth.GET("/check", check)
+		// TODO logout
+		//auth.POST("/login", login)
 	}
 }

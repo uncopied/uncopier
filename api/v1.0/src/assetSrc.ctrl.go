@@ -68,7 +68,7 @@ func create(c *gin.Context) {
 	}
 
 	db.Create(&asset)
-	md5, err := stamp(&asset)
+	md5, err := stamp(&asset, db)
 	asset.Stamp = md5
 	if err != nil {
 		// should we return some error code when stamping failed?
@@ -86,7 +86,7 @@ const LocalCacheDIR = "./ifps_cache"
 const MaxContentLength = 25000000
 const ThumbnailWidthHeight = 720
 
-func stamp(asset *dbmodel.DigitalAssetSrc) (string, error) {
+func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 	sourceURL := IPFSRootURL +"/"+asset.IPFSHash;
 	resp, err := http.Get(sourceURL)
 	if err!=nil {
@@ -103,6 +103,19 @@ func stamp(asset *dbmodel.DigitalAssetSrc) (string, error) {
 
 	// read the body into mem
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+
+	// MD5 stamp
+	hasher := md5.New()
+	hasher.Write(bodyBytes)
+	md5 := hex.EncodeToString(hasher.Sum(nil))
+
+	// check for any duplicate based on MD5
+	// check if exists
+	var exists dbmodel.DigitalAssetSrc
+	if err := db.Where("stamp = ?", md5).First(&exists).Error; err == nil {
+		return "",errors.New("IPFS already contains file with stamp "+md5+", legit collision is unlikely - could be plagiarism")
+	}
+
 	mime := mimetype.Detect(bodyBytes)
 	if asset.IPFSMimetype == "" {
 		asset.IPFSMimetype = mime.String()
@@ -169,11 +182,6 @@ func stamp(asset *dbmodel.DigitalAssetSrc) (string, error) {
 	} else {
 		thumbnail = resize.Resize(0, ThumbnailWidthHeight, img, resize.Lanczos3)
 	}
-
-	// MD5 stamp
-	hasher := md5.New()
-	hasher.Write(bodyBytes)
-	md5 := hex.EncodeToString(hasher.Sum(nil))
 
 	// add steganography
 	type Stegano struct {

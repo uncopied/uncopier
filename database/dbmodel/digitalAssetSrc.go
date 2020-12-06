@@ -28,7 +28,7 @@ type DigitalAssetSrc struct {
 	IPFSHashThumbnail string `sql:"type:text;"`
 
 	// once the digital asset is validated, stamp it with a MD5 checksum
-	Stamp string `sql:"type:text;"`
+	Stamp string `gorm:"type:char(32);index"`
 	StampError string `sql:"type:text;"`
 
 }

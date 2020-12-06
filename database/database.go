@@ -16,7 +16,13 @@ func Initialize() (*gorm.DB, error) {
 		panic(err)
 	}
 	fmt.Println("Connected to database")
-	db.AutoMigrate(&dbmodel.User{}, &dbmodel.DigitalAssetSrc{}, &dbmodel.DigitalAsset{}, &dbmodel.Certificate{}, &dbmodel.CertificateToken{})
+	db.AutoMigrate(&dbmodel.User{},
+					&dbmodel.DigitalAssetSrc{},
+					&dbmodel.DigitalAsset{},
+					&dbmodel.Certificate{},
+					&dbmodel.CertificateToken{},
+					&dbmodel.UncopierException{},
+	)
 	adminUser :=&dbmodel.User{
 		UserName:     "uncopied",
 		DisplayName:  "Elian Carsenat",

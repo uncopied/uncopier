@@ -24,6 +24,7 @@ func checkHash(password string, hash string) bool {
 
 
 const secret = "secret"
+const cookiesDomain =""
 var hs = jwt.NewHS256([]byte(secret))
 
 type CustomPayload struct {
@@ -137,7 +138,7 @@ func login(c *gin.Context) {
 
 	token, _ := generateToken(body.UserName)
 
-	c.SetCookie("token", token, 60*60*24*7, "/", "uncopied.org", false, false)
+	c.SetCookie("token", token, 60*60*24*7, "/", cookiesDomain, false, false)
 	authToken := Token{
 		UserName: body.UserName,
 		Token:    token,
@@ -163,7 +164,7 @@ func check(c *gin.Context) {
 	if diff < 60*60*24*3 {
 		// renew token
 		token, _ := generateToken(userName)
-		c.SetCookie("token", token, 60*60*24*7, "/", "", false, true)
+		c.SetCookie("token", token, 60*60*24*7, "/", cookiesDomain, false, true)
 		authToken := Token{
 			UserName: userName,
 			Token:    token,
