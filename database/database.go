@@ -5,7 +5,7 @@ import (
 	"os"
 	"gorm.io/gorm"
 	"gorm.io/driver/postgres"
-	model "./dbmodel"
+	"github.com/uncopied/uncopier/dbmodel"
 )
 
 // Initialize initializes the database
@@ -16,8 +16,8 @@ func Initialize() (*gorm.DB, error) {
 		panic(err)
 	}
 	fmt.Println("Connected to database")
-	db.AutoMigrate(&model.User{}, &model.DigitalAssetSrc{}, &model.DigitalAsset{}, &model.Certificate{}, &model.CertificateToken{})
-	adminUser :=&model.User{
+	db.AutoMigrate(&dbmodel.User{}, &dbmodel.DigitalAssetSrc{}, &dbmodel.DigitalAsset{}, &dbmodel.Certificate{}, &dbmodel.CertificateToken{})
+	adminUser :=&dbmodel.User{
 		UserName:     "uncopied",
 		DisplayName:  "Elian Carsenat",
 		EmailAddress: "contact@uncopied.art",
