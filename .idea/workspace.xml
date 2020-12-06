@@ -20,12 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5e677f-c316-463c-9758-5b7ecae58590" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/api.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/api.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/middleware/jwt.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/middleware/jwt.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/src/assetSrc.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/src/assetSrc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/v1.0.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/v1.0.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uncopier.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopier.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
