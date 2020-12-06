@@ -1,7 +1,7 @@
 package src
 
 import (
-	"../../../database/dbmodel"
+	"github.com/uncopied/uncopier/database/dbmodel"
 	"bytes"
 	"crypto/md5"
 	"encoding/hex"

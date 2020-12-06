@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"../../../database/dbmodel"
+	"github.com/uncopied/uncopier/database/dbmodel"
 	"fmt"
 	"github.com/gbrlsnchs/jwt"
 	"github.com/gin-gonic/gin"

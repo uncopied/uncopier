@@ -1,4 +1,4 @@
-module uncopied.org/m
+module github.com/uncopied/uncopier
 
 go 1.15
 

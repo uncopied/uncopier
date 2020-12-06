@@ -1,6 +1,6 @@
 package cert
 import (
-	"../../../database/dbmodel"
+	"github.com/uncopied/uncopier/database/dbmodel"
 	"crypto/rsa"
 	"crypto/md5"
 	"crypto/x509"

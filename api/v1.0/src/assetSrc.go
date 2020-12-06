@@ -1,7 +1,7 @@
 package src
 
 import (
-	"../middleware"
+	"github.com/uncopied/uncopier/middleware"
 	"github.com/gin-gonic/gin"
 )
 
