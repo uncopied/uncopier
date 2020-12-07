@@ -21,7 +21,7 @@ type DigitalAssetSrc struct {
 	// the Issuer will have several options to 'upload' the asset file
 	IPFSUploader string `sql:"type:text;"`
 	IPFSFilename string `sql:"type:text;"`
-	IPFSHash string `sql:"type:text;"`
+	IPFSHash string `gorm:"type:varchar(255);index"`
 	IPFSMimetype string `sql:"type:text;"`
 
 	// asset thumbnail

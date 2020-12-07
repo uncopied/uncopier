@@ -68,8 +68,8 @@ func create(c *gin.Context) {
 	}
 
 	db.Create(&asset)
-	md5, err := stamp(&asset, db)
-	asset.Stamp = md5
+	md5Hash, err := stamp(&asset, db)
+	asset.Stamp = md5Hash
 	if err != nil {
 		// should we return some error code when stamping failed?
 		asset.StampError = err.Error()
@@ -87,6 +87,23 @@ const MaxContentLength = 25000000
 const ThumbnailWidthHeight = 720
 
 func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
+
+	// check for any duplicate based on MD5
+	// check if exists
+	var exists dbmodel.DigitalAssetSrc
+	if err := db.Where("ip_fs_hash = ?", asset.IPFSHash).First(&exists).Error; err == nil {
+		msg := "IPFS already contains file with IPFSHash "+ asset.IPFSHash
+		// create an exception
+		exception := dbmodel.UncopierException{
+			Source : *asset,
+			OtherSource : exists,
+			Status : "NEW",
+			Message : msg,
+		}
+		db.Create(&exception)
+		return "",errors.New(msg)
+	}
+
 	sourceURL := IPFSRootURL +"/"+asset.IPFSHash;
 	resp, err := http.Get(sourceURL)
 	if err!=nil {
@@ -107,13 +124,19 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 	// MD5 stamp
 	hasher := md5.New()
 	hasher.Write(bodyBytes)
-	md5 := hex.EncodeToString(hasher.Sum(nil))
+	md5Hash := hex.EncodeToString(hasher.Sum(nil))
 
-	// check for any duplicate based on MD5
-	// check if exists
-	var exists dbmodel.DigitalAssetSrc
-	if err := db.Where("stamp = ?", md5).First(&exists).Error; err == nil {
-		return "",errors.New("IPFS already contains file with stamp "+md5+", legit collision is unlikely - could be plagiarism")
+	if err := db.Where("stamp = ?", md5Hash).First(&exists).Error; err == nil {
+		msg := "IPFS already contains file with stamp "+ md5Hash +", legit collision is unlikely - could be plagiarism"
+		// create an exception
+		exception := dbmodel.UncopierException{
+			Source : *asset,
+			OtherSource : exists,
+			Status : "NEW",
+			Message : msg,
+		}
+		db.Create(&exception)
+		return "",errors.New(msg)
 	}
 
 	mime := mimetype.Detect(bodyBytes)
@@ -156,7 +179,7 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 	}
 
 	// Create the file
-	filePath := LocalCacheDIR+"/"+asset.Issuer.UserName+"/"
+	filePath := LocalCacheDIR+"/"
 	fileName := asset.IPFSHash+mime.Extension()
 	err = os.MkdirAll(filePath,os.ModePerm)
 	if err != nil {
@@ -191,18 +214,16 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 		Stamp string
 	}
 	stegano := Stegano{
-		Source:   "uncopied.org",
-		SourceType:   "thumbnail",
-		IPFSHash: asset.IPFSHash,
-		Stamp: md5,
+		Source:     "uncopied.org",
+		SourceType: "thumbnail",
+		IPFSHash:   asset.IPFSHash,
+		Stamp:      md5Hash,
 	}
 	message := json.Encode(stegano)
 	sizeOfMessage := steganography.GetMessageSizeFromImage(thumbnail)
 
 	if int(sizeOfMessage) < len(message) {
-		if err != nil {
-			return "",errors.New("IPFS thumbnail too small for stegano "+sourceURL)
-		}
+		return "",errors.New("IPFS thumbnail too small for stegano "+sourceURL)
 	} else {
 		w := new(bytes.Buffer)
 		err := steganography.Encode(w, thumbnail, message) // Encode the message into the image
@@ -217,7 +238,7 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 		}
 		asset.IPFSHashThumbnail = cid
 	}
-	return md5,err
+	return md5Hash,err
 }
 
 func list(c *gin.Context) {
@@ -260,75 +281,3 @@ func read(c *gin.Context) {
 	c.JSON(200, assetSrc)
 }
 
-func remove(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-	id := c.Param("id")
-
-	userName := c.MustGet("user")
-	// check if user
-	var user dbmodel.User
-	if err := db.Where("user_name = ?", userName).First(&user).Error; err == nil {
-		c.AbortWithStatus(409)
-		return
-	}
-
-	var asset dbmodel.DigitalAssetSrc
-	if err := db.Where("id = ?", id).First(&asset).Error; err != nil {
-		c.AbortWithStatus(404)
-		return
-	}
-
-	if asset.Issuer.ID != user.ID {
-		c.AbortWithStatus(403)
-		return
-	}
-
-	db.Delete(&asset)
-	c.Status(204)
-}
-
-func update(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-	id := c.Param("id")
-
-	userName := c.MustGet("user")
-	// check if user
-	var user dbmodel.User
-	if err := db.Where("user_name = ?", userName).First(&user).Error; err == nil {
-		c.AbortWithStatus(409)
-		return
-	}
-
-	type RequestBody struct {
-		IssuerClaimsAuthorship bool
-		AuthorName string
-		AuthorProfileURL string
-		SourceLicense string
-		SourceLicenseURL string
-	}
-
-	var body RequestBody
-	if err := c.BindJSON(&body); err != nil {
-		c.AbortWithStatus(400)
-		return
-	}
-
-	var asset dbmodel.DigitalAssetSrc
-	if err := db.Preload("User").Where("id = ?", id).First(&asset).Error; err != nil {
-		c.AbortWithStatus(404)
-		return
-	}
-
-	if asset.Issuer.ID != user.ID {
-		c.AbortWithStatus(403)
-		return
-	}
-	asset.IssuerClaimsAuthorship = body.IssuerClaimsAuthorship
-	asset.AuthorName =  body.AuthorName
-	asset.AuthorProfileURL = body.AuthorProfileURL
-	asset.SourceLicense =  body.SourceLicense
-	asset.SourceLicenseURL =  body.SourceLicenseURL
-
-	db.Save(&asset)
-	c.JSON(200, asset)
-}
