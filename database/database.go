@@ -31,7 +31,8 @@ func Initialize() (*gorm.DB, error) {
 	fmt.Println("Connected to database")
 	db.AutoMigrate(&dbmodel.User{},
 					&dbmodel.DigitalAssetSrc{},
-					&dbmodel.DigitalAsset{},
+					&dbmodel.AssetTemplate{},
+					&dbmodel.Asset{},
 					&dbmodel.Certificate{},
 					&dbmodel.Alert{},
 					&dbmodel.CertificateToken{},

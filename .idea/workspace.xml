@@ -2,17 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="54e4dffa-e567-46b4-90f9-fc00f68382d4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/v1.0/asset/asset.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/dbmodel/asset.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jsonTemplating.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/auth/auth.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/auth/auth.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/middleware/jwt.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/middleware/jwt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/v1.0.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/v1.0.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/createAsset.go" beforeDir="false" afterPath="$PROJECT_DIR$/createAsset.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetNFT.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/assetTemplate.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetSrc.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/digitalAssetSrc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/user.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
   </component>
   <component name="GOROOT" url="file://$PROJECT_DIR$/../../Go" />
   <component name="Git.Settings">
@@ -28,11 +41,12 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/database/dbmodel" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -40,7 +54,22 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\git\uncopier\database\dbmodel" />
+      <recent name="D:\git\uncopier\api\v1.0\asset" />
+    </key>
+  </component>
   <component name="RunManager" selected="Go Build.go build uncopier.go">
+    <configuration name="go build jsonTemplating.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="uncopier" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/jsonTemplating.go" />
+      <package value="github.com/uncopied/uncopier" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
     <configuration name="go build uncopiedKeys.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
@@ -62,6 +91,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build uncopier.go" />
+        <item itemvalue="Go Build.go build jsonTemplating.go" />
         <item itemvalue="Go Build.go build uncopiedKeys.go" />
       </list>
     </recent_temporary>
@@ -93,19 +123,9 @@
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/api/v1.0/src/assetSrc.ctrl.go</url>
-          <line>27</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/api/v1.0/middleware/jwt.go</url>
-          <line>14</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/api/v1.0/auth/auth.ctrl.go</url>
-          <line>121</line>
-          <option name="timeStamp" value="13" />
+          <url>file://$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go</url>
+          <line>170</line>
+          <option name="timeStamp" value="30" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

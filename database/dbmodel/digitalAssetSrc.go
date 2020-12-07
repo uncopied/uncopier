@@ -31,4 +31,10 @@ type DigitalAssetSrc struct {
 	Stamp string `gorm:"type:char(32);index"`
 	StampError string `sql:"type:text;"`
 
+	ExternalSourceID string `sql:"type:text;"`
+}
+
+const IPFSRootURL = "https://ipfs.io/ipfs"
+func ThumbnailURL(src DigitalAssetSrc) string {
+	return IPFSRootURL+"/"+src.IPFSHashThumbnail
 }

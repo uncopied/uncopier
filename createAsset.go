@@ -7,7 +7,6 @@ import (
 	"github.com/algorand/go-algorand-sdk/client/kmd"
 )
 
-
 func main() {
 	const kmdAddress = "http://localhost:7833"
 	const kmdToken = "206ba3f9ad1d83523fb2a303dd055cd99ce10c5be01e35ee88285fe51438f02a"
