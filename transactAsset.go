@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/algorand/go-algorand-sdk/future"
-
 	"github.com/algorand/go-algorand-sdk/client/algod"
 	"github.com/algorand/go-algorand-sdk/client/kmd"
 )

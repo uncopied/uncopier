@@ -12,9 +12,9 @@ require (
 	github.com/ipfs/go-ipfs-api v0.2.0
 	github.com/joho/godotenv v1.3.0
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
-	github.com/pkg/errors v0.9.1
+	github.com/pkg/errors v0.8.1
 	github.com/qri-io/jsonschema v0.2.0
-	golang.org/x/crypto v0.0.0-20201203163018-be400aefbc4c
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	gorm.io/driver/postgres v1.0.5
 	gorm.io/gorm v1.20.8
 )
