@@ -20,8 +20,9 @@ func Initialize() (*gorm.DB, error) {
 					&dbmodel.DigitalAssetSrc{},
 					&dbmodel.DigitalAsset{},
 					&dbmodel.Certificate{},
+					&dbmodel.Alert{},
 					&dbmodel.CertificateToken{},
-					&dbmodel.UncopierException{},
+
 	)
 	adminUser :=&dbmodel.User{
 		UserName:     "uncopied",

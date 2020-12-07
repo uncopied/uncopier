@@ -4,8 +4,8 @@ import (
 	"gorm.io/gorm"
 )
 
-// UncopierException data dbmodel
-type UncopierException struct {
+// Alert data dbmodel
+type Alert struct {
 	gorm.Model
 
 	Source DigitalAssetSrc `gorm:"foreignKey:SourceID"`
@@ -13,7 +13,6 @@ type UncopierException struct {
 
 	OtherSource DigitalAssetSrc `gorm:"foreignKey:OtherSourceID"`
 	OtherSourceID uint
-
 
 	Status string `sql:"type:text;"`
 	Message string `sql:"type:text;"`
