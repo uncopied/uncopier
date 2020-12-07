@@ -91,10 +91,10 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 	// check for any duplicate based on MD5
 	// check if exists
 	var exists dbmodel.DigitalAssetSrc
-	if err := db.Where("ip_fs_hash = ?", asset.IPFSHash).First(&exists).Error; err == nil {
-		msg := "IPFS already contains file with IPFSHash "+ asset.IPFSHash
+	if err := db.Where("ip_fs_hash = ? AND stamp <> '' ", asset.IPFSHash).First(&exists).Error; err == nil {
+		msg := "IPFS already contains stamped file with IPFSHash "+ asset.IPFSHash
 		// create an exception
-		exception := dbmodel.UncopierException{
+		exception := dbmodel.Alert{
 			Source : *asset,
 			OtherSource : exists,
 			Status : "NEW",
@@ -129,7 +129,7 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 	if err := db.Where("stamp = ?", md5Hash).First(&exists).Error; err == nil {
 		msg := "IPFS already contains file with stamp "+ md5Hash +", legit collision is unlikely - could be plagiarism"
 		// create an exception
-		exception := dbmodel.UncopierException{
+		exception := dbmodel.Alert{
 			Source : *asset,
 			OtherSource : exists,
 			Status : "NEW",

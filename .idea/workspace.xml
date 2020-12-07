@@ -21,8 +21,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1a5e677f-c316-463c-9758-5b7ecae58590" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/src/assetSrc.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/src/assetSrc.ctrl.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/uncopierException.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/alert.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +40,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="1kSZT5RDlYOHS5D2rXm1ILlbgZR" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
