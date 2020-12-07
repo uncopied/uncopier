@@ -1,16 +1,15 @@
 package middleware
 
 import (
+	"fmt"
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gin-gonic/gin"
 	"github.com/uncopied/uncopier/api/v1.0/auth"
-	"log"
 	"strings"
 	"time"
 )
 
-const secret = "secret"
-var hs = jwt.NewHS256([]byte(secret))
+var hs = auth.JwtNew()
 
 func validateToken(token string) (string, error) {
 	var pl auth.CustomPayload
@@ -27,8 +26,7 @@ func validateToken(token string) (string, error) {
 	validatePayload := jwt.ValidatePayload(&pl.Payload, iatValidator, expValidator, audValidator)
 	_, err := jwt.Verify([]byte(token), hs, &pl, validatePayload)
 	if err != nil {
-		// ...
-		log.Fatal(err)
+		fmt.Println("Invalid token ... discarting")
 		return "", err
 	}
 	return pl.UserName, nil
@@ -59,9 +57,9 @@ func JWTMiddleware() gin.HandlerFunc {
 		if err != nil {
 			c.Next()
 			return
+		} else {
+			c.Set("user", tokenData)
+			c.Next()
 		}
-
-		c.Set("user", tokenData)
-		c.Next()
 	}
 }

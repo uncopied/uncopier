@@ -6,6 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
+	"io/ioutil"
+	"log"
 	"time"
 	//https://www.gregorygaines.com/blog/posts/2020/6/11/how-to-hash-and-salt-passwords-in-golang-using-sha512-and-why-you-shouldnt
 	"golang.org/x/crypto/bcrypt"
@@ -21,9 +23,20 @@ func checkHash(password string, hash string) bool {
 	return err == nil
 }
 
-const secret = "secret"
+
 const cookiesDomain =""
-var hs = jwt.NewHS256([]byte(secret))
+
+const secretFile = "secret.pem"
+var hs = JwtNew()
+
+func JwtNew() (*jwt.HMACSHA) {
+	fmt.Println("init in auth")
+	secret, err := ioutil.ReadFile(secretFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return jwt.NewHS256(secret)
+}
 
 type CustomPayload struct {
 	jwt.Payload

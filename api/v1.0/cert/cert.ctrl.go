@@ -1,52 +1,35 @@
 package cert
+
 import (
-	"github.com/uncopied/uncopier/database/dbmodel"
-	"crypto/rsa"
 	"crypto/md5"
+	"crypto/rsa"
 	"crypto/x509"
 	"encoding/hex"
 	"encoding/pem"
 	"fmt"
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gin-gonic/gin"
+	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
+	"io/ioutil"
 	"log"
 	"strconv"
 	"time"
 )
 const UncopiedOrg = "uncopied.org"
-const secret = `
------BEGIN PRIVATE KEY-----
-MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCjwdu1Mh8d3I08
-oBuEOJVePgXj1wKyzu3qxjyVmCgikSB9XRegy/DPpX/n4uRqxVB4iPZXflGu7sch
-FhCMdfxb4byBI9JF7p4rK3xHlab9a4EkUdvOEr28zTNgtwkmme6CDFbhtxXFQSjd
-fPQ+BKYA0t2x8IHqAoI9dBCHLTj9BN7HPIagNFLv8gMM9SXEzA1FGHxp7OhoOuHZ
-ltfAOKI1Suwvd51/oHSUojRcX0LoTeLJovvX/lJl1Mu72eW1RBKdBv7Sxk4sYmkb
-1UCitMnCo+ZCqdb/8qGbjg+S7qelRb6jNj/H+brcHIUw3uMbz2goYP/NbCGU/4uG
-XWYvXX11AgMBAAECggEBAISPnYdkd4P40exNv3idRWzw0FvL5cdRc48lwk1myraQ
-vLg+762e6eVtl8jjBvzXlXi9hoz1GLJ/YHsMHYFW0V6fsbTohoNN0oQnw4c/QdrL
-d9Mq4MBEs4tuoTSddq7k1Qo5aut1Bg6T3LzPNfguUyM/j29HviLsvPl6RxbmKMfI
-KfBmGs5Enxvyp3DJkP1CvQDmEuB2kW8fGXYbVy+x3plACOO/OSBvbrTWp4fGrCo4
-mNWMpAK/MU208MlCUNMH4PQXJgV7uXm0aRiTDxDWyYtSH056muIqFwfkrGzZJMkt
-93MzhnU36bXOX1mQsAPYMmjxpJfaScXeL2wX7tHb8oECgYEA0OLqz1Sz9kA9vZ/y
-x8Bo/PejKibJzY9JQ0n2Jqs9Fy6dcIA7e5KiwU4SEbXzWISHFsXV9uRZSWR+Ci65
-XEOApFxgrAh/oYLru7zR1pYrjr4ez+cc6m685rv7ryocsssCq9LoxxECsCA5Io+n
-cant0jbU83P+H9VWvauPak+izEkCgYEAyLEwQB+rdNSGBujw/K8JICavdaFXoqCo
-OyafN/LLQha5XNxN2O2MTmctMUTl7DMmzwjtkvBZEB+OAVBZmjEeQ92rY7vtKFxE
-OmKuEDgDnKLVwZm2YLjLD/co98RXf3KeBUcIdaRinbpwsDQ9A4S3/6xjbgdTPyWh
-j0lZZ/mKr80CgYBjrgVzTu5Z8qoD1VIbtFvla573PG9MorXJYIAQT+LlLx9+UhMQ
-kxcLu9+vh+5KLWPxoBLMsIdTGJt07HsT5jp7NIIFVkDhqAIqIp7YEe1TPrKhb55C
-2PlX+hjOq//p6iqqKAlhBWMM/TOGpJq5COguSnAwhQed1UaBWF8l0j7T0QKBgGVc
-eI4qcKJVJEwhInW8wdMnNr8meeh9U/psC0ZqrhX2/C/WZMsHTzHaEo0ryyR8wUEX
-tUXddl4aUdKADoE+BZcpQgLhS2pzD1KdvGQcplZaN7PMOrynGIg7wMlCtR59eSoZ
-MkCYgeY/3+Jev+IjCftrydwsfvMJwotn9Gv7MPyRAoGAdhk++VzYWrz65FL36Btj
-NbrEVeXVA3z+ByoUXR+CKIInDSMEf+FDp8kE5EIhVd3UT0pEgLFjB94ZTbytoShD
-qx+LF1b6Ndg156XG1xEThZB58zdZJdEz96NqGFkXHEBUCI9E7/j2OWLUeJ6eOUwo
-wGS3ha8R0NfDrjnPv0Vrfgw=
------END PRIVATE KEY-----
-`
+const pkFile="keyPrivate.pem"
 
-var privPEMData = []byte(secret)
+var privPEMData []byte = readPK()
+
+func readPK() []byte {
+	fmt.Println("init in cert.go")
+	privPEMData, err := ioutil.ReadFile(pkFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return privPEMData
+}
+
 
 type CustomPayload struct {
 	jwt.Payload
