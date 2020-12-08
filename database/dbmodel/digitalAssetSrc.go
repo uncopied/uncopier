@@ -32,6 +32,12 @@ type DigitalAssetSrc struct {
 	StampError string `sql:"type:text;"`
 
 	ExternalSourceID string `sql:"type:text;"`
+
+	// hashes for similarity indexing
+	AverageHash uint64
+	DifferenceHash uint64
+	PerceptionHash uint64
+
 }
 
 const IPFSRootURL = "https://ipfs.io/ipfs"

@@ -1,18 +1,19 @@
 package src
 
 import (
-	"github.com/uncopied/uncopier/database/dbmodel"
 	"bytes"
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
 	"github.com/algorand/go-algorand-sdk/encoding/json"
 	"github.com/auyer/steganography"
+	"github.com/corona10/goimagehash"
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/gin-gonic/gin"
 	"github.com/ipfs/go-ipfs-api"
 	"github.com/nfnt/resize"
 	"github.com/pkg/errors"
+	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
 	"image"
 	"image/jpeg"
@@ -32,6 +33,7 @@ func create(c *gin.Context) {
 		AuthorName string  `json:"author_name"`
 		AuthorProfileURL string  `json:"author_profile_url"`
 		SourceLicense string  `json:"source_license"`
+		ExternalSourceID string  `json:"external_source_id"`
 		SourceLicenseURL string `json:"source_license_url"`
 		IPFSUploader string `json:"ipfs_uploader"`
 		IPFSFilename string `json:"ipfs_filename"`
@@ -59,6 +61,7 @@ func create(c *gin.Context) {
 		IssuerClaimsAuthorship: false,
 		AuthorName:             body.AuthorName,
 		AuthorProfileURL:       body.AuthorProfileURL,
+		ExternalSourceID: 		body.ExternalSourceID,
 		SourceLicense:          body.SourceLicense,
 		SourceLicenseURL:       body.SourceLicenseURL,
 		IPFSUploader:           body.IPFSUploader,
@@ -178,24 +181,26 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 		return "",errors.New("IPFS thumbnailing : currently, only PNG and JPG files are supported "+sourceURL)
 	}
 
-	// Create the file
+	// Save the main file in cache
 	filePath := LocalCacheDIR+"/"
-	fileName := asset.IPFSHash+mime.Extension()
-	err = os.MkdirAll(filePath,os.ModePerm)
-	if err != nil {
-		return "",err
+	{
+		fileName := asset.IPFSHash+mime.Extension()
+		err = os.MkdirAll(filePath,os.ModePerm)
+		if err != nil {
+			return "",err
+		}
+		out, err := os.Create(filePath+fileName)
+		if err != nil {
+			return "",err
+		}
+		defer out.Close()
+		// Write the body to file
+		_, err = out.Write(bodyBytes)
+		if err != nil {
+			return "",err
+		}
 	}
-	out, err := os.Create(filePath+fileName)
-	if err != nil {
-		return "",err
-	}
-	defer out.Close()
 
-	// Write the body to file
-	_, err = out.Write(bodyBytes)
-	if err != nil {
-		return "",err
-	}
 
 	// resize using Lanczos resampling
 	// and preserve aspect ratio
@@ -205,6 +210,15 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 	} else {
 		thumbnail = resize.Resize(0, ThumbnailWidthHeight, img, resize.Lanczos3)
 	}
+
+	// compute thumbnail hashes for similarity indexing
+	averageHash, _ := goimagehash.AverageHash(thumbnail)
+	differenceHash, _ := goimagehash.DifferenceHash(thumbnail)
+	perceptionHash, _ := goimagehash.PerceptionHash(thumbnail)
+	asset.AverageHash = averageHash.GetHash()
+	asset.DifferenceHash = differenceHash.GetHash()
+	asset.PerceptionHash = perceptionHash.GetHash()
+
 
 	// add steganography
 	type Stegano struct {
@@ -221,7 +235,6 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 	}
 	message := json.Encode(stegano)
 	sizeOfMessage := steganography.GetMessageSizeFromImage(thumbnail)
-
 	if int(sizeOfMessage) < len(message) {
 		return "",errors.New("IPFS thumbnail too small for stegano "+sourceURL)
 	} else {
@@ -237,6 +250,21 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 			os.Exit(1)
 		}
 		asset.IPFSHashThumbnail = cid
+		// Save the thumbnail file in cache
+		filePath := LocalCacheDIR+"/"
+		{
+			fileName := cid	+".png"
+			out, err := os.Create(filePath+fileName)
+			if err != nil {
+				return "",err
+			}
+			defer out.Close()
+			// Write the body to file
+			_, err = out.Write(w.Bytes())
+			if err != nil {
+				return "",err
+			}
+		}
 	}
 	return md5Hash,err
 }
