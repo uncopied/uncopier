@@ -26,17 +26,12 @@ type Asset struct {
 	// Friendly name (must be short)
 	Name string `sql:"type:text;"`
 
-	// Unit name of asset (must be VERY short) ex. Lady-{{ .editionNumber }}
-	UnitName string  `sql:"type:text;"` // used to display asset units to user
-
 	// Certificate label
 	CertificateLabel string `sql:"type:text;"`
 
 	// Arbitrary data to be stored in the transaction
 	Note string  `sql:"type:text;"` //
 
-	// digital asset source
-	Template   AssetTemplate `gorm:"foreignKey:TemplateID"`
-	TemplateID uint
+	AssetTemplateID uint
 
 }

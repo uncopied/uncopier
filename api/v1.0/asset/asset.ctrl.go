@@ -13,7 +13,7 @@ import (
 
 type AssetBundle struct {
 	Template dbmodel.AssetTemplate
-	Assets []dbmodel.Asset
+//	Params []TemplateParams
 	Status string
 	ErrorMessage []string
 }
@@ -66,6 +66,7 @@ func create(c *gin.Context) {
 	}
 
 	assetTemplate := dbmodel.AssetTemplate{
+		Source: assetSrc,
 		Metadata:            body.Metadata,
 		ExternalMetadataURL: body.ExternalMetadataURL,
 		ExternalAssetId:     body.ExternalAssetId,
@@ -74,6 +75,7 @@ func create(c *gin.Context) {
 		CertificateLabel:    body.CertificateLabel,
 		Note:                body.Note,
 	}
+
 	// if the work is not an edition then EditionTotal=1
 	if assetTemplate.EditionTotal == 0 {
 		assetTemplate.EditionTotal = 1
@@ -83,12 +85,12 @@ func create(c *gin.Context) {
 		c.AbortWithStatus(500)
 		return
 	}
+	// TODO check why we need this
+	assetTemplate.Assets = bundle.Template.Assets
 	if bundle.Status == "CREATE" && len(bundle.ErrorMessage) == 0 {
 		// the bundle is valid, so create in DB
 		db.Create(&assetTemplate)
-		for _, elem := range bundle.Assets {
-			db.Create(&elem)
-		}
+		//for _, elem := range bundle.Assets { db.Create(&elem) }
 	}
 	c.JSON(200, &bundle)
 }
@@ -122,16 +124,13 @@ const maxCertificateLabelLength = 128
 const maxNoteLength = 1000
 
 func evaluate(assetTemplate *dbmodel.AssetTemplate) (AssetBundle, error) {
-  	assets := make([]dbmodel.Asset, assetTemplate.EditionTotal)
-	bundle := AssetBundle{
-		Template:     *assetTemplate,
-		Assets:       assets,
-		Status:       "CREATE",
-		ErrorMessage: make([]string,0),
-	}
+  	assets := make([]dbmodel.Asset, 0)
+  	params := make([]TemplateParams,0)
+  	errors := make([]string,0)
+
 	currentTime := time.Now()
 	currentYear := strconv.Itoa(currentTime.Year())
-	for i := 0; i< assetTemplate.EditionTotal ;i++ {
+	for i := 1; i<= assetTemplate.EditionTotal ;i++ {
 		externalAssetId := 0
 		if assetTemplate.ExternalAssetId > 0 {
 			externalAssetId = assetTemplate.ExternalAssetId+i
@@ -152,13 +151,13 @@ func evaluate(assetTemplate *dbmodel.AssetTemplate) (AssetBundle, error) {
 		// evaluate asset name first
 		assetName := execute(&templateParams, assetTemplate.Name)
 		if len(assetName) > maxAssetNameLength {
-			bundle.ErrorMessage = append(bundle.ErrorMessage, "asset name length too long : "+assetName)
+			errors = append(errors, "asset name length too long : "+assetName)
 		}
 		templateParams.AssetName = assetName
 		// then evaluate certificate label
 		certificateLabel := execute(&templateParams, assetTemplate.CertificateLabel)
 		if len(certificateLabel) > maxCertificateLabelLength {
-			bundle.ErrorMessage = append(bundle.ErrorMessage, "asset label length too long : "+certificateLabel)
+			errors = append(errors, "asset label length too long : "+certificateLabel)
 		}
 		templateParams.CertificateLabel = certificateLabel
 		externalMetadataURL:= execute(&templateParams, assetTemplate.ExternalMetadataURL)
@@ -166,7 +165,7 @@ func evaluate(assetTemplate *dbmodel.AssetTemplate) (AssetBundle, error) {
 		templateParams.ExternalMetadataURL = externalMetadataURL
 		note:=execute(&templateParams, assetTemplate.Note)
 		if len(note) > maxNoteLength {
-			bundle.ErrorMessage = append(bundle.ErrorMessage, "asset note too long : "+note)
+			errors = append(errors, "asset note too long : "+note)
 		}
 		metadata:=execute(&templateParams, assetTemplate.Metadata)
 		// TODO : json schema validation an comparison with value at externalMetadataURL
@@ -179,10 +178,17 @@ func evaluate(assetTemplate *dbmodel.AssetTemplate) (AssetBundle, error) {
 			ExternalMetadataURL: externalMetadataURL,
 			Note:                note,
 			Metadata:            metadata,
-			Template:            *assetTemplate,
 		}
 		assets = append(assets, asset)
+		params = append(params, templateParams)
 	}
+	bundle := AssetBundle{
+		Template:     *assetTemplate,
+		Status:       "CREATE",
+//		Params:       params,
+		ErrorMessage: errors,
+	}
+	bundle.Template.Assets = assets
 	return bundle, nil
 }
 

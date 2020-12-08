@@ -2,18 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="54e4dffa-e567-46b4-90f9-fc00f68382d4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/v1.0/asset/asset.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/dbmodel/asset.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jsonTemplating.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/v1.0.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/v1.0.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/createAsset.go" beforeDir="false" afterPath="$PROJECT_DIR$/createAsset.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetNFT.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/assetTemplate.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetSrc.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/digitalAssetSrc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/asset.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/asset.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/assetTemplate.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/assetTemplate.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,8 +116,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go</url>
-          <line>170</line>
-          <option name="timeStamp" value="30" />
+          <line>89</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go</url>
+          <line>82</line>
+          <option name="timeStamp" value="41" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

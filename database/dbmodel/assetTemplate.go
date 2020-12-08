@@ -33,4 +33,7 @@ type AssetTemplate struct {
 	Source   DigitalAssetSrc `gorm:"foreignKey:SourceID"`
 	SourceID uint
 
+	// assets from template
+ 	Assets []Asset `gorm:"foreignKey:AssetTemplateID"`
+
 }
