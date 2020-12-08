@@ -34,9 +34,9 @@ type DigitalAssetSrc struct {
 	ExternalSourceID string `sql:"type:text;"`
 
 	// hashes for similarity indexing
-	AverageHash uint64
-	DifferenceHash uint64
-	PerceptionHash uint64
+	AverageHash uint64 `gorm:"type:numeric;"`
+	DifferenceHash uint64 `gorm:"type:numeric;"`
+	PerceptionHash uint64 `gorm:"type:numeric;"`
 
 }
 

@@ -78,7 +78,12 @@ func create(c *gin.Context) {
 		asset.StampError = err.Error()
 		fmt.Println("error "+err.Error())
 	}
-	db.Updates(&asset)
+	tx := db.Updates(&asset)
+	if tx.Error != nil {
+		fmt.Println("DB transaction error ")
+		c.AbortWithStatus(500)
+		return
+	}
 	c.JSON(200, &asset)
 }
 

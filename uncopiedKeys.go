@@ -5,7 +5,7 @@
 // +build ignore
 
 // Generate a self-signed X.509 certificate for a TLS server. Outputs to
-// 'cert.pem' and 'key.pem' and will overwrite existing files.
+// 'certificates.pem' and 'key.pem' and will overwrite existing files.
 
 package main
 
@@ -77,7 +77,7 @@ func main() {
 	template.DNSNames = append(template.DNSNames, uncopiedDomainArt)
 	template.EmailAddresses = append(template.EmailAddresses,emailAddress)
 	template.EmailAddresses = append(template.EmailAddresses,emailAddressPresident)
-	//whether this cert should be its own Certificate Authority
+	//whether this certificates should be its own Certificate Authority
 	template.IsCA = true
 	template.KeyUsage |= x509.KeyUsageCertSign
 
@@ -86,19 +86,19 @@ func main() {
 		log.Fatalf("Failed to create certificate: %v", err)
 	}
 
-	certOut, err := os.Create("cert.pem")
+	certOut, err := os.Create("certificates.pem")
 	if err != nil {
-		log.Fatalf("Failed to open cert.pem for writing: %v", err)
+		log.Fatalf("Failed to open certificates.pem for writing: %v", err)
 	}
 
 	if err := pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes}); err != nil {
-		log.Fatalf("Failed to write data to cert.pem: %v", err)
+		log.Fatalf("Failed to write data to certificates.pem: %v", err)
 	}
 
 	if err := certOut.Close(); err != nil {
-		log.Fatalf("Error closing cert.pem: %v", err)
+		log.Fatalf("Error closing certificates.pem: %v", err)
 	}
-	log.Print("wrote cert.pem\n")
+	log.Print("wrote certificates.pem\n")
 
 	keyOut, err := os.OpenFile("keyPrivate.pem", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {

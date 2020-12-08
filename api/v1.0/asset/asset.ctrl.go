@@ -3,11 +3,11 @@ package asset
 import (
 	"bytes"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/uncopied/uncopier/database/dbmodel"
+	"gorm.io/gorm"
 	"strconv"
 	"text/template"
-	"gorm.io/gorm"
-	"github.com/gin-gonic/gin"
 	"time"
 )
 
@@ -192,24 +192,6 @@ func evaluate(assetTemplate *dbmodel.AssetTemplate) (AssetBundle, error) {
 	return bundle, nil
 }
 
-func list(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-	userName := c.MustGet("user")
-	// check if user
-	var user dbmodel.User
-	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
-		fmt.Println("User name not found ",userName)
-		c.AbortWithStatus(409)
-		return
-	}
-	var assetSrc []dbmodel.DigitalAssetSrc
-	if err := db.Where("issuer_id = ?", user.ID).Order("id asc").Find(&assetSrc).Error; err != nil {
-		c.AbortWithStatus(500)
-		return
-	}
-	c.JSON(200, assetSrc)
-}
-
 func read(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	userName := c.MustGet("user")
@@ -221,14 +203,17 @@ func read(c *gin.Context) {
 		return
 	}
 	id := c.Param("id")
-	var assetSrc dbmodel.DigitalAssetSrc
-
-	// auto preloads the related dbmodel
-	// http://gorm.io/docs/preload.html#Auto-Preloading
-	if err := db.Set("gorm:auto_preload", true).Where("id = ?", id).First(&assetSrc).Error; err != nil {
+	var asset dbmodel.AssetTemplate
+	if err := db.Preload("Source").Preload("Assets").Where("id = ?", id).First(&asset).Error; err != nil {
 		c.AbortWithStatus(404)
 		return
 	}
-	c.JSON(200, assetSrc)
+	if asset.Source.IssuerID != user.ID {
+		fmt.Println("User doesnt own asset ",userName)
+		c.AbortWithStatus(409)
+		return
+	}
+	c.JSON(200, asset)
 }
+
 

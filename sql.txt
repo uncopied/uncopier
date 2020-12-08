@@ -1,0 +1,29 @@
+DROP TABLE alerts CASCADE;
+DROP TABLE asset_templates CASCADE;
+DROP TABLE assets CASCADE;
+DROP TABLE certificate_tokens CASCADE;
+DROP TABLE certificates CASCADE;
+DROP TABLE digital_asset_srcs CASCADE;
+DROP TABLE users CASCADE;
+
+
+
+ALTER TABLE digital_asset_srcs
+DROP COLUMN     average_hash;
+
+ALTER TABLE digital_asset_srcs
+DROP COLUMN     difference_hash;
+
+ALTER TABLE digital_asset_srcs
+DROP COLUMN     perception_hash;
+
+ALTER TABLE digital_asset_srcs
+ADD COLUMN     average_hash decimal;
+
+ALTER TABLE digital_asset_srcs
+ADD COLUMN     difference_hash decimal;
+
+ALTER TABLE digital_asset_srcs
+ADD COLUMN     perception_hash decimal;
+
+

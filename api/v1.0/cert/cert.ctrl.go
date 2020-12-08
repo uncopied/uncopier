@@ -22,7 +22,7 @@ const pkFile="keyPrivate.pem"
 var privPEMData []byte = readPK()
 
 func readPK() []byte {
-	fmt.Println("init in cert.go")
+	fmt.Println("init in certificates.go")
 	privPEMData, err := ioutil.ReadFile(pkFile)
 	if err != nil {
 		log.Fatal(err)
@@ -133,7 +133,6 @@ func issue(c *gin.Context) {
 		return
 	}
 	// additional checks on user?
-
 	type RequestBody struct {
 		CertificateLabel  string `json:"label" binding:"required"`
 	}
@@ -197,7 +196,7 @@ func issue(c *gin.Context) {
 func action(c *gin.Context) {
 	fmt.Println("control")
 	db := c.MustGet("db").(*gorm.DB)
-	certId := c.Param("cert")
+	certId := c.Param("certificates")
 	token := c.Param("token")
 
 	userName := c.MustGet("user")

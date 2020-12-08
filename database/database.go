@@ -18,7 +18,7 @@ func Initialize() (*gorm.DB, error) {
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 		logger.Config{
 			SlowThreshold: time.Second,   // Slow SQL threshold
-			LogLevel:      logger.Info, // Log level
+			LogLevel:      logger.Warn, // Log level
 			Colorful:      false,         // Disable color
 		},
 	)

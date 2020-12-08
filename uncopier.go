@@ -6,6 +6,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/uncopied/uncopier/api"
 	"github.com/uncopied/uncopier/api/v1.0/middleware"
+	"github.com/uncopied/uncopier/certificates"
 	"github.com/uncopied/uncopier/database"
 	"net/http"
 )
@@ -34,7 +35,10 @@ func main() {
 	})
 	router.Use(database.Inject(db))
 	router.Use(middleware.JWTMiddleware())
-	api.ApplyRoutes(router) // apply api router
+	// apply api router
+	api.ApplyRoutes(router)
+	// apply certificates router
+	certificates.ApplyRoutes(router)
 	router.Run(":8081")
 
 }
