@@ -3,13 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="54e4dffa-e567-46b4-90f9-fc00f68382d4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/src/assetSrc.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/src/assetSrc.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/digitalAssetSrc.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/digitalAssetSrc.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ifps_cache/QmQ5nQy187g1BsNrcUYRwtNRbEQ5iNHQGAuGV9GQJsd2Qp.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ifps_cache/Qma4RX4QD5b5H2EiJWotUssA5iWTq4tJtkJadndBfknKnj.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +37,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
+    <property name="go.vendoring.notification.had.been.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/database/dbmodel" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -56,7 +52,7 @@
       <recent name="D:\git\uncopier\api\v1.0\asset" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build uncopier.go">
+  <component name="RunManager" selected="Go Build.go build uncopiedKeys.go">
     <configuration name="go build jsonTemplating.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
@@ -86,9 +82,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build uncopiedKeys.go" />
         <item itemvalue="Go Build.go build uncopier.go" />
         <item itemvalue="Go Build.go build jsonTemplating.go" />
-        <item itemvalue="Go Build.go build uncopiedKeys.go" />
       </list>
     </recent_temporary>
   </component>
