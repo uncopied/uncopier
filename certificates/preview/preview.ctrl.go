@@ -31,7 +31,7 @@ func preview(c *gin.Context) {
 
 	id := c.Param("id")
 	var asset dbmodel.AssetTemplate
-	if err := db.Preload("Source").Preload("Assets").Where("id = ?", id).First(&asset).Error; err != nil {
+	if err := db.Preload("Source.Issuer").Preload("Source").Preload("Assets").Where("id = ?", id).First(&asset).Error; err != nil {
 		c.AbortWithStatus(404)
 		return
 	}
@@ -80,10 +80,11 @@ func preview(c *gin.Context) {
 	//
 	//	certificateSVG: string(buf.Bytes()),
 	//}
+
 	c.HTML(http.StatusOK, "preview.tmpl", gin.H{
-		"certificateLabel": first.CertificateLabel,
+		"asset": first,
+		"source": asset.Source,
 		"tallystick": tallystickHtml,
-		"thumbnail": asset.Source.IPFSHashThumbnail,
 	})
 }
 

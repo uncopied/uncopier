@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="54e4dffa-e567-46b4-90f9-fc00f68382d4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/certificates/preview/preview.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/certificates/preview/preview.ctrl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/preview.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/preview.tmpl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +52,7 @@
       <recent name="D:\git\uncopier\api\v1.0\asset" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build uncopiedKeys.go">
+  <component name="RunManager" selected="Go Build.go build uncopier.go">
     <configuration name="go build jsonTemplating.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
@@ -82,8 +82,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build uncopiedKeys.go" />
         <item itemvalue="Go Build.go build uncopier.go" />
+        <item itemvalue="Go Build.go build uncopiedKeys.go" />
         <item itemvalue="Go Build.go build jsonTemplating.go" />
       </list>
     </recent_temporary>
@@ -127,5 +127,10 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="GoApplicationRunConfiguration">
+        <watch expression="user" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

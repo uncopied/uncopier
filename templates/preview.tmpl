@@ -1,9 +1,41 @@
 <div>
 <h1>
-    {{ .certificateLabel }}
+    {{ .asset.CertificateLabel }}
 </h1>
+<h2>Certificate of Authenticity</h2>
+    <p>
+        This document certifies that {{ .source.Issuer.DisplayName }} declares the piece of artwork mentioned below, to be an authentic, original piece of art
+        of the author's own creative efforts.
+    </p>
+    <p>
+        The high definition digital source of the work (or a high definition digital copy issued by the author) has been released by the author
+        under licence {{ .source.SourceLicense }} and it will be stored forever (with exceptions if for Illegal, Harmful, or Offensive Content) with
+        cryptographic hash {{ .source.IPFSHash }}
+    </p>
+    <p>
+        The thumbnail below is a lower definition copy of the digital source which has been released under licence UNCOPIED v1.0 and it will be stored
+        forever (with exceptions if for Illegal, Harmful, or Offensive Content) with cryptographic hash {{ .source.IPFSHashThumbnail }}.
 
-<img src="http://localhost:8080/ipfs/{{ .thumbnail }}"/>
+        The artwork's metadata (information such as : title, author etc.) has been released under licence UNCOPIED v1.0 and it will be stored
+        forever (with exceptions if for Illegal, Harmful, or Offensive Content).
+
+        The use of the thumbnail and the metadata is limited to the use listed in provisions of UNCOPIED v1.0 license.
+    </p>
+    <p>
+        Of the digital source were produced {{ .asset.EditionTotal }} original and unique prints constituting the limited physical edition.
+        Prints are numbered from 1 to {{ .asset.EditionTotal }} of {{ .asset.EditionTotal }} original prints. Original prints have a tally stick permanently glued
+        to the back, corresponding to the tally stick below, physically signed or marked by the artist. The art work number {{ .asset.EditionNumber }} of
+        {{ .asset.EditionTotal }} is an original edition.
+    </p>
+    <p>
+        Of the digital source were produced {{ .asset.EditionTotal }} original and unique cryptographic tokens constituting the limited digital edition.
+        Each unique physical print is tied to its unique digital token. Transferring ownership of one instantly transfers the ownership of the other, with the
+        exception of : fraud, spoliation, cybercrime or any for of abuse.
+    </p>
+    <p>
+
+    </p>
+    <img src="http://localhost:8080/ipfs/{{ .source.IPFSHashThumbnail }}"/>
 
 <div>
 {{ .tallystick }}
