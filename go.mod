@@ -3,6 +3,7 @@ module github.com/uncopied/uncopier
 go 1.15
 
 require (
+	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.6.1
 	github.com/algorand/go-algorand-sdk v1.5.1
 	github.com/auyer/steganography v1.0.0
 	github.com/corona10/goimagehash v1.0.3
