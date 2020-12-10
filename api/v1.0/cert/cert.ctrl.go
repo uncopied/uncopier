@@ -113,7 +113,7 @@ func generateTokens(certificate dbmodel.Certificate, userRole string) (dbmodel.C
 	h.Write(token)
 	tokenHash := hex.EncodeToString(h.Sum(nil))
 	certificateToken := dbmodel.CertificateToken{
-		Certificate:   certificate,
+		CertificateID:   certificate.ID,
 		Role:          userRole,
 		Token:         string(token),
 		TokenHash:     tokenHash,
@@ -121,35 +121,28 @@ func generateTokens(certificate dbmodel.Certificate, userRole string) (dbmodel.C
 	return certificateToken
 }
 
-func issue(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
-	userName := c.MustGet("user")
+const uncopiedUsername = "uncopied"
+func IssueCertificate(db *gorm.DB, user dbmodel.User, certificateLabel string, IsDIY bool) dbmodel.Certificate {
 	// check if user
-	var user dbmodel.User
-	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
-		fmt.Println("User name not found ",userName)
-		c.AbortWithStatus(409)
-		return
+	var uncopied dbmodel.User
+	if err := db.Where("user_name = ?", uncopiedUsername).First(&uncopied).Error; err != nil {
+		fmt.Println("User name not found ",uncopiedUsername)
+		log.Fatal("User name uncopied not found ")
+		return dbmodel.Certificate{}
 	}
-	// additional checks on user?
-	type RequestBody struct {
-		CertificateLabel  string `json:"label" binding:"required"`
+	var printer dbmodel.User
+	if IsDIY {
+		printer = user
+	} else {
+		printer = uncopied
 	}
-
-	var body RequestBody
-	if err := c.BindJSON(&body); err != nil {
-		c.AbortWithStatus(400)
-		return
-	}
-
 	// create certificate
 	certificate := dbmodel.Certificate{
 		Issuer:                        user,
-		Printer:                       user,
-		PrimaryConservator:            user,
-		SecondaryConservator:          user,
-		CertificateLabel:              body.CertificateLabel,
+		Printer:                       printer,
+		PrimaryConservator:            uncopied,
+		SecondaryConservator:          uncopied,
+		CertificateLabel:              certificateLabel,
 	}
 	db.Create(&certificate)
 
@@ -171,25 +164,45 @@ func issue(c *gin.Context) {
 	db.Create(&primaryIssuerVerifierToken)
 	db.Create(&secondaryIssuerVerifierToken)
 
-	certificate.IssuerTokenID = issuerToken.ID
-	certificate.OwnerTokenID = ownerToken.ID
-	certificate.PrimaryAssetVerifierTokenID = primaryAssetVerifierToken.ID
-	certificate.SecondaryAssetVerifierTokenID = secondaryAssetVerifierToken.ID
-	certificate.PrimaryOwnerVerifierTokenID = primaryOwnerVerifierToken.ID
-	certificate.SecondaryOwnerVerifierTokenID = secondaryOwnerVerifierToken.ID
-	certificate.PrimaryIssuerVerifierTokenID = primaryIssuerVerifierToken.ID
-	certificate.SecondaryIssuerVerifierTokenID = secondaryIssuerVerifierToken.ID
+	certificate.IssuerToken = issuerToken
+	certificate.OwnerToken = ownerToken
+	certificate.PrimaryAssetVerifierToken = primaryAssetVerifierToken
+	certificate.SecondaryAssetVerifierToken = secondaryAssetVerifierToken
+	certificate.PrimaryOwnerVerifierToken = primaryOwnerVerifierToken
+	certificate.SecondaryOwnerVerifierToken = secondaryOwnerVerifierToken
+	certificate.PrimaryIssuerVerifierToken = primaryIssuerVerifierToken
+	certificate.SecondaryIssuerVerifierToken = secondaryIssuerVerifierToken
 
 	db.Updates(&certificate)
+	return certificate
+}
 
+func issue(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+	userName := c.MustGet("user")
+	// check if user
+	var user dbmodel.User
+	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
+		fmt.Println("User name not found ",userName)
+		c.AbortWithStatus(409)
+		return
+	}
+	// additional checks on user?
+	type RequestBody struct {
+		CertificateLabel  string `json:"label" binding:"required"`
+	}
+	var body RequestBody
+	if err := c.BindJSON(&body); err != nil {
+		c.AbortWithStatus(400)
+		return
+	}
+	certificate := IssueCertificate(db, user, body.CertificateLabel, true)
 	type RequestResponse struct {
 		Certificate dbmodel.Certificate
 	}
-
 	requestResponse := RequestResponse{
-		Certificate:              certificate,
+		Certificate: certificate,
 	}
-
 	c.JSON(200, requestResponse)
 }
 

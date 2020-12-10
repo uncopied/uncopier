@@ -37,13 +37,21 @@ type Certificate struct {
 	CertificateSecondaryURL  string `sql:"type:text;"` // link to the certificate in secondary system ex. stable link to blockchain explorer
 
 	// role tokens : qrcodes split
+	IssuerToken CertificateToken `gorm:"foreignKey:IssuerTokenID"`
 	IssuerTokenID uint
+	OwnerToken CertificateToken `gorm:"foreignKey:OwnerTokenID"`
 	OwnerTokenID uint
+	PrimaryAssetVerifierToken CertificateToken `gorm:"foreignKey:PrimaryAssetVerifierTokenID"`
 	PrimaryAssetVerifierTokenID uint
+	SecondaryAssetVerifierToken CertificateToken `gorm:"foreignKey:SecondaryAssetVerifierTokenID"`
 	SecondaryAssetVerifierTokenID uint
+	PrimaryOwnerVerifierToken CertificateToken `gorm:"foreignKey:PrimaryOwnerVerifierTokenID"`
 	PrimaryOwnerVerifierTokenID uint
+	SecondaryOwnerVerifierToken CertificateToken `gorm:"foreignKey:SecondaryOwnerVerifierTokenID"`
 	SecondaryOwnerVerifierTokenID uint
+	PrimaryIssuerVerifierToken CertificateToken `gorm:"foreignKey:PrimaryIssuerVerifierTokenID"`
 	PrimaryIssuerVerifierTokenID uint
+	SecondaryIssuerVerifierToken CertificateToken `gorm:"foreignKey:SecondaryIssuerVerifierTokenID"`
 	SecondaryIssuerVerifierTokenID uint
 
 }

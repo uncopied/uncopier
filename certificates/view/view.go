@@ -1,4 +1,4 @@
-package preview
+package view
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,8 +7,14 @@ import (
 
 // ApplyRoutes applies router to the gin Engine
 func ApplyRoutes(r *gin.RouterGroup) {
-	posts := r.Group("/v")
+	posts := r.Group("/preview")
 	{
+		// preview by ID
 		posts.GET("/:id", middleware.Authorized, preview)
+	}
+	views := r.Group("/v")
+	{
+		// preview by token (this is PUBLIC)
+		views.GET("/:token", view)
 	}
 }

@@ -36,7 +36,8 @@ func Initialize() (*gorm.DB, error) {
 					&dbmodel.Certificate{},
 					&dbmodel.Alert{},
 					&dbmodel.CertificateToken{},
-
+					&dbmodel.Order{},
+					&dbmodel.CertificateIssuance{},
 	)
 	adminUser :=&dbmodel.User{
 		UserName:     "uncopied",

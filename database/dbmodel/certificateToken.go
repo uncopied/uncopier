@@ -7,7 +7,6 @@ import (
 type CertificateToken struct {
 	gorm.Model
 
-	Certificate Certificate `gorm:"foreignKey:CertificateID"`
 	CertificateID uint
 
 	Role string `sql:"type:text;"` // role, ex. Issuer, Owner, etc.

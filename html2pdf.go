@@ -20,10 +20,11 @@ func main() {
 	pdfg.Grayscale.Set(false)
 
 	// Create a new input page from an URL
-	page := wkhtmltopdf.NewPage("http://localhost:8081/public/1.html")
+	page := wkhtmltopdf.NewPage("http://localhost:8081/public/certif.html")
 
 	// Set options for this page
 	page.FooterRight.Set("[page]")
+	page.FooterCenter.Set("Issuer Copy")
 	page.FooterFontSize.Set(10)
 	page.Zoom.Set(0.95)
 
@@ -37,7 +38,7 @@ func main() {
 	}
 
 	// Write buffer contents to file on disk
-	err = pdfg.WriteFile("./simplesample.pdf")
+	err = pdfg.WriteFile("./certif.pdf")
 	if err != nil {
 		log.Fatal(err)
 	}

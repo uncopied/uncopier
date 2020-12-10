@@ -1,0 +1,45 @@
+{{ template "header.tmpl" .}}
+<div>
+<h1>
+    Checking-out
+</h1>
+<h2>Delivery options</h2>
+    <p>
+        Your are about to finalize your order to certify {{ .asset.CertificateLabel }}. The certificate is valid for a duration of 10 years.
+        You can order to e-mail and print the certificate yourself, or you can order to mail and receive a printed document by post.
+    </p>
+    <p>
+
+    </p>
+    <h2>Order by mail</h2>
+<p>
+    We activate the digital certificate immediately, we print the documents and you will receive the physical certificates by post within a few days.
+</p>
+    <p><button type="button" disabled="true">Pay now {{ .pricing.CcySymbol }} {{ .pricing.Price }} {{ .pricing.Ccy }} </button> (available SOON!)</p>
+    <h2>Do it yourself (DIY) instructions</h2>
+<p>
+    If you order to e-mail, you will receive two PDF documents at your email address {{ .source.Issuer.EmailAddress }}. The first PDF document contains the {{ .asset.EditionTotal }} certificates. The second PDF document contains the {{ .asset.EditionTotal }} tally sticks (example below),
+</p>
+    <p><button type="button">Pay now {{ .pricing.CcySymbol }} {{ .pricing.PriceDiy }} {{ .pricing.Ccy }} </button></p>
+    <div id="#tallystick">
+        {{ .tallystick }}
+    </div>
+<p>
+    <ul>
+        <li>Print the certificate document in <b>4 copies</b></li>
+        <li>Print the tally stick document on quality 100-gram paper</li>
+        <li>Sign manually each part of the tally stick, just below the title</li>
+        <li>Cut along the blue lines with good scissors</li>
+        <li>Glue the central part of the tally stick to the back of the artwork</li>
+        <li>Glue each other part of the tally stick to one certificate copy</li>
+        <li>The issuer copy should be retained by the artist for the record</li>
+        <li>The owner copy is given to the owner when the artwork is sold</li>
+        <li>Send the two certificate copies by post to the PO Box address</li>
+    </ul>
+    Printing should be made on 100-gram high quality paper (recommended brand). Cutting should be done manually with good quality scissors.
+    Gluing should be done with strong, permanent and transparent glue that will not affect the artwork's long term preservation (recommended brand).
+    We will activate the digital certificate as soon as we have received the physical copies from you by post.
+</p>
+
+</div>
+{{ template "footer.tmpl" .}}
