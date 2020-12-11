@@ -39,12 +39,16 @@ func Initialize() (*gorm.DB, error) {
 					&dbmodel.Order{},
 					&dbmodel.CertificateIssuance{},
 	)
-	adminUser :=&dbmodel.User{
-		UserName:     "uncopied",
-		DisplayName:  "Elian Carsenat",
-		EmailAddress: "contact@uncopied.art",
+	admin := "uncopied"
+	var exists dbmodel.User
+	if err := db.Where("user_name = ?", admin).First(&exists).Error; err != nil {
+		adminUser :=&dbmodel.User{
+			UserName:     "uncopied",
+			DisplayName:  "Elian Carsenat",
+			EmailAddress: "contact@uncopied.art",
+		}
+		db.Create(adminUser)
 	}
-	db.Create(adminUser)
 	return db, err
 }
 

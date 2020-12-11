@@ -313,6 +313,8 @@ github.com/uncopied/go-qrcode v0.0.0-20201113130944-61f364f4f017 h1:cCkDpIh52Koc
 github.com/uncopied/go-qrcode v0.0.0-20201113130944-61f364f4f017/go.mod h1:BE3p9hNTcQy4UN/HbkTI2z7qYB8VrzG7r/hLYOl6wNw=
 github.com/uncopied/tallystick v0.0.1 h1:GncwOeAmAuE3bX6t0MBBtR/jhNuye1tGYhpML9A0nt0=
 github.com/uncopied/tallystick v0.0.1/go.mod h1:jM0xzhwCCUiGUxU6kUyhktBEZBlX7OjmjNT4SR9iUI4=
+github.com/uncopied/tallystick v0.0.2 h1:T/S+vPv5Zt17VQK7QdeOEhBplEKJ2JcrGczRedYA+D4=
+github.com/uncopied/tallystick v0.0.2/go.mod h1:jM0xzhwCCUiGUxU6kUyhktBEZBlX7OjmjNT4SR9iUI4=
 github.com/wcharczuk/go-chart v2.0.2-0.20191206192251-962b9abdec2b+incompatible h1:ahpaSRefPekV3gcXot2AOgngIV8WYqzvDyFe3i7W24w=
 github.com/wcharczuk/go-chart v2.0.2-0.20191206192251-962b9abdec2b+incompatible/go.mod h1:PF5tmL4EIx/7Wf+hEkpCqYi5He4u90sw+0+6FhrryuE=
 github.com/whyrusleeping/tar-utils v0.0.0-20180509141711-8c6c8ba81d5c h1:GGsyl0dZ2jJgVT+VvWBf/cNijrHRhkrTjkmp5wg7li0=

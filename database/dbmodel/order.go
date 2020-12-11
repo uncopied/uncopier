@@ -26,6 +26,9 @@ type Order struct {
 	QualityStatus string
 	Quality int
 
+	// the file delivry
+	ZipBundle string
+
 	// is do it yourself?
 	IsDIY bool
 }

@@ -3,6 +3,9 @@
     <h1>
         Transaction succeeded
     </h1>
+    <p>
+        Your order {{ .OrderUUID }} is now with status {{ .order.DeliveryStatus }}.
+    </p>
     <h2>Your Documents</h2>
     <ul>
         <li>
@@ -18,9 +21,27 @@
         </li>
         {{end}}
     </ul>
-    <h2>What's next ?</h2>
+    <p>You can download all those files in <a href="/public/doc/{{ .order.OrderUUID }}/{{ .order.ZipBundle }}" target="top">one ZIP bundle</a>.
+        A copy will be sent to your email address. Links are valid for 48 hours. </p>
+    <h2>Do-it-yourself (DIY) instructions</h2>
     <p>
         Please check your email / post for documents and instructions.
+    </p>
+    <p>
+        <ul>
+            <li>Print the certificates, each certificate is already present in 4 copies in the PDF document</li>
+            <li>Print the tally stick documents on quality 100-gram paper</li>
+            <li>Sign manually each part of the tally stick, just below the title</li>
+            <li>Cut along the blue lines with good scissors</li>
+            <li>Glue the central part of the tally stick to the back of the artwork</li>
+            <li>Glue each other part of the tally stick on the related certificate copy</li>
+            <li>The issuer copy should be retained by the artist</li>
+            <li>The owner copy should be handed to the owner when the artwork is sold</li>
+            <li>Send by post the two certificate copies to UNCOPÏED PO Box address</li>
+        </ul>
+        Printing should be made on 100-gram high quality paper (recommended brand). Cutting should be done manually with good quality scissors.
+        Gluing should be done with strong, permanent and transparent glue that will not affect the artwork's long term preservation (recommended brand).
+        We will activate the digital certificate as soon as we have received the physical copies from you by post.
     </p>
 </div>
         {{ template "footer.tmpl" .}}

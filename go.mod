@@ -17,7 +17,7 @@ require (
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pkg/errors v0.8.1
 	github.com/qri-io/jsonschema v0.2.0
-	github.com/uncopied/tallystick v0.0.1
+	github.com/uncopied/tallystick v0.0.2
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	gorm.io/driver/postgres v1.0.5
 	gorm.io/gorm v1.20.8

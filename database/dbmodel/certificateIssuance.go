@@ -17,4 +17,8 @@ type CertificateIssuance struct {
 	Certificate Certificate `gorm:"foreignKey:CertificateID"`
 	CertificateID uint
 
+	AlgorandTransactionID string `sql:"type:text;"`
+
+	Metadata string  `sql:"type:text;"`
+	MetadataHash  string  `sql:"type:text;"`
 }

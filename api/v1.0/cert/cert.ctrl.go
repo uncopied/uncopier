@@ -39,7 +39,7 @@ type CustomPayload struct {
 }
 
 func validateToken(token string) (CustomPayload, error) {
-	block, rest := pem.Decode(privPEMData)
+	block, _ := pem.Decode(privPEMData)
 	if block == nil || block.Type != "PRIVATE KEY" {
 		log.Fatal("failed to decode PEM block containing public key")
 	}
@@ -48,7 +48,6 @@ func validateToken(token string) (CustomPayload, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Got a %T, with remaining data: %q", privateKey, rest)
 	var privateKeyRsa = privateKey.(*rsa.PrivateKey)
 	//var hs = jwt.NewHS256([]byte(secret))
 	var hs = jwt.NewRS256(jwt.RSAPublicKey(&privateKeyRsa.PublicKey))
@@ -75,7 +74,7 @@ func validateToken(token string) (CustomPayload, error) {
 }
 
 func generateTokens(certificate dbmodel.Certificate, userRole string) (dbmodel.CertificateToken) {
-	block, rest := pem.Decode(privPEMData)
+	block, _ := pem.Decode(privPEMData)
 	if block == nil || block.Type != "PRIVATE KEY" {
 		log.Fatal("failed to decode PEM block containing public key")
 	}
@@ -84,7 +83,6 @@ func generateTokens(certificate dbmodel.Certificate, userRole string) (dbmodel.C
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Got a %T, with remaining data: %q", privateKey, rest)
 	var privateKeyRsa = privateKey.(*rsa.PrivateKey)
 
 	//var hs = jwt.NewHS256([]byte(secret))
@@ -144,7 +142,6 @@ func IssueCertificate(db *gorm.DB, user dbmodel.User, certificateLabel string, I
 		SecondaryConservator:          uncopied,
 		CertificateLabel:              certificateLabel,
 	}
-	db.Create(&certificate)
 
 	issuerToken := generateTokens(certificate, "Issuer")
 	ownerToken := generateTokens(certificate, "Owner")
@@ -155,14 +152,14 @@ func IssueCertificate(db *gorm.DB, user dbmodel.User, certificateLabel string, I
 	primaryIssuerVerifierToken := generateTokens(certificate, "PrimaryIssuerVerifier")
 	secondaryIssuerVerifierToken := generateTokens(certificate, "SecondaryIssuerVerifier")
 
-	db.Create(&issuerToken)
-	db.Create(&ownerToken)
-	db.Create(&primaryAssetVerifierToken)
-	db.Create(&secondaryAssetVerifierToken)
-	db.Create(&primaryOwnerVerifierToken)
-	db.Create(&secondaryOwnerVerifierToken)
-	db.Create(&primaryIssuerVerifierToken)
-	db.Create(&secondaryIssuerVerifierToken)
+	//db.Create(&issuerToken)
+	//db.Create(&ownerToken)
+	//db.Create(&primaryAssetVerifierToken)
+	//db.Create(&secondaryAssetVerifierToken)
+	//db.Create(&primaryOwnerVerifierToken)
+	//db.Create(&secondaryOwnerVerifierToken)
+	//db.Create(&primaryIssuerVerifierToken)
+	//db.Create(&secondaryIssuerVerifierToken)
 
 	certificate.IssuerToken = issuerToken
 	certificate.OwnerToken = ownerToken
@@ -172,8 +169,7 @@ func IssueCertificate(db *gorm.DB, user dbmodel.User, certificateLabel string, I
 	certificate.SecondaryOwnerVerifierToken = secondaryOwnerVerifierToken
 	certificate.PrimaryIssuerVerifierToken = primaryIssuerVerifierToken
 	certificate.SecondaryIssuerVerifierToken = secondaryIssuerVerifierToken
-
-	db.Updates(&certificate)
+	db.Create(&certificate)
 	return certificate
 }
 

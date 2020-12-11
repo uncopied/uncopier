@@ -3,6 +3,7 @@ package certificates
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/uncopied/uncopier/certificates/checkout"
+	"github.com/uncopied/uncopier/certificates/verify"
 	"github.com/uncopied/uncopier/certificates/view"
 )
 
@@ -12,6 +13,7 @@ func ApplyRoutes(r *gin.Engine) {
 	{
 		view.ApplyRoutes(cert)
 		checkout.ApplyRoutes(cert)
+		verify.ApplyRoutes(cert)
 	}
 }
 

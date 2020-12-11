@@ -1,0 +1,53 @@
+{{ template "header.tmpl" .}}
+<div>
+<h1>
+    {{ .asset.CertificateLabel }}
+</h1>
+<h2>Verifying Authenticity</h2>
+    <p>
+        If you are here, you probably have access to an UNCOPIED certificate of authenticity, or an object with an UNCOPIED tag glued to it.
+    </p>
+    <p>
+        Your object's label should read : {{ .certificateIssuance.Asset.CertificateLabel }}.
+    </p>
+    <p>
+        Your object should look like this, according to its thumbnail :
+    </p>
+    <img src="http://127.0.0.1:8080/ipfs/{{ .source.IPFSHashThumbnail }}"/>
+    <p>
+        This same information can be read from several independent sources, for example
+        <ul>
+            <li><a href="http://ipfs.io/ipfs/{{ .source.IPFSHashThumbnail }}">http://ipfs.io/ipfs/{{ .source.IPFSHashThumbnail }}</a></li>
+            <li><a href="https://cloudflare-ipfs.com/ipfs/{{ .source.IPFSHashThumbnail }}">https://cloudflare-ipfs.com/ipfs/{{ .source.IPFSHashThumbnail }}</a></li>
+        </ul>
+    </p>
+    <p>
+        The object's <a href="http://127.0.0.1:8080/ipfs/{{ .certificateIssuance.MetadataHash }}">metadata</a> is stored permanently in IPFS with hash {{ .certificateIssuance.MetadataHash }}.
+        This same information can be read from several independent sources, for example
+        <ul>
+            <li><a href="http://ipfs.io/ipfs/{{ .certificateIssuance.MetadataHash }}">http://ipfs.io/ipfs/{{ .certificateIssuance.MetadataHash }}</a></li>
+            <li><a href="https://cloudflare-ipfs.com/ipfs/{{ .certificateIssuance.MetadataHash }}">https://cloudflare-ipfs.com/ipfs/{{ .certificateIssuance.MetadataHash }}</a></li>
+        </ul>
+    </p>
+    <p>
+        The object's metadata hash {{ .certificateIssuance.MetadataHash }} is also stored permanently in the Algorand blockchain with transaction ID {{ .certificateIssuance.AlgorandTransactionID }}
+        This same information can be read from several independent sources, for example
+        <ul>
+            <li><a href="https://algoexplorer.io/tx/{{ .certificateIssuance.AlgorandTransactionID }}">https://algoexplorer.io/tx/{{ .certificateIssuance.AlgorandTransactionID }}</a></li>
+                <li><a href="https://goalseeker.purestake.io/algorand/mainnet/transaction/{{ .certificateIssuance.AlgorandTransactionID }}">https://goalseeker.purestake.io/algorand/mainnet/transaction/{{ .certificateIssuance.AlgorandTransactionID }}</a></li>
+        </ul>
+    </p>
+    <p>
+        If you are the physical object's issuer/author or the object's owner, you should be able to do additional checks combining the tally stick on your certificate of authenticity
+        and the one glued on the back of the object.
+    </p>
+    <p>
+        If you are the digital item's issuer/author or the NFT (non fungible token) owner in the blockchain, you should be able to do additional operations, such as
+        adding images, lending the object or transferring ownership.
+    </p>
+    <p>
+        If you only have access to the item itself, you send a picture along with a picture of the tally stick glued to its back. We will be able to do a first
+        level of verification based on those images.
+    </p>
+</div>
+{{ template "footer.tmpl" .}}
