@@ -49,7 +49,7 @@ func main() {
 	api.ApplyRoutes(router)
 	// apply certificates router
 	certificates.ApplyRoutes(router)
-	fmt.Printf("Serving with tlsMod %s\n", *tlsMod)
+	fmt.Printf("Serving with tlsMod %s\n", *tls)
 	if *tls=="http" {
 		router.Run(":8081")
 	} else if *tls=="https" {
