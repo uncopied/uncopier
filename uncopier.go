@@ -19,7 +19,7 @@ import (
 
 
 func main() {
-	tlsMod := flag.String("tlsMod", "http", "TLS mod : http, https or autocert")
+	tls := flag.String("tls", "http", "TLS mod : http, https or autocert")
 
 	err := godotenv.Load()
 	if err != nil {
@@ -50,11 +50,11 @@ func main() {
 	// apply certificates router
 	certificates.ApplyRoutes(router)
 	fmt.Printf("Serving with tlsMod %s\n", *tlsMod)
-	if *tlsMod=="http" {
+	if *tls=="http" {
 		router.Run(":8081")
-	} else if *tlsMod=="https" {
+	} else if *tls=="https" {
 		router.RunTLS((":8443"),"/etc/letsencrypt/live/uncopied.art/fullchain.pem","/etc/letsencrypt/live/uncopied.art/privkey.pem") // listen and serve on 0.0.0.0:8443
-	} else if *tlsMod=="autocert" {
+	} else if *tls=="autocert" {
 		log.Fatal(autotls.Run(router, "uncopied.org", "uncopied.art"))
 	}
 }

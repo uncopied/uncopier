@@ -37,6 +37,7 @@ const rsaBits = 2048
 // see also http://www.inanzzz.com/index.php/post/1nw3/data-encryption-and-decryption-with-x509-public-and-private-key-example-in-golang
 func main() {
 
+
 	priv, err := rsa.GenerateKey(rand.Reader, rsaBits)
 
 	// ECDSA, ED25519 and RSA subject keys should have the DigitalSignature
@@ -137,4 +138,6 @@ func main() {
 	}
 
 	log.Print("wrote key.pem\n")
+
+
 }
