@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -8,10 +10,17 @@ import (
 	"github.com/uncopied/uncopier/api/v1.0/middleware"
 	"github.com/uncopied/uncopier/certificates"
 	"github.com/uncopied/uncopier/database"
+	"github.com/gin-gonic/autotls"
+	"log"
 	"net/http"
 )
 
+
+
+
 func main() {
+	tlsMod := flag.String("tlsMod", "http", "TLS mod : http, https or autocert")
+
 	err := godotenv.Load()
 	if err != nil {
 		panic(err)
@@ -40,6 +49,12 @@ func main() {
 	api.ApplyRoutes(router)
 	// apply certificates router
 	certificates.ApplyRoutes(router)
-	router.Run(":8081")
-
+	fmt.Printf("Serving with tlsMod %s\n", *tlsMod)
+	if *tlsMod=="http" {
+		router.Run(":8081")
+	} else if *tlsMod=="https" {
+		router.RunTLS((":8443"),"/etc/letsencrypt/live/uncopied.art/fullchain.pem","/etc/letsencrypt/live/uncopied.art/privkey.pem") // listen and serve on 0.0.0.0:8443
+	} else if *tlsMod=="autocert" {
+		log.Fatal(autotls.Run(router, "uncopied.org", "uncopied.art"))
+	}
 }

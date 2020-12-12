@@ -2,31 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="54e4dffa-e567-46b4-90f9-fc00f68382d4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/blockchain/algorand.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/certificates/verify/verify.ctrl.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/certificates/verify/verify.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/verify.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/certificates/certificates.go" beforeDir="false" afterPath="$PROJECT_DIR$/certificates/certificates.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/certificates/checkout/checkout.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/certificates/checkout/checkout.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/certificateIssuance.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/certificateIssuance.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/dbmodel/order.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/order.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/1.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/1_files/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/certif.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/certif_files/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/certif_files/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/check-out.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/check-out_files/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/img.png.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/checkout.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/checkout.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/success.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/success.tmpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uncopier.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopier.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,11 +129,6 @@
           <url>file://$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go</url>
           <line>177</line>
           <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/api/v1.0/auth/auth.ctrl.go</url>
-          <line>69</line>
-          <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
