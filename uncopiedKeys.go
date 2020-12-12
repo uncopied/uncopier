@@ -138,6 +138,17 @@ func main() {
 	}
 
 	log.Print("wrote key.pem\n")
-
+	someUuid := uuid.New().String()
+	secretOut, err := os.Create("secret.pem")
+	if err != nil {
+		log.Fatalf("Failed to open secret.pem for writing: %v", err)
+	}
+	_,err := secretOut.Write(someUuid)
+	if err != nil {
+		log.Fatalf("Failed to write data to secret.pem: %v", err)
+	}
+	if err := secretOut.Close(); err != nil {
+		log.Fatalf("Error closing secret.pem: %v", err)
+	}
 
 }
