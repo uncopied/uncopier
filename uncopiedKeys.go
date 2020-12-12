@@ -15,6 +15,7 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
+	"github.com/google/uuid"
 	"log"
 	"math/big"
 	"os"
@@ -143,7 +144,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to open secret.pem for writing: %v", err)
 	}
-	_,err := secretOut.Write(someUuid)
+	_,err = secretOut.Write([]byte(someUuid))
 	if err != nil {
 		log.Fatalf("Failed to write data to secret.pem: %v", err)
 	}
