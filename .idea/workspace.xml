@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="54e4dffa-e567-46b4-90f9-fc00f68382d4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uncopiedKeys.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopiedKeys.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uncopier.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopier.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +56,7 @@
       <recent name="D:\git\uncopier\api\v1.0\asset" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build uncopiedKeys.go">
+  <component name="RunManager" selected="Go Build.go build uncopier.go">
     <configuration name="go build html2pdf.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
@@ -86,17 +87,22 @@
     <configuration name="go build uncopier.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
-      <parameters value="--tls https" />
       <kind value="FILE" />
       <filePath value="$PROJECT_DIR$/uncopier.go" />
       <package value="github.com/uncopied/uncopier" />
       <directory value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Go Build.go build html2pdf.go" />
+      <item itemvalue="Go Build.go build jsonTemplating.go" />
+      <item itemvalue="Go Build.go build uncopiedKeys.go" />
+      <item itemvalue="Go Build.go build uncopier.go" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build uncopiedKeys.go" />
         <item itemvalue="Go Build.go build uncopier.go" />
+        <item itemvalue="Go Build.go build uncopiedKeys.go" />
         <item itemvalue="Go Build.go build html2pdf.go" />
         <item itemvalue="Go Build.go build jsonTemplating.go" />
       </list>

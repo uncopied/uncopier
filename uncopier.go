@@ -36,7 +36,6 @@ func main() {
 	router.Static("/assets", "./assets")
 	router.Static("/img", "./img")
 	router.LoadHTMLGlob("templates/*")
-
 	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
 	router.GET("/index", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
@@ -54,7 +53,7 @@ func main() {
 	if *tls=="http" {
 		router.Run(":8081")
 	} else if *tls=="https" {
-		router.RunTLS((":8443"),"/etc/letsencrypt/live/unc	opied.art/fullchain.pem","/etc/letsencrypt/live/uncopied.art/privkey.pem") // listen and serve on 0.0.0.0:8443
+		router.RunTLS((":8443"),"/etc/letsencrypt/live/uncopied.art/fullchain.pem","/etc/letsencrypt/live/uncopied.art/privkey.pem") // listen and serve on 0.0.0.0:8443
 	} else if *tls=="autocert" {
 		log.Fatal(autotls.Run(router, "uncopied.org", "uncopied.art"))
 	}
