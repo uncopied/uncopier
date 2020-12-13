@@ -67,12 +67,8 @@ func view(c *gin.Context) {
 		c.AbortWithStatus(404)
 		return
 	}
-	localIPFSHost:=os.Getenv("LOCAL_IPFS_HOST")
-	localIPFSPort:=os.Getenv("LOCAL_IPFS_PORT")
 	c.HTML(http.StatusOK, "view.tmpl", gin.H{
 		"asset":  asset,
 		"source": assetTemplate.Source,
-		"localIPFSHost":localIPFSHost,
-		"localIPFSPort":localIPFSPort,
 	})
 }

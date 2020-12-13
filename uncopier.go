@@ -12,8 +12,26 @@ import (
 	"github.com/uncopied/uncopier/database"
 	"log"
 	"net/http"
+	"net/http/httptest"
+	"net/http/httputil"
+	"net/url"
 	"os"
 )
+// direct call to IPFS, http://127.0.0.1:8080/ipfs/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP
+// proxied call to IPDS http://127.0.0.1:8081/ipfs/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP
+func ReverseProxyIPFS() gin.HandlerFunc {
+	localIPFSHost:=os.Getenv("LOCAL_IPFS_HOST")
+	localIPFSPort:=os.Getenv("LOCAL_IPFS_PORT")
+	target := localIPFSHost+":"+localIPFSPort
+	targetUrl,err := url.Parse("http://"+target)
+	if err!=nil {
+		log.Fatal(err)
+	}
+	proxy := httputil.NewSingleHostReverseProxy(targetUrl)
+	return func(c *gin.Context) {
+		proxy.ServeHTTP(c.Writer, c.Request)
+	}
+}
 
 func main() {
 
@@ -35,6 +53,14 @@ func main() {
 			"artistName": "Mary Stone",
 		})
 	})
+	backendServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "this call was relayed by the reverse proxy")
+	}))
+	defer backendServer.Close()
+
+	// proxy for IPFS requests
+	router.GET("/ipfs/:hash", ReverseProxyIPFS())
+
 	router.Use(database.Inject(db))
 	router.Use(middleware.JWTMiddleware())
 	// apply api router
