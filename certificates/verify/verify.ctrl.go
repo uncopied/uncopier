@@ -5,6 +5,7 @@ import (
 	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
 	"net/http"
+	"os"
 )
 
 func verify(c *gin.Context) {
@@ -22,9 +23,13 @@ func verify(c *gin.Context) {
 		c.AbortWithStatus(404)
 		return
 	}
+	localIPFSHost:=os.Getenv("LOCAL_IPFS_HOST")
+	localIPFSPort:=os.Getenv("LOCAL_IPFS_PORT")
 	c.HTML(http.StatusOK, "verify.tmpl", gin.H{
 		"certificateIssuance": certificateIssuance,
 		"assetTemplate" : assetTemplate,
 		"source" : assetTemplate.Source,
+		"localIPFSHost":localIPFSHost,
+		"localIPFSPort":localIPFSPort,
 	})
 }

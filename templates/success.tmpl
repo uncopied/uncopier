@@ -9,11 +9,11 @@
     <h2>Your Documents</h2>
     <ul>
         <li>
-            <a href="/public/doc/{{ .order.OrderUUID }}/{{ .certificateDoc }}" target="top">Certificate(s) of Authenticity</a>
+            <a href="/doc/{{ .order.OrderUUID }}/{{ .certificateDoc }}" target="top">Certificate(s) of Authenticity</a>
         </li>
         {{range .tallystickDocs}}
         <li>
-            <a href="/public/doc/{{ .OrderUUID }}/{{ .Filename }}" target="top">{{ .CertificateLabel }} Tally stick</a>
+            <a href="/doc/{{ .OrderUUID }}/{{ .Filename }}" target="top">{{ .CertificateLabel }} Tally stick</a>
         </li>
         {{else}}
         <li>
@@ -21,7 +21,7 @@
         </li>
         {{end}}
     </ul>
-    <p>You can download all those files in <a href="/public/doc/{{ .order.OrderUUID }}/{{ .order.ZipBundle }}" target="top">one ZIP bundle</a>.
+    <p>You can download all those files in <a href="/doc/{{ .order.OrderUUID }}/{{ .order.ZipBundle }}" target="top">one ZIP bundle</a>.
         A copy will be sent to your email address. Links are valid for 48 hours. </p>
     <h2>Do-it-yourself (DIY) instructions</h2>
     <p>

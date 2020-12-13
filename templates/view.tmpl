@@ -36,7 +36,7 @@
     <p>
 
     </p>
-    <img src="http://127.0.0.1:8080/ipfs/{{ .source.IPFSHashThumbnail }}"/>
+    <img src="http://{{ .localIPFSHost }}:{{ .localIPFSPort }}/ipfs/{{ .source.IPFSHashThumbnail }}"/>
 
 </div>
 {{ template "footer.tmpl" .}}

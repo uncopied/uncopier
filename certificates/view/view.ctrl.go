@@ -6,6 +6,7 @@ import (
 	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
 	"net/http"
+	"os"
 )
 
 func preview(c *gin.Context) {
@@ -38,12 +39,15 @@ func preview(c *gin.Context) {
 		c.AbortWithStatus(409)
 		return
 	}
-
+	localIPFSHost:=os.Getenv("LOCAL_IPFS_HOST")
+	localIPFSPort:=os.Getenv("LOCAL_IPFS_PORT")
 	// view the first
 	var first = assetTemplate.Assets[0]
 	c.HTML(http.StatusOK, "view.tmpl", gin.H{
 		"asset":  first,
 		"source": assetTemplate.Source,
+		"localIPFSHost":localIPFSHost,
+		"localIPFSPort":localIPFSPort,
 	})
 }
 
@@ -63,9 +67,12 @@ func view(c *gin.Context) {
 		c.AbortWithStatus(404)
 		return
 	}
-
+	localIPFSHost:=os.Getenv("LOCAL_IPFS_HOST")
+	localIPFSPort:=os.Getenv("LOCAL_IPFS_PORT")
 	c.HTML(http.StatusOK, "view.tmpl", gin.H{
 		"asset":  asset,
 		"source": assetTemplate.Source,
+		"localIPFSHost":localIPFSHost,
+		"localIPFSPort":localIPFSPort,
 	})
 }

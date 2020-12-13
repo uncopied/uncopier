@@ -13,7 +13,7 @@
     <p>
         Your object should look like this, according to its thumbnail :
     </p>
-    <img src="http://127.0.0.1:8080/ipfs/{{ .source.IPFSHashThumbnail }}"/>
+    <img src="http://{{ .localIPFSHost }}:{{ .localIPFSPort }}/ipfs/{{ .source.IPFSHashThumbnail }}"/>
     <p>
         This same information can be read from several independent sources, for example
         <ul>
@@ -22,7 +22,7 @@
         </ul>
     </p>
     <p>
-        The object's <a href="http://127.0.0.1:8080/ipfs/{{ .certificateIssuance.MetadataHash }}">metadata</a> is stored permanently in IPFS with hash {{ .certificateIssuance.MetadataHash }}.
+        The object's <a href="http://{{ .localIPFSHost }}:{{ .localIPFSPort }}/ipfs/{{ .certificateIssuance.MetadataHash }}">metadata</a> is stored permanently in IPFS with hash {{ .certificateIssuance.MetadataHash }}.
         This same information can be read from several independent sources, for example
         <ul>
             <li><a href="http://ipfs.io/ipfs/{{ .certificateIssuance.MetadataHash }}">http://ipfs.io/ipfs/{{ .certificateIssuance.MetadataHash }}</a></li>
