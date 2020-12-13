@@ -19,6 +19,17 @@ import (
 )
 // direct call to IPFS, http://127.0.0.1:8080/ipfs/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP
 // proxied call to IPDS http://127.0.0.1:8081/ipfs/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP
+// IPFS node should be configured with disabling of subdomains
+// "PublicGateways": {
+//			"localhost": {
+//				"Paths": ["/ipfs"],
+//				"UseSubdomains": false
+//			},
+//			"127.0.0.1": {
+//				"Paths": ["/ipfs"],
+//				"UseSubdomains": false
+//			}
+//		}
 func ReverseProxyIPFS() gin.HandlerFunc {
 	localIPFSHost:=os.Getenv("LOCAL_IPFS_HOST")
 	localIPFSPort:=os.Getenv("LOCAL_IPFS_PORT")

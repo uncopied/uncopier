@@ -167,6 +167,7 @@ func success(c *gin.Context) {
 	// PDF document with all the certificates
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	if err != nil {
+		fmt.Println("wkhtmltopdf.NewPDFGenerator() failed ")
 		c.AbortWithStatus(500)
 		return
 	}
@@ -181,9 +182,31 @@ func success(c *gin.Context) {
 		log.Fatal(err)
 		return
 	}
+	// URL for preview
+	tls := os.Getenv("SERVER_TLS")
+	serverHost := os.Getenv("SERVER_HOST")
+	serverBaseURLExternal := ""
+	serverBaseURLInternal := ""
+	if tls=="http" {
+		// needs redirecting 80 port to 8081
+		httpPort:=os.Getenv("SERVER_HTTP_PORT")
+		serverBaseURLInternal="http://"+serverHost+":"+httpPort
+		serverBaseURLExternal=serverBaseURLInternal
+	} else if tls=="https" {
+		// needs redirecting 443 port to 8443
+		httpsPort:=os.Getenv("SERVER_HTTPS_PORT")
+		serverBaseURLInternal="https://"+serverHost+":"+httpsPort
+		serverBaseURLExternal="https://"+serverHost
+	} else if tls=="autocert" {
+		// needs root priviledge to run on 443
+		serverBaseURLInternal="https://"+serverHost
+		serverBaseURLExternal=serverBaseURLInternal
+	}
+
 	// checkout the first
 	for _, asset := range assetTemplate.Assets {
-		assetViewURL := "http://localhost:8081/c/v/" + strconv.Itoa(int(asset.ID))
+		assetViewURLExternal :=serverBaseURLExternal+"/c/v/" + strconv.Itoa(int(asset.ID))
+		assetViewURLInternal :=serverBaseURLInternal+"/c/v/" + strconv.Itoa(int(asset.ID))
 		// create hash with metadata
 		metadata, err := json.Marshal(asset)
 		if err != nil {
@@ -196,7 +219,7 @@ func success(c *gin.Context) {
 			fmt.Fprintf(os.Stderr, "error: %s", err)
 			os.Exit(1)
 		}
-		transactionId, err := blockchain.AlgorandCreateNFT(&asset, assetViewURL, metadataHash)
+		transactionId, err := blockchain.AlgorandCreateNFT(&asset, assetViewURLExternal, metadataHash)
 		if err != nil {
 			fmt.Println("blockchain.AlgorandCreateNFT(asset) failed ")
 			c.AbortWithStatus(500)
@@ -255,7 +278,7 @@ func success(c *gin.Context) {
 		// make 4 copies
 		for i := 0; i < 4; i++ {
 			// issuer copy
-			page := wkhtmltopdf.NewPage(assetViewURL)
+			page := wkhtmltopdf.NewPage(assetViewURLInternal)
 			// Set options for this page
 			page.FooterRight.Set("[page]")
 			page.FooterFontSize.Set(10)

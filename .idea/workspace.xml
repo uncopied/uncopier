@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="54e4dffa-e567-46b4-90f9-fc00f68382d4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/certificates/verify/verify.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/certificates/verify/verify.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/certificates/view/view.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/certificates/view/view.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/verify.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/verify.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/view.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/view.tmpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/certificates/checkout/checkout.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/certificates/checkout/checkout.ctrl.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/uncopier.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopier.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -148,11 +145,6 @@
           <url>file://$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go</url>
           <line>177</line>
           <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/uncopier.go</url>
-          <line>31</line>
-          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
