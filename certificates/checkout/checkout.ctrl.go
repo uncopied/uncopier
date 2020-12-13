@@ -22,15 +22,14 @@ import (
 	"strconv"
 )
 
-const uncopied_root = "http://localhost:8081"
-const IPFSNode = "localhost:5001"
-
 func PermanentCertificateURL(certificateIssuanceID uint) string {
-	return uncopied_root + "/c/y/" + strconv.Itoa(int(certificateIssuanceID))
+	serverHost := os.Getenv("SERVER_HOST")
+	return "https://"+serverHost+"/c/y/" + strconv.Itoa(int(certificateIssuanceID))
 }
 
 func PermanentCertificateTokenURL(token string) string {
-	return uncopied_root + "/c/t/" + token
+	serverHost := os.Getenv("SERVER_HOST")
+	return "https://"+serverHost+"/c/t/" + token
 }
 
 type Pricing struct {
@@ -202,7 +201,10 @@ func success(c *gin.Context) {
 		serverBaseURLInternal="https://"+serverHost
 		serverBaseURLExternal=serverBaseURLInternal
 	}
-
+	//# IPFSNode = "localhost:5001"
+	//LOCAL_IPFS_NODE_HOST=127.0.0.1
+	//LOCAL_IPFS_NODE_PORT=5001
+	ipfsNode := os.Getenv("LOCAL_IPFS_NODE_HOST")+":"+os.Getenv("LOCAL_IPFS_NODE_PORT")
 	// checkout the first
 	for _, asset := range assetTemplate.Assets {
 		assetViewURLExternal :=serverBaseURLExternal+"/c/v/" + strconv.Itoa(int(asset.ID))
@@ -213,7 +215,7 @@ func success(c *gin.Context) {
 			log.Fatal(err)
 			return
 		}
-		sh := shell.NewShell(IPFSNode)
+		sh := shell.NewShell(ipfsNode)
 		metadataHash, err := sh.Add(bytes.NewReader(metadata))
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error: %s", err)
@@ -238,6 +240,7 @@ func success(c *gin.Context) {
 		t := tallystick.Tallystick{
 			CertificateLabel:                asset.CertificateLabel,
 			PrimaryLinkURL:                  PermanentCertificateURL(certificateIssuance.ID),
+			// TODO change this
 			SecondaryLinkURL:                "algorand://tx/" + transactionId,
 			IssuerTokenURL:                  PermanentCertificateTokenURL(certificate.IssuerToken.TokenHash),
 			OwnerTokenURL:                   PermanentCertificateTokenURL(certificate.OwnerToken.TokenHash),

@@ -87,10 +87,9 @@ func create(c *gin.Context) {
 	c.JSON(200, &asset)
 }
 
-const IPFSRootURL = "https://ipfs.io/ipfs"
-const IPFSNode = "localhost:5001"
 
-const LocalCacheDIR = "./ifps_cache"
+
+
 const MaxContentLength = 25000000
 const ThumbnailWidthHeight = 720
 
@@ -111,8 +110,9 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 		db.Create(&exception)
 		return "",errors.New(msg)
 	}
-
-	sourceURL := IPFSRootURL +"/"+asset.IPFSHash;
+	//const IPFSRootURL = "https://ipfs.io/ipfs"
+	ipfsRootURL := os.Getenv("IPFS_ROOT_URL")
+	sourceURL := ipfsRootURL +"/"+asset.IPFSHash;
 	resp, err := http.Get(sourceURL)
 	if err!=nil {
 		return "",err
@@ -187,7 +187,8 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 	}
 
 	// Save the main file in cache
-	filePath := LocalCacheDIR+"/"
+	ipfsCacheDir := os.Getenv("LOCAL_IPFS_CACHE")
+	filePath := ipfsCacheDir+"/"
 	{
 		fileName := asset.IPFSHash+mime.Extension()
 		err = os.MkdirAll(filePath,os.ModePerm)
@@ -248,7 +249,8 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 		if err != nil {
 			return "",err
 		}
-		sh := shell.NewShell(IPFSNode)
+		ipfsNode := os.Getenv("LOCAL_IPFS_NODE_HOST")+":"+os.Getenv("LOCAL_IPFS_NODE_PORT")
+		sh := shell.NewShell(ipfsNode)
 		cid, err := sh.Add(bytes.NewReader(w.Bytes()))
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error: %s", err)
@@ -256,7 +258,7 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 		}
 		asset.IPFSHashThumbnail = cid
 		// Save the thumbnail file in cache
-		filePath := LocalCacheDIR+"/"
+		filePath := ipfsCacheDir+"/"
 		{
 			fileName := cid	+".png"
 			out, err := os.Create(filePath+fileName)
@@ -269,6 +271,11 @@ func stamp(asset *dbmodel.DigitalAssetSrc, db *gorm.DB) (string, error) {
 			if err != nil {
 				return "",err
 			}
+		}
+		// pin the original image
+		err = sh.Pin(asset.IPFSHash)
+		if err!= nil {
+			return "",err
 		}
 	}
 	return md5Hash,err
