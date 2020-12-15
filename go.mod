@@ -9,6 +9,7 @@ require (
 	github.com/corona10/goimagehash v1.0.3
 	github.com/gabriel-vasile/mimetype v1.1.2
 	github.com/gbrlsnchs/jwt/v3 v3.0.0
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/static v0.0.0-20200916080430-d45d9a37d28e
 	github.com/gin-gonic/autotls v0.0.3
 	github.com/gin-gonic/gin v1.6.3

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
@@ -55,6 +56,15 @@ func main() {
 	db, _ := database.Initialize()
 	db.Debug()
 	router := gin.Default()
+	// CORS for https://foo.com and https://github.com origins, allowing:
+	// - PUT and PATCH methods
+	// - Origin header
+	// - Credentials share
+	// - Preflight requests cached for 12 hours
+	// TODO : tune this for prod
+	router.Use(cors.Default())
+
+
 	router.Use(static.ServeRoot("/", "./public")) // static files have higher priority over dynamic routes
 	router.LoadHTMLGlob("templates/*")
 	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
