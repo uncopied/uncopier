@@ -11,6 +11,7 @@ import (
 	"github.com/uncopied/uncopier/api/v1.0/middleware"
 	"github.com/uncopied/uncopier/certificates"
 	"github.com/uncopied/uncopier/database"
+	"github.com/uncopied/uncopier/upload"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -63,14 +64,15 @@ func main() {
 	// - Credentials share
 	// - Preflight requests cached for 12 hours
 	// TODO : tune this for prod
-
+	// Also beware there is a bug when calling http://localhost:8081/api/v1.0/src (redirect 307 not working with CORS)
+	// so need to call http://localhost:8081/api/v1.0/src/ to avoid redirects
 	router.Use(cors.New(cors.Config{
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"},
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
-		AllowCredentials: true,
-		AllowAllOrigins: true,
-		AllowFiles: true,
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
+		AllowFiles: true,
+		AllowAllOrigins: true,
 	}))
 
 	router.Use(static.ServeRoot("/", "./public")) // static files have higher priority over dynamic routes
@@ -96,6 +98,8 @@ func main() {
 	api.ApplyRoutes(router)
 	// apply certificates router
 	certificates.ApplyRoutes(router)
+	// ipfs upload
+	upload.ApplyRoutes(router)
 
 	tls := os.Getenv("SERVER_TLS")
 	serverHost := os.Getenv("SERVER_HOST")
