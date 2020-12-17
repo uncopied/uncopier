@@ -17,6 +17,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"time"
 )
 // direct call to IPFS, http://127.0.0.1:8080/ipfs/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP
 // proxied call to IPDS http://127.0.0.1:8081/ipfs/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP
@@ -62,8 +63,15 @@ func main() {
 	// - Credentials share
 	// - Preflight requests cached for 12 hours
 	// TODO : tune this for prod
-	router.Use(cors.Default())
 
+	router.Use(cors.New(cors.Config{
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
+		AllowCredentials: true,
+		AllowAllOrigins: true,
+		AllowFiles: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	router.Use(static.ServeRoot("/", "./public")) // static files have higher priority over dynamic routes
 	router.LoadHTMLGlob("templates/*")
