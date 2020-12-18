@@ -12,12 +12,20 @@ import (
 )
 
 type AssetBundle struct {
-	Template dbmodel.AssetTemplate
+	Template *dbmodel.AssetTemplate
 //	Params []TemplateParams
 	Status string
 	ErrorMessage []string
 }
 
+type AssetError struct{
+	Message    string
+}
+
+//create asset data = {"name":"Allégorie Florale",
+//"certificate_label":"{{.AssetName}} by {{.IssuerName}}, {{.CurrentYear}} ( {{.EditionNumber}} / {{.EditionTotal}} )",
+//"edition_total":"3",
+//"source_id":14}
 func create(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	type RequestBody struct {
@@ -34,7 +42,11 @@ func create(c *gin.Context) {
 
 	var body RequestBody
 	if err := c.BindJSON(&body); err != nil {
-		c.AbortWithStatus(400)
+		fmt.Println("Failed to bind body")
+		assetError := AssetError{
+			Message: "Failed to bind "+err.Error(),
+		}
+		c.AbortWithStatusJSON(400, assetError)
 		return
 	}
 
@@ -43,7 +55,10 @@ func create(c *gin.Context) {
 	var user dbmodel.User
 	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
 		fmt.Println("User name not found ",userName)
-		c.AbortWithStatus(409)
+		assetError := AssetError{
+			Message: "User name not found",
+		}
+		c.AbortWithStatusJSON(409, assetError)
 		return
 	}
 
@@ -85,8 +100,6 @@ func create(c *gin.Context) {
 		c.AbortWithStatus(500)
 		return
 	}
-	// TODO check why we need this
-	assetTemplate.Assets = bundle.Template.Assets
 	if bundle.Status == "CREATE" && len(bundle.ErrorMessage) == 0 {
 		// the bundle is valid, so create in DB
 		db.Create(&assetTemplate)
@@ -182,13 +195,13 @@ func evaluate(assetTemplate *dbmodel.AssetTemplate) (AssetBundle, error) {
 		assets = append(assets, asset)
 		params = append(params, templateParams)
 	}
+	assetTemplate.Assets=assets
 	bundle := AssetBundle{
-		Template:     *assetTemplate,
+		Template:     assetTemplate,
 		Status:       "CREATE",
 //		Params:       params,
 		ErrorMessage: errors,
 	}
-	bundle.Template.Assets = assets
 	return bundle, nil
 }
 
