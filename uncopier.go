@@ -19,6 +19,7 @@ import (
 	"net/url"
 	"os"
 	"time"
+	"github.com/gin-contrib/gzip"
 )
 // direct call to IPFS, http://127.0.0.1:8080/ipfs/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP
 // proxied call to IPDS http://127.0.0.1:8081/ipfs/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP
@@ -58,6 +59,14 @@ func main() {
 	db, _ := database.Initialize()
 	db.Debug()
 	router := gin.Default()
+	// gzip as per https://www.webpagetest.org/ reco
+	router.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{
+		".png", ".gif", ".jpeg", ".jpg",
+		".pdf",
+	})))
+	// TODO - (No max-age or expires) - https://uncopied.org/static/css/main.7f31058b.chunk.css
+	// https://github.com/gin-gonic/gin/issues/1543
+
 	// CORS for https://foo.com and https://github.com origins, allowing:
 	// - PUT and PATCH methods
 	// - Origin header
