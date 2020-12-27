@@ -13,6 +13,7 @@ import (
 
 // Initialize initializes the database
 func Initialize() (*gorm.DB, error) {
+	fmt.Println("init in database")
 	dsn := os.Getenv("DB_CONFIG")
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
@@ -26,6 +27,7 @@ func Initialize() (*gorm.DB, error) {
 		Logger: newLogger,
 	})
 	if err != nil {
+		fmt.Println("Failed to open database")
 		panic(err)
 	}
 	fmt.Println("Connected to database")

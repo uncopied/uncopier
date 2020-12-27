@@ -2,6 +2,7 @@
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/uncopied/uncopier/api/v1.0/middleware"
 )
 
 const mailTo = "NAMSOR SAS\nBP 40373\n78000 VERSAILLES\nCEDEX FRANCE"
@@ -12,9 +13,10 @@ func MailTo( ) string {
 
 // ApplyRoutes applies router to the gin Engine
 func ApplyRoutes(r *gin.RouterGroup) {
-	cert:= r.Group("/certificates")
+	cert:= r.Group("/cert")
 	{
-		cert.POST("/issue", issue)
-		cert.GET("/:certificates/:token", action)
+		cert.GET("/:id", middleware.Authorized, preview)
+		//cert.POST("/issue", issue)
+		//cert.GET("/:certificates/:token", action)
 	}
 }

@@ -50,6 +50,7 @@ func ReverseProxyIPFS() gin.HandlerFunc {
 
 func main() {
 
+	fmt.Println("odotenv.Load()")
 	err := godotenv.Load()
 	if err != nil {
 		panic(err)

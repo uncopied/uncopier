@@ -1,6 +1,7 @@
 package cert
 
 import (
+	"bytes"
 	"crypto/md5"
 	"crypto/rsa"
 	"crypto/x509"
@@ -9,19 +10,32 @@ import (
 	"fmt"
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gin-gonic/gin"
+	"github.com/uncopied/tallystick"
+	"github.com/uncopied/uncopier/certificates/view"
 	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
 	"io/ioutil"
 	"log"
+	"os"
 	"strconv"
 	"time"
 )
-const UncopiedOrg = "uncopied.org"
-const pkFile="keyPrivate.pem"
+
+func PermanentCertificateURL(certificateIssuanceID uint) string {
+	serverHost := os.Getenv("SERVER_HOST")
+	return "https://"+serverHost+"/c/y/" + strconv.Itoa(int(certificateIssuanceID))
+}
+
+func PermanentCertificateTokenURL(token string) string {
+	serverHost := os.Getenv("SERVER_HOST")
+	return "https://"+serverHost+"/c/t/" + token
+}
+
 
 var privPEMData []byte = readPK()
-
+const pkFile="keyPrivate.pem"
 func readPK() []byte {
+
 	fmt.Println("init in certificates.go")
 	privPEMData, err := ioutil.ReadFile(pkFile)
 	if err != nil {
@@ -54,7 +68,8 @@ func validateToken(token string) (CustomPayload, error) {
 
 	var pl CustomPayload
 	now := time.Now()
-	aud := jwt.Audience{"https://uncopied.org"}
+	uncopiedDomainPrimary := os.Getenv("UNCOPIED_DOMAIN_PRIMARY")
+	aud := jwt.Audience{uncopiedDomainPrimary}
 
 	// Validate claims "iat", "exp" and "aud".
 	iatValidator := jwt.IssuedAtValidator(now)
@@ -88,11 +103,14 @@ func generateTokens(certificate dbmodel.Certificate, userRole string) (dbmodel.C
 	//var hs = jwt.NewHS256([]byte(secret))
 	var hs = jwt.NewRS256(jwt.RSAPublicKey(&privateKeyRsa.PublicKey), jwt.RSAPrivateKey(privateKeyRsa))
 	now := time.Now()
+	uncopiedOrg := os.Getenv("UNCOPIED_USERNAME")
+	uncopiedDomainPrimary := os.Getenv("UNCOPIED_DOMAIN_PRIMARY")
+	uncopiedDomainSecondary := os.Getenv("UNCOPIED_DOMAIN_SECONDARY")
 	pl := CustomPayload{
 		Payload: jwt.Payload{
-		Issuer:         UncopiedOrg,
+		Issuer:         uncopiedOrg,
 		Subject:        certificate.CertificateLabel,
-		Audience:       jwt.Audience{"https://uncopied.org", "https://uncopied.art"},
+		Audience:       jwt.Audience{uncopiedDomainPrimary, uncopiedDomainSecondary},
 		ExpirationTime: jwt.NumericDate(now.Add(24 * 30 * 12 * time.Hour)),
 		NotBefore:      jwt.NumericDate(now.Add(30 * time.Minute)),
 		IssuedAt:       jwt.NumericDate(now),
@@ -119,8 +137,8 @@ func generateTokens(certificate dbmodel.Certificate, userRole string) (dbmodel.C
 	return certificateToken
 }
 
-const uncopiedUsername = "uncopied"
 func IssueCertificate(db *gorm.DB, user dbmodel.User, certificateLabel string, IsDIY bool) dbmodel.Certificate {
+	uncopiedUsername := os.Getenv("UNCOPIED_USERNAME")
 	// check if user
 	var uncopied dbmodel.User
 	if err := db.Where("user_name = ?", uncopiedUsername).First(&uncopied).Error; err != nil {
@@ -151,15 +169,6 @@ func IssueCertificate(db *gorm.DB, user dbmodel.User, certificateLabel string, I
 	secondaryOwnerVerifierToken := generateTokens(certificate, "SecondaryOwnerVerifier")
 	primaryIssuerVerifierToken := generateTokens(certificate, "PrimaryIssuerVerifier")
 	secondaryIssuerVerifierToken := generateTokens(certificate, "SecondaryIssuerVerifier")
-
-	//db.Create(&issuerToken)
-	//db.Create(&ownerToken)
-	//db.Create(&primaryAssetVerifierToken)
-	//db.Create(&secondaryAssetVerifierToken)
-	//db.Create(&primaryOwnerVerifierToken)
-	//db.Create(&secondaryOwnerVerifierToken)
-	//db.Create(&primaryIssuerVerifierToken)
-	//db.Create(&secondaryIssuerVerifierToken)
 
 	certificate.IssuerToken = issuerToken
 	certificate.OwnerToken = ownerToken
@@ -264,4 +273,66 @@ func action(c *gin.Context) {
 		UserRoleToken : certToken.Token,
 	}
 	c.JSON(200, response)
+}
+
+type CertPreview struct {
+	DocPreviewURL string
+	TaillyPreviewSVG string
+}
+
+func TallyStickPreview (first dbmodel.Asset ) string {
+	// create a tally stick for checkout
+	t := tallystick.Tallystick{
+		CertificateLabel:                first.CertificateLabel,
+		PrimaryLinkURL:                  PermanentCertificateURL(1),
+		SecondaryLinkURL:                PermanentCertificateURL(1),
+		IssuerTokenURL:                  PermanentCertificateTokenURL("certificate.IssuerToken.TokenHash"),
+		OwnerTokenURL:                   PermanentCertificateTokenURL("certificate.OwnerToken.TokenHash"),
+		PrimaryAssetVerifierTokenURL:    PermanentCertificateTokenURL("certificate.PrimaryAssetVerifier.TokenHash"),
+		SecondaryAssetVerifierTokenURL:  PermanentCertificateTokenURL("certificate.SecondaryAssetVerifierToken.TokenHash"),
+		PrimaryOwnerVerifierTokenURL:    PermanentCertificateTokenURL("certificate.PrimaryOwnerVerifierToken.TokenHash"),
+		SecondaryOwnerVerifierTokenURL:  PermanentCertificateTokenURL("certificate.SecondaryOwnerVerifierToken.TokenHash"),
+		PrimaryIssuerVerifierTokenURL:   PermanentCertificateTokenURL("certificate.PrimaryIssuerVerifierToken.TokenHash"),
+		SecondaryIssuerVerifierTokenURL: PermanentCertificateTokenURL("certificate.SecondaryIssuerVerifierToken.TokenHash"),
+		MailToContentLeft:               MailTo(),
+		MailToContentRight:              MailTo(),
+	}
+	var buf bytes.Buffer
+	err := tallystick.DrawSVG(&t, &buf)
+	if err != nil {
+		fmt.Println("Tallystick.DrawSVG failed ")
+		return ""
+	}
+	return string(buf.Bytes())
+}
+
+func preview(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+	userName := c.MustGet("user")
+	// check if user
+	var user dbmodel.User
+	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
+		fmt.Println("User name not found ",userName)
+		c.AbortWithStatus(409)
+		return
+	}
+	id := c.Param("id")
+	var asset dbmodel.AssetTemplate
+	if err := db.Preload("Source").Preload("Assets").Where("id = ?", id).First(&asset).Error; err != nil {
+		c.AbortWithStatus(404)
+		return
+	}
+	if asset.Source.IssuerID != user.ID {
+		fmt.Println("User doesnt own asset ",userName)
+		c.AbortWithStatus(409)
+		return
+	}
+	var first = asset.Assets[0]
+	tallystickPreviewSVG := TallyStickPreview(first)
+	baseURL := view.ServerBaseURL()
+	preview := CertPreview{
+		DocPreviewURL:    baseURL.ServerBaseURLExternal+"/c/preview/"+strconv.Itoa(int(first.ID)),
+		TaillyPreviewSVG: tallystickPreviewSVG,
+	}
+	c.JSON(200, preview)
 }

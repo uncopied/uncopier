@@ -12,6 +12,7 @@ import (
 	"github.com/uncopied/tallystick"
 	"github.com/uncopied/uncopier/api/v1.0/cert"
 	"github.com/uncopied/uncopier/blockchain"
+	"github.com/uncopied/uncopier/certificates/view"
 	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
 	"html/template"
@@ -73,31 +74,7 @@ func checkout(c *gin.Context) {
 
 	// checkout the first
 	var first = asset.Assets[0]
-
-	// create a tally stick for checkout
-	t := tallystick.Tallystick{
-		CertificateLabel:                first.CertificateLabel,
-		PrimaryLinkURL:                  PermanentCertificateURL(1),
-		SecondaryLinkURL:                PermanentCertificateURL(1),
-		IssuerTokenURL:                  PermanentCertificateTokenURL("certificate.IssuerToken.TokenHash"),
-		OwnerTokenURL:                   PermanentCertificateTokenURL("certificate.OwnerToken.TokenHash"),
-		PrimaryAssetVerifierTokenURL:    PermanentCertificateTokenURL("certificate.PrimaryAssetVerifier.TokenHash"),
-		SecondaryAssetVerifierTokenURL:  PermanentCertificateTokenURL("certificate.SecondaryAssetVerifierToken.TokenHash"),
-		PrimaryOwnerVerifierTokenURL:    PermanentCertificateTokenURL("certificate.PrimaryOwnerVerifierToken.TokenHash"),
-		SecondaryOwnerVerifierTokenURL:  PermanentCertificateTokenURL("certificate.SecondaryOwnerVerifierToken.TokenHash"),
-		PrimaryIssuerVerifierTokenURL:   PermanentCertificateTokenURL("certificate.PrimaryIssuerVerifierToken.TokenHash"),
-		SecondaryIssuerVerifierTokenURL: PermanentCertificateTokenURL("certificate.SecondaryIssuerVerifierToken.TokenHash"),
-		MailToContentLeft:               cert.MailTo(),
-		MailToContentRight:              cert.MailTo(),
-	}
-	var buf bytes.Buffer
-	err := tallystick.DrawSVG(&t, &buf)
-	if err != nil {
-		fmt.Println("Tallystick.DrawSVG failed ")
-		c.AbortWithStatus(500)
-		return
-	}
-	tallystickTxt := string(buf.Bytes())
+	tallystickTxt := cert.TallyStickPreview(first)
 	tallystickHtml := template.HTML(tallystickTxt)
 	//prev := CertPreview {
 	//
@@ -181,34 +158,15 @@ func success(c *gin.Context) {
 		log.Fatal(err)
 		return
 	}
-	// URL for preview
-	tls := os.Getenv("SERVER_TLS")
-	serverHost := os.Getenv("SERVER_HOST")
-	serverBaseURLExternal := ""
-	serverBaseURLInternal := ""
-	if tls=="http" {
-		// needs redirecting 80 port to 8081
-		httpPort:=os.Getenv("SERVER_HTTP_PORT")
-		serverBaseURLInternal="http://"+serverHost+":"+httpPort
-		serverBaseURLExternal=serverBaseURLInternal
-	} else if tls=="https" {
-		// needs redirecting 443 port to 8443
-		httpsPort:=os.Getenv("SERVER_HTTPS_PORT")
-		serverBaseURLInternal="https://"+serverHost+":"+httpsPort
-		serverBaseURLExternal="https://"+serverHost
-	} else if tls=="autocert" {
-		// needs root priviledge to run on 443
-		serverBaseURLInternal="https://"+serverHost
-		serverBaseURLExternal=serverBaseURLInternal
-	}
+	serverBaseURL := view.ServerBaseURL()
 	//# IPFSNode = "localhost:5001"
 	//LOCAL_IPFS_NODE_HOST=127.0.0.1
 	//LOCAL_IPFS_NODE_PORT=5001
 	ipfsNode := os.Getenv("LOCAL_IPFS_NODE_HOST")+":"+os.Getenv("LOCAL_IPFS_NODE_PORT")
 	// checkout the first
 	for _, asset := range assetTemplate.Assets {
-		assetViewURLExternal :=serverBaseURLExternal+"/c/v/" + strconv.Itoa(int(asset.ID))
-		assetViewURLInternal :=serverBaseURLInternal+"/c/v/" + strconv.Itoa(int(asset.ID))
+		assetViewURLExternal :=serverBaseURL.ServerBaseURLExternal+"/c/v/" + strconv.Itoa(int(asset.ID))
+		assetViewURLInternal :=serverBaseURL.ServerBaseURLInternal+"/c/v/" + strconv.Itoa(int(asset.ID))
 		// create hash with metadata
 		metadata, err := json.Marshal(asset)
 		if err != nil {
@@ -236,6 +194,7 @@ func success(c *gin.Context) {
 			MetadataHash : metadataHash,
 		}
 		db.Create(&certificateIssuance)
+
 		// create a tally stick for checkout
 		t := tallystick.Tallystick{
 			CertificateLabel:                asset.CertificateLabel,

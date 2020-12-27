@@ -7,7 +7,8 @@ import (
 	"github.com/uncopied/uncopier/certificates/view"
 )
 
-// ApplyRoutes applies router to gin Router
+
+// ApplyRoutes applies router tow gin Router
 func ApplyRoutes(r *gin.Engine) {
 	cert := r.Group("/c")
 	{
