@@ -3,16 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="54e4dffa-e567-46b4-90f9-fc00f68382d4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/auth/auth.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/auth/auth.ctrl.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/v1.0/cert/cert.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/certificates/certificates.go" beforeDir="false" afterPath="$PROJECT_DIR$/certificates/certificates.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/certificates/checkout/checkout.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/certificates/checkout/checkout.ctrl.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/certificates/view/view.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/certificates/view/view.ctrl.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/certificates/view/view.go" beforeDir="false" afterPath="$PROJECT_DIR$/certificates/view/view.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uncopier.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopier.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/assetTemplate.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/assetTemplate.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/order.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/order.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/user.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +26,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="D:\Go" />
+  <component name="GOROOT" url="file://$PROJECT_DIR$/../../Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -45,9 +45,8 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="go.sdk.automatically.set" value="true" />
     <property name="go.vendoring.notification.had.been.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Projects/namsor/uncopiedOrg/uncopied-www" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/upload" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -55,7 +54,6 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -122,8 +120,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build uncopier.go" />
-        <item itemvalue="Go Build.go build uncopiedKeys.go" />
         <item itemvalue="Go Build.go build proxyTest.go" />
+        <item itemvalue="Go Build.go build uncopiedKeys.go" />
         <item itemvalue="Go Build.go build html2pdf.go" />
         <item itemvalue="Go Build.go build jsonTemplating.go" />
       </list>
@@ -147,71 +145,5 @@
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="225" y="88" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1608463080903">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state x="225" y="88" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.864@0.0.1536.864" timestamp="1608463080903" />
-    <state x="549" y="187" width="650" height="490" key="FileChooserDialogImpl" timestamp="1608625696995">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state x="549" y="187" width="650" height="490" key="FileChooserDialogImpl/0.0.1536.864@0.0.1536.864" timestamp="1608625696995" />
-    <state width="1493" height="234" key="GridCell.Tab.0.bottom" timestamp="1608625874733">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="234" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1608625874733" />
-    <state width="1493" height="234" key="GridCell.Tab.0.center" timestamp="1608625874733">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="234" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1608625874733" />
-    <state width="1493" height="234" key="GridCell.Tab.0.left" timestamp="1608625874733">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="234" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1608625874733" />
-    <state width="1493" height="234" key="GridCell.Tab.0.right" timestamp="1608625874733">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="234" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1608625874733" />
-    <state width="1493" height="277" key="GridCell.Tab.1.bottom" timestamp="1608463392239">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="277" key="GridCell.Tab.1.bottom/0.0.1536.864@0.0.1536.864" timestamp="1608463392239" />
-    <state width="1493" height="277" key="GridCell.Tab.1.center" timestamp="1608463392239">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="277" key="GridCell.Tab.1.center/0.0.1536.864@0.0.1536.864" timestamp="1608463392239" />
-    <state width="1493" height="277" key="GridCell.Tab.1.left" timestamp="1608463392239">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="277" key="GridCell.Tab.1.left/0.0.1536.864@0.0.1536.864" timestamp="1608463392238" />
-    <state width="1493" height="277" key="GridCell.Tab.1.right" timestamp="1608463392239">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="277" key="GridCell.Tab.1.right/0.0.1536.864@0.0.1536.864" timestamp="1608463392239" />
-    <state x="279" y="78" key="SettingsEditor" timestamp="1608539542598">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state x="279" y="78" key="SettingsEditor/0.0.1536.864@0.0.1536.864" timestamp="1608539542598" />
-    <state x="477" y="32" width="582" height="801" key="find.popup" timestamp="1608542225504">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state x="477" y="32" width="582" height="801" key="find.popup/0.0.1536.864@0.0.1536.864" timestamp="1608542225504" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/database/database.go</url>
-          <line>15</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go</url>
-          <line>38</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -36,4 +36,6 @@ type AssetTemplate struct {
 	// assets from template
  	Assets []Asset `gorm:"foreignKey:AssetTemplateID"`
 
+	// uuid for preview
+	ObjectUUID string `gorm:"type:char(36);index"`
 }

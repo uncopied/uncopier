@@ -16,7 +16,12 @@ func ApplyRoutes(r *gin.RouterGroup) {
 	cert:= r.Group("/cert")
 	{
 		cert.GET("/:id", middleware.Authorized, preview)
-		//cert.POST("/issue", issue)
-		//cert.GET("/:certificates/:token", action)
+		cert.POST("/order", middleware.Authorized, order)
+	}
+	order:= r.Group("/order")
+	{
+		order.GET("/checkout/:uuid", middleware.Authorized, checkout)
+		order.POST("/process", middleware.Authorized, process)
 	}
 }
+

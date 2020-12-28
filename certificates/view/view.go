@@ -46,7 +46,7 @@ func ApplyRoutes(r *gin.RouterGroup) {
 	posts := r.Group("/preview")
 	{
 		// preview by ID
-		posts.GET("/:id", middleware.Authorized, preview)
+		posts.GET("/:uuid", middleware.Authorized, preview)
 	}
 	views := r.Group("/v")
 	{

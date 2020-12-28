@@ -9,7 +9,8 @@ import (
 type Order struct {
 	gorm.Model
 
-	OrderUUID string
+	// the order UUID
+	OrderUUID string `gorm:"type:char(36);index"`
 
 	// asset template
 	AssetTemplate AssetTemplate `gorm:"foreignKey:AssetTemplateID"`
@@ -31,4 +32,7 @@ type Order struct {
 
 	// is do it yourself?
 	IsDIY bool
+
+	// Paypal Details
+	PaypalDetails string `sql:"type:text;"`
 }

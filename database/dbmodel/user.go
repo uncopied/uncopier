@@ -13,5 +13,6 @@ type User struct {
 	PasswordHash string
 	// blockchain specifics
 	EthereumAddress       string
+	UserRole       string
 }
 

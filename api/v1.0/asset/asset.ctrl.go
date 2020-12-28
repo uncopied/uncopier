@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
 	"strconv"
 	"text/template"
 	"time"
+
 )
 
 type AssetBundle struct {
@@ -80,8 +82,8 @@ func create(c *gin.Context) {
 		return
 	}
 
+	uuid := uuid.New().String()
 	assetTemplate := dbmodel.AssetTemplate{
-		Source: assetSrc,
 		Metadata:            body.Metadata,
 		ExternalMetadataURL: body.ExternalMetadataURL,
 		ExternalAssetId:     body.ExternalAssetId,
@@ -89,6 +91,8 @@ func create(c *gin.Context) {
 		Name:                body.Name,
 		CertificateLabel:    body.CertificateLabel,
 		Note:                body.Note,
+		Source:              assetSrc,
+		ObjectUUID:          uuid,
 	}
 
 	// if the work is not an edition then EditionTotal=1

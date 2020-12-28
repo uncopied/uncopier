@@ -182,6 +182,62 @@ func IssueCertificate(db *gorm.DB, user dbmodel.User, certificateLabel string, I
 	return certificate
 }
 
+
+func order(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+	userName := c.MustGet("user")
+	// check if user
+	var user dbmodel.User
+	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
+		fmt.Println("User name not found ",userName)
+		c.AbortWithStatus(409)
+		return
+	}
+	// additional checks on user?
+	//{AssetTemplateID: 17, OrderUUID: "006c363d-c3d6-44d6-9cff-ba20a6269409"}
+	type RequestBody struct {
+		AssetTemplateID  int `json:"AssetTemplateID" binding:"required"`
+		OrderUUID  string `json:"OrderUUID" binding:"required"`
+	}
+	var body RequestBody
+	if err := c.BindJSON(&body); err != nil {
+		c.AbortWithStatus(400)
+		return
+	}
+	var assetTemplate dbmodel.AssetTemplate
+	if err := db.Preload("Source.Issuer").Preload("Source").Preload("Assets").Where("id = ?", body.AssetTemplateID).First(&assetTemplate).Error; err != nil {
+		c.AbortWithStatus(404)
+		return
+	}
+	if assetTemplate.Source.IssuerID != user.ID {
+		fmt.Println("User doesnt own assetTemplate ", userName)
+		c.AbortWithStatus(409)
+		return
+	}
+	if assetTemplate.Source.Stamp == "" {
+		fmt.Println("Asset is not stamped ")
+		c.AbortWithStatus(409)
+		return
+	}
+	if assetTemplate.ObjectUUID != body.OrderUUID {
+		fmt.Println("Order and asset UUID mismatch ")
+		c.AbortWithStatus(409)
+		return
+	}
+
+	order := dbmodel.Order{
+		OrderUUID:      body.OrderUUID,
+		AssetTemplate:  assetTemplate,
+		PaymentStatus:  "",
+		DeliveryStatus: "",
+	}
+
+	// create the order for tracking
+	db.Create(&order)
+
+	c.JSON(200, order)
+}
+
 func issue(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	userName := c.MustGet("user")
@@ -331,8 +387,121 @@ func preview(c *gin.Context) {
 	tallystickPreviewSVG := TallyStickPreview(first)
 	baseURL := view.ServerBaseURL()
 	preview := CertPreview{
-		DocPreviewURL:    baseURL.ServerBaseURLExternal+"/c/preview/"+strconv.Itoa(int(first.ID)),
+		DocPreviewURL:    baseURL.ServerBaseURLExternal+"/c/preview/"+asset.ObjectUUID,
 		TaillyPreviewSVG: tallystickPreviewSVG,
 	}
 	c.JSON(200, preview)
+}
+
+type Pricing struct {
+	PriceDiy  int
+	Price     int
+	CcySymbol string
+	Ccy       string
+}
+
+func checkout(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+	userName := c.MustGet("user")
+	// check if user
+	var user dbmodel.User
+	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
+		fmt.Println("User name not found ",userName)
+		c.AbortWithStatus(409)
+		return
+	}
+	id := c.Param("uuid")
+	var order dbmodel.Order
+	if err := db.Preload("AssetTemplate").Preload("AssetTemplate.Source").Preload("AssetTemplate.Assets").Where("order_uuid = ?", id).First(&order).Error; err != nil {
+		c.AbortWithStatus(404)
+		return
+	}
+	var asset = order.AssetTemplate
+	if asset.Source.IssuerID != user.ID {
+		fmt.Println("User doesnt own asset ",userName)
+		c.AbortWithStatus(409)
+		return
+	}
+	var first = asset.Assets[0]
+	tallystickPreviewSVG := TallyStickPreview(first)
+	baseURL := view.ServerBaseURL()
+	preview := CertPreview {
+		DocPreviewURL:    baseURL.ServerBaseURLExternal+"/c/preview/"+asset.ObjectUUID,
+		TaillyPreviewSVG: tallystickPreviewSVG,
+	}
+	pricing := Pricing{
+		PriceDiy:  5 + asset.EditionTotal * 1,
+		Price:     25 + asset.EditionTotal * 5,
+		CcySymbol: "€",
+		Ccy:       "EUR",
+	}
+	type RequestResponse struct {
+		Order dbmodel.Order
+		Pricing Pricing
+		CertPreview CertPreview
+	}
+	response :=RequestResponse{
+		Order : order,
+		Pricing :  pricing,
+		CertPreview :preview,
+	}
+	c.JSON(200, response)
+}
+
+
+func process(c *gin.Context) {
+
+	db := c.MustGet("db").(*gorm.DB)
+	userName := c.MustGet("user")
+	// check if user
+	var user dbmodel.User
+	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
+		fmt.Println("User name not found ",userName)
+		c.AbortWithStatus(409)
+		return
+	}
+
+	type RequestBody struct {
+		OrderUUID  string `json:"OrderUUID" binding:"required"`
+		IsDIY bool `json:"IsDIY" binding:"required"`
+		IsPaid bool `json:"IsPaid" binding:"required"`
+		PaypalDetails string `json:"PaypalDetails" binding:"required"`
+	}
+
+	var body RequestBody
+	if err := c.BindJSON(&body); err != nil {
+		c.AbortWithStatus(400)
+		return
+	}
+	var order dbmodel.Order
+	if err := db.Preload("AssetTemplate").Preload("AssetTemplate.Source").Preload("AssetTemplate.Assets").Where("order_uuid = ?", body.OrderUUID).First(&order).Error; err != nil {
+		c.AbortWithStatus(404)
+		return
+	}
+
+	if( body.IsPaid ) {
+		// success
+		order.PaymentStatus="PAID"
+		order.DeliveryStatus="PENDING_DELIVERY"
+		order.IsDIY=body.IsDIY
+		order.PaypalDetails = body.PaypalDetails
+	} else {
+		// failure
+		order.PaymentStatus="FAILED"
+		// let's deliver for now and collect payment later
+		order.DeliveryStatus="PENDING_DELIVERY"
+		order.IsDIY=body.IsDIY
+		order.PaypalDetails = body.PaypalDetails
+	}
+	db.Updates(&order)
+
+	type RequestResponse struct {
+		PaymentStatus string
+		DeliveryStatus string
+	}
+	response :=RequestResponse{
+		PaymentStatus:  order.PaymentStatus,
+		DeliveryStatus: order.DeliveryStatus,
+	}
+	c.JSON(200, response)
 }

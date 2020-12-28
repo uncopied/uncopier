@@ -20,9 +20,9 @@ func preview(c *gin.Context) {
 		return
 	}
 
-	id := c.Param("id")
+	uuid := c.Param("uuid")
 	var assetTemplate dbmodel.AssetTemplate
-	if err := db.Preload("Source.Issuer").Preload("Source").Preload("Assets").Where("id = ?", id).First(&assetTemplate).Error; err != nil {
+	if err := db.Preload("Source.Issuer").Preload("Source").Preload("Assets").Where("object_uuid = ?", uuid).First(&assetTemplate).Error; err != nil {
 		c.AbortWithStatus(404)
 		return
 	}

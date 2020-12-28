@@ -74,6 +74,7 @@ func register(c *gin.Context) {
 		DisplayName string `json:"display_name" binding:"required"`
 		EmailAddress string `json:"email" binding:"required"`
 		Password    string `json:"password" binding:"required"`
+		UserRole    string `json:"role" binding:"required"`
 	}
 
 	var body RequestBody
@@ -101,6 +102,7 @@ func register(c *gin.Context) {
 		DisplayName:  body.DisplayName,
 		EmailAddress: body.EmailAddress,
 		PasswordHash: hash,
+		UserRole: 	  body.UserRole,
 	}
 	db.Create(&user)
 
