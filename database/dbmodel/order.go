@@ -23,16 +23,19 @@ type Order struct {
 	// delivery status
 	DeliveryStatus string
 
-	// quality check status
-	QualityStatus string
-	Quality int
-
-	// the file delivry
+	// production status : file delivery
 	ZipBundle string
+	ProductionStatus string
+	ProductionMessage string
 
 	// is do it yourself?
 	IsDIY bool
 
 	// Paypal Details
 	PaypalDetails string `sql:"type:text;"`
+
+	// quality check status
+	QualityStatus string
+	Quality int
+
 }

@@ -46,7 +46,6 @@ func preview(c *gin.Context) {
 	})
 }
 
-
 func view(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 

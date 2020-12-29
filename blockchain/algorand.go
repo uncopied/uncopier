@@ -7,20 +7,27 @@ import (
 	"github.com/algorand/go-algorand-sdk/client/kmd"
 	"github.com/google/uuid"
 	"github.com/uncopied/uncopier/database/dbmodel"
+	"os"
 	"strconv"
 )
 
 func AlgorandCreateNFT(asset *dbmodel.Asset, assetViewURL string, cid string) (string, error) {
-	return uuid.New().String(),nil
+	createAlgorandAsset := os.Getenv("ALGORAND_CREATE_ASSET")
+	if createAlgorandAsset == "true" {
+		return AlgorandCreateNFT_(asset, assetViewURL, cid)
+	} else {
+		return uuid.New().String(),nil
+	}
 }
 
 func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string, cid string) (string, error) {
-	const kmdAddress = "http://localhost:7833"
-	const kmdToken = "206ba3f9ad1d83523fb2a303dd055cd99ce10c5be01e35ee88285fe51438f02a"
-	const algodAddress = "http://localhost:8080"
-	const algodToken = "da61ace80780af7b1c78456c7d1d2a511758a754d2c219e1a6b37c32763f5bfe"
-	const walletName = "mylinuxwallet"
-	const walletPassword = "password123"
+
+	kmdAddress := os.Getenv("ALGORAND_KMDADDRESS") // "http://localhost:7833"
+	kmdToken := os.Getenv("ALGORAND_KMDTOKEN") //"206ba3f9ad1d83523fb2a303dd055cd99ce10c5be01e35ee88285fe51438f02a"
+	algodAddress := os.Getenv("ALGORAND_ALGODADDRESS") //"http://localhost:8080"
+	algodToken := os.Getenv("ALGORAND_ALGODTOKEN")  // "da61ace80780af7b1c78456c7d1d2a511758a754d2c219e1a6b37c32763f5bfe"
+	walletName := os.Getenv("ALGORAND_WALLETNAME") //"mylinuxwallet"
+	walletPassword := os.Getenv("ALGORAND_WALLETPASSWORD") // "password123"
 
 	// Create a kmd client
 	kmdClient, err := kmd.MakeClient(kmdAddress, kmdToken)

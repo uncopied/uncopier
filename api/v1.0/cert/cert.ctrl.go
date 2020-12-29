@@ -1,16 +1,21 @@
 package cert
 
 import (
+	"archive/zip"
 	"bytes"
 	"crypto/md5"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/hex"
+	"encoding/json"
 	"encoding/pem"
 	"fmt"
+	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gin-gonic/gin"
+	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/uncopied/tallystick"
+	"github.com/uncopied/uncopier/blockchain"
 	"github.com/uncopied/uncopier/certificates/view"
 	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
@@ -479,6 +484,7 @@ func process(c *gin.Context) {
 		return
 	}
 
+	// in any case, mark the order for delivery and prepare order
 	if( body.IsPaid ) {
 		// success
 		order.PaymentStatus="PAID"
@@ -488,12 +494,15 @@ func process(c *gin.Context) {
 	} else {
 		// failure
 		order.PaymentStatus="FAILED"
-		// let's deliver for now and collect payment later
+		// let's prepare for now and collect payment later
 		order.DeliveryStatus="PENDING_DELIVERY"
 		order.IsDIY=body.IsDIY
 		order.PaypalDetails = body.PaypalDetails
 	}
 	db.Updates(&order)
+
+	// in any case, prepare the order
+	go prepare(db, order, user)
 
 	type RequestResponse struct {
 		PaymentStatus string
@@ -505,3 +514,237 @@ func process(c *gin.Context) {
 	}
 	c.JSON(200, response)
 }
+
+type TallystickDoc struct {
+	CertificateLabel string
+	OrderUUID        string
+	Filename         string
+}
+
+func prepareFail(db *gorm.DB, order dbmodel.Order, user dbmodel.User, errorMessage string) {
+	order.ProductionStatus = "FAIL"
+	order.ProductionMessage = errorMessage
+	db.Updates(&order)
+}
+
+func prepareStep(db *gorm.DB, order dbmodel.Order, user dbmodel.User, productionStatus string, productionMessage string) {
+	fmt.Println("delivery step "+productionStatus+" "+productionMessage)
+	order.ProductionStatus = productionStatus
+	order.ProductionMessage = productionMessage
+	db.Updates(&order)
+}
+
+func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
+	// do stuff
+	uuid := order.OrderUUID
+	assetTemplate := order.AssetTemplate
+	mailTo := MailTo()
+	// PDF document with all the certificates
+	pdfg, err := wkhtmltopdf.NewPDFGenerator()
+	if err != nil {
+		fmt.Println("wkhtmltopdf.NewPDFGenerator() failed ")
+		prepareFail(db, order, user, "wkhtmltopdf.NewPDFGenerator() failed ")
+		return
+	}
+	prepareStep(db, order, user, "PDF_GENERATOR",uuid)
+	// Set global options
+	pdfg.Dpi.Set(300)
+	pdfg.Orientation.Set(wkhtmltopdf.OrientationPortrait)
+	pdfg.Grayscale.Set(false)
+	tallystickDocs := make([]TallystickDoc, 0)
+	filePath := "./public/doc/" + uuid + "/"
+	err = os.MkdirAll(filePath, os.ModePerm)
+	if err != nil {
+		fmt.Println("os.MkdirAll() error "+err.Error())
+		prepareFail(db, order, user, "os.MkdirAll() error "+err.Error())
+		return
+	}
+	serverBaseURL := view.ServerBaseURL()
+	//# IPFSNode = "localhost:5001"
+	//LOCAL_IPFS_NODE_HOST=127.0.0.1
+	//LOCAL_IPFS_NODE_PORT=5001
+	ipfsNode := os.Getenv("LOCAL_IPFS_NODE_HOST")+":"+os.Getenv("LOCAL_IPFS_NODE_PORT")
+	// checkout the first
+	for _, asset := range assetTemplate.Assets {
+		assetViewURLExternal :=serverBaseURL.ServerBaseURLExternal+"/c/v/" + strconv.Itoa(int(asset.ID))
+		assetViewURLInternal :=serverBaseURL.ServerBaseURLInternal+"/c/v/" + strconv.Itoa(int(asset.ID))
+		prepareStep(db, order, user, "PROCESS_ASSET", assetViewURLExternal)
+
+		// create hash with metadata
+		prepareStep(db, order, user, "READ_METADATA", assetViewURLExternal)
+		metadata, err := json.Marshal(asset)
+		if err != nil {
+			fmt.Println("json.Marshal(asset) "+err.Error())
+			prepareFail(db, order, user, "json.Marshal(asset) "+err.Error())
+			return
+		}
+		prepareStep(db, order, user, "HASH_METADATA", assetViewURLExternal)
+		sh := shell.NewShell(ipfsNode)
+		metadataHash, err := sh.Add(bytes.NewReader(metadata))
+		if err != nil {
+			fmt.Println("metadataHash "+err.Error())
+			prepareFail(db, order, user, "metadataHash "+err.Error())
+			return
+		}
+		prepareStep(db, order, user, "CREATE_NFT", assetViewURLExternal)
+		transactionId, err := blockchain.AlgorandCreateNFT(&asset, assetViewURLExternal, metadataHash)
+		if err != nil {
+			fmt.Println("blockchain.AlgorandCreateNFT "+err.Error())
+			prepareFail(db, order, user, "blockchain.AlgorandCreateNFT "+err.Error())
+			return
+		}
+		prepareStep(db, order, user, "ISSUE_CERTIFICATE", assetViewURLExternal)
+		certificate := IssueCertificate(db, user, asset.CertificateLabel, order.IsDIY)
+		certificateIssuance := dbmodel.CertificateIssuance{
+			Asset:                 asset,
+			Order:                 order,
+			Certificate:           certificate,
+			AlgorandTransactionID: transactionId,
+			MetadataHash : metadataHash,
+		}
+		db.Create(&certificateIssuance)
+
+		prepareStep(db, order, user, "DRAW_TALLYSTICK", assetViewURLExternal)
+		// create a tally stick for checkout
+		t := tallystick.Tallystick{
+			CertificateLabel:                asset.CertificateLabel,
+			PrimaryLinkURL:                  PermanentCertificateURL(certificateIssuance.ID),
+			// TODO change this
+			SecondaryLinkURL:                "algorand://tx/" + transactionId,
+			IssuerTokenURL:                  PermanentCertificateTokenURL(certificate.IssuerToken.TokenHash),
+			OwnerTokenURL:                   PermanentCertificateTokenURL(certificate.OwnerToken.TokenHash),
+			PrimaryAssetVerifierTokenURL:    PermanentCertificateTokenURL(certificate.PrimaryAssetVerifierToken.TokenHash),
+			SecondaryAssetVerifierTokenURL:  PermanentCertificateTokenURL(certificate.SecondaryAssetVerifierToken.TokenHash),
+			PrimaryOwnerVerifierTokenURL:    PermanentCertificateTokenURL(certificate.PrimaryOwnerVerifierToken.TokenHash),
+			SecondaryOwnerVerifierTokenURL:  PermanentCertificateTokenURL(certificate.SecondaryOwnerVerifierToken.TokenHash),
+			PrimaryIssuerVerifierTokenURL:   PermanentCertificateTokenURL(certificate.PrimaryIssuerVerifierToken.TokenHash),
+			SecondaryIssuerVerifierTokenURL: PermanentCertificateTokenURL(certificate.SecondaryIssuerVerifierToken.TokenHash),
+			MailToContentLeft:               mailTo,
+			MailToContentRight:              mailTo,
+		}
+		var buf bytes.Buffer
+		err = tallystick.DrawPDF(&t, &buf)
+		if err != nil {
+			fmt.Println("tallystick.DrawPDF(&t, &buf) "+err.Error())
+			prepareFail(db, order, user, "tallystick.DrawPDF(&t, &buf)"+err.Error())
+			return
+		}
+		tallystickDoc := TallystickDoc{
+			OrderUUID:        uuid,
+			CertificateLabel: asset.CertificateLabel,
+			Filename:         "tallystick_" + uuid + "_" + strconv.Itoa(int(asset.ID)) + ".pdf",
+		}
+		prepareStep(db, order, user, "SAVE_TALLYSTICK", assetViewURLExternal)
+		out, err := os.Create(filePath + tallystickDoc.Filename)
+		if err != nil {
+			fmt.Println("os.Create(filePath + tallystickDoc.Filename) "+err.Error())
+			prepareFail(db, order, user, "os.Create(filePath + tallystickDoc.Filename) "+err.Error())
+			return
+		}
+		defer out.Close()
+		// Write the body to file
+		_, err = out.Write(buf.Bytes())
+		if err != nil {
+			fmt.Println("out.Write(buf.Bytes()) "+err.Error())
+			prepareFail(db, order, user, "out.Write(buf.Bytes()) "+err.Error())
+			return
+		}
+		tallystickDocs = append(tallystickDocs, tallystickDoc)
+		prepareStep(db, order, user, "APPEND_CERTIFICATE", assetViewURLExternal)
+		// make 4 copies
+		for i := 0; i < 4; i++ {
+			// issuer copy
+			page := wkhtmltopdf.NewPage(assetViewURLInternal)
+			// Set options for this page
+			page.FooterRight.Set("[page]")
+			page.FooterFontSize.Set(10)
+			page.Zoom.Set(0.95)
+			// Add to document
+			pdfg.AddPage(page)
+		}
+	}
+	prepareStep(db, order, user, "PDF_CREATE",uuid)
+	// Create PDF document in internal buffer
+	err = pdfg.Create()
+	if err != nil {
+		fmt.Println("pdfg.Create() "+err.Error())
+		prepareFail(db, order, user, "pdfg.Create() "+err.Error())
+		return
+	}
+	// Write buffer contents to file on disk
+	prepareStep(db, order, user, "PDF_WRITE",uuid)
+	certificateDoc := "certificate_" + uuid + ".pdf"
+	err = pdfg.WriteFile(filePath + certificateDoc)
+	if err != nil {
+		fmt.Println("pdfg.WriteFile(filePath + certificateDoc) "+err.Error())
+		prepareFail(db, order, user, "pdfg.WriteFile(filePath + certificateDoc) "+err.Error())
+		return
+	}
+	prepareStep(db, order, user, "ZIP_BUNDLE",uuid)
+	zipBundle := "uncopied_"+uuid+".zip"
+	out, err := os.Create(filePath + zipBundle)
+	if err != nil {
+		fmt.Println("os.Create(filePath + zipBundle) "+err.Error())
+		prepareFail(db, order, user, "os.Create(filePath + zipBundle) "+err.Error())
+		return
+	}
+	defer out.Close()
+	// Create a new zip archive.
+	w := zip.NewWriter(out)
+	// Add files to the archive.
+	{
+		prepareStep(db, order, user, "ZIP_BUNDLE_ADD_CERT",uuid)
+		f, err := w.Create(certificateDoc)
+		if err != nil {
+			fmt.Println("w.Create(certificateDoc) "+err.Error())
+			prepareFail(db, order, user, "w.Create(certificateDoc) "+err.Error())
+			return
+		}
+		b, err := ioutil.ReadFile(filePath + certificateDoc) // just pass the file name
+		if err != nil {
+			fmt.Println("ioutil.ReadFile(filePath + certificateDoc) "+err.Error())
+			prepareFail(db, order, user, "ioutil.ReadFile(filePath + certificateDoc) "+err.Error())
+			return
+		}
+		_, err = f.Write(b)
+		if err != nil {
+			fmt.Println("f.Write(b) "+err.Error())
+			prepareFail(db, order, user, "f.Write(b) "+err.Error())
+			return
+		}
+	}
+	for _, file := range tallystickDocs {
+		prepareStep(db, order, user, "ZIP_BUNDLE_ADD_TALLY",uuid+"/"+file.Filename)
+		f, err := w.Create(file.Filename)
+		if err != nil {
+			fmt.Println("for _, file := range tallystickDocs; w.Create(file.Filename) "+err.Error())
+			prepareFail(db, order, user, "for _, file := range tallystickDocs; w.Create(file.Filename)"+err.Error())
+			return
+		}
+		b, err := ioutil.ReadFile(filePath +file.Filename) // just pass the file name
+		if err != nil {
+			fmt.Println("for _, file := range tallystickDocs; ioutil.ReadFile(filePath +file.Filename) "+err.Error())
+			prepareFail(db, order, user, "for _, file := range tallystickDocs; ioutil.ReadFile(filePath +file.Filename) "+err.Error())
+			return
+		}
+		_, err = f.Write(b)
+		if err != nil {
+			fmt.Println("for _, file := range tallystickDocs; _, err = f.Write(b) "+err.Error())
+			prepareFail(db, order, user, "for _, file := range tallystickDocs; _, err = f.Write(b) "+err.Error())
+			return
+		}
+	}
+	prepareStep(db, order, user, "ZIP_BUNDLE_CLOSE",uuid)
+	// Make sure to check the error on Close.
+	err = w.Close()
+	if err != nil {
+		fmt.Println("err = w.Close() "+err.Error())
+		prepareFail(db, order, user, "err = w.Close() "+err.Error())
+		return
+	}
+	prepareStep(db, order, user, "READY_TO_DELIVER", "")
+	order.ZipBundle = zipBundle
+	db.Updates(&order)
+}
+
+
