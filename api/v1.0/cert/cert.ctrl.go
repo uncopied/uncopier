@@ -435,7 +435,7 @@ func checkout(c *gin.Context) {
 		TaillyPreviewSVG: tallystickPreviewSVG,
 	}
 	pricing := Pricing{
-		PriceDiy:  5 + asset.EditionTotal * 1,
+		PriceDiy:  asset.EditionTotal * 1, // for now
 		Price:     25 + asset.EditionTotal * 5,
 		CcySymbol: "€",
 		Ccy:       "EUR",

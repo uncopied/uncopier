@@ -10,7 +10,6 @@ import (
 	"strconv"
 	"text/template"
 	"time"
-
 )
 
 type AssetBundle struct {
@@ -34,6 +33,7 @@ func create(c *gin.Context) {
 		SourceID int `json:"source_id" binding:"required"`
 		Name string `json:"name" binding:"required"`
 		CertificateLabel string  `json:"certificate_label" binding:"required"`
+		AssetLabel string  `json:"asset_label" binding:"required"`
 		Metadata string  `json:"metadata"`
 		ExternalMetadataURL string  `json:"external_metadata_url"`
 		Note string `json:"note"`
@@ -90,6 +90,7 @@ func create(c *gin.Context) {
 		EditionTotal:        body.EditionTotal,
 		Name:                body.Name,
 		CertificateLabel:    body.CertificateLabel,
+		AssetLabel:    		 body.AssetLabel,
 		Note:                body.Note,
 		Source:              assetSrc,
 		ObjectUUID:          uuid,
@@ -138,6 +139,7 @@ func execute(templateParams *TemplateParams, templateString string) string {
 
 const maxAssetNameLength = 32
 const maxCertificateLabelLength = 128
+const maxAssetLabelLength = 32
 const maxNoteLength = 1000
 
 func evaluate(assetTemplate *dbmodel.AssetTemplate) (AssetBundle, error) {
@@ -171,11 +173,19 @@ func evaluate(assetTemplate *dbmodel.AssetTemplate) (AssetBundle, error) {
 			errors = append(errors, "asset name length too long : "+assetName)
 		}
 		templateParams.AssetName = assetName
+
 		// then evaluate certificate label
 		certificateLabel := execute(&templateParams, assetTemplate.CertificateLabel)
 		if len(certificateLabel) > maxCertificateLabelLength {
-			errors = append(errors, "asset label length too long : "+certificateLabel)
+			errors = append(errors, "certificate label length too long : "+certificateLabel)
 		}
+
+		// then evaluate asset label
+		assetLabel := execute(&templateParams, assetTemplate.AssetLabel)
+		if len(assetLabel) > maxAssetLabelLength {
+			errors = append(errors, "asset label length too long : "+assetLabel)
+		}
+
 		templateParams.CertificateLabel = certificateLabel
 		externalMetadataURL:= execute(&templateParams, assetTemplate.ExternalMetadataURL)
 		// TODO: call it and get it

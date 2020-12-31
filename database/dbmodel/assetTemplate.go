@@ -26,6 +26,9 @@ type AssetTemplate struct {
 	// Certificate label
 	CertificateLabel string `sql:"type:text;"`
 
+	// Asset label (max size : 32, auto truncated)
+	AssetLabel string `sql:"type:text;"`
+
 	// Arbitrary data to be stored in the transaction
 	Note string  `sql:"type:text;"` //
 
