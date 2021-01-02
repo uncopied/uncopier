@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/aviddiviner/gin-limit"
+	limit "github.com/aviddiviner/gin-limit"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-contrib/static"
@@ -58,7 +58,7 @@ func headersByRequestURI() gin.HandlerFunc {
 			serverHost := os.Getenv("SERVER_HOST")
 			// https://blog.bracebin.com/achieving-perfect-ssl-labs-score-with-go
 			c.Header("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
-			c.Header("Content-Security-Policy", "default-src 'self' https://"+serverHost+"; font-src 'self'; img-src 'self' data: http://www.w3.org; script-src 'self'; frame-src 'self'; style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net;")
+			c.Header("Content-Security-Policy", "base-uri 'self'; default-src 'self' https://"+serverHost+"; font-src 'self'; img-src 'self' data: http://www.w3.org; script-src 'self'; frame-src 'self'; style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net;")
 			c.Header("X-Frame-Options","SAMEORIGIN")
 			// INLINE_RUNTIME_CHUNK=false
 		}
@@ -171,7 +171,17 @@ func main() {
 		httpsPort:=os.Getenv("SERVER_HTTPS_PORT")
 		fullChain:=os.Getenv("SERVER_HTTPS_FULLCHAIN")
 		privKey:=os.Getenv("SERVER_HTTPS_PRIVKEY")
-		err = router.RunTLS((serverHost+":"+httpsPort),fullChain,privKey) // listen and serve on 0.0.0.0:8443
+		addr:=serverHost+":"+httpsPort
+		server := &http.Server{
+			Addr:              addr,
+			Handler:           router,
+			ReadTimeout:       5 * time.Second,
+			ReadHeaderTimeout: 5 * time.Second,
+			WriteTimeout:      5 * time.Second,
+		}
+		err := server.ListenAndServeTLS(fullChain, privKey)
+		// err = http.ListenAndServeTLS(addr, fullChain, privKey, router)
+		//err = router.RunTLS(addr,fullChain,privKey) // listen and serve on 0.0.0.0:8443
 		if err!=nil {
 			log.Fatal(err)
 		}
