@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	limit "github.com/aviddiviner/gin-limit"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-contrib/static"
@@ -19,7 +18,6 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -116,14 +114,6 @@ func main() {
 		AllowAllOrigins: true,
 	}))
 
-	// set max number of concurrent clients
-	concurrentUsers, err := strconv.Atoi(os.Getenv("MAX_CONCURRENT_USERS"))
-	if err!=nil {
-		router.Use(limit.MaxAllowed(concurrentUsers))
-	} else {
-		fmt.Println("Oops, could not set max concurrency")
-	}
-
 	router.Use(static.ServeRoot("/", "./public")) // static files have higher priority over dynamic routes
 	router.LoadHTMLGlob("templates/*")
 	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
@@ -185,6 +175,9 @@ func main() {
 		if err!=nil {
 			log.Fatal(err)
 		}
+		// to monitor files open lsof -p [PID_ID]
+		// TODO: set limits ulimit -n 65535
+		// https://medium.com/@muhammadtriwibowo/set-permanently-ulimit-n-open-files-in-ubuntu-4d61064429a
 	} else if tls=="autocert" {
 		// needs root priviledge to run on 443
 		domain1:=os.Getenv("SERVER_DOMAIN1")
