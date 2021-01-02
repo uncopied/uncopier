@@ -54,16 +54,23 @@ func headersByRequestURI() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tls := os.Getenv("SERVER_TLS")
 		if tls == "https" {
+			serverHost := os.Getenv("SERVER_HOST")
 			// https://blog.bracebin.com/achieving-perfect-ssl-labs-score-with-go
 			c.Header("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+			c.Header("Content-Security-Policy", "default-src https://"+serverHost)
+			c.Header("X-Frame-Options","SAMEORIGIN")
 		}
 		if strings.HasPrefix(c.Request.RequestURI, "/static/") ||
 			strings.HasPrefix(c.Request.RequestURI, "/assets/") ||
 			strings.HasPrefix(c.Request.RequestURI, "/docs/") {
-			c.Header("Cache-Control", "max-age=86400")
+			// 10 days
+			c.Header("Cache-Control", "max-age=864000")
 			//c.Header("Content-Description", "File Transfer")
 			//c.Header("Content-Type", "application/octet-stream")
 			//c.Header("Content-Transfer-Encoding", "binary")
+		} else if !strings.HasPrefix(c.Request.RequestURI, "/api/") {
+			// default : one day
+			c.Header("Cache-Control", "max-age=86400")
 		}
 	}
 }
