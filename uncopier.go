@@ -57,8 +57,9 @@ func headersByRequestURI() gin.HandlerFunc {
 			serverHost := os.Getenv("SERVER_HOST")
 			// https://blog.bracebin.com/achieving-perfect-ssl-labs-score-with-go
 			c.Header("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
-			c.Header("Content-Security-Policy", "default-src 'self' https://"+serverHost+"; font-src 'self'; img-src 'self'; script-src 'self'; frame-src 'self'; style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net;")
+			c.Header("Content-Security-Policy", "default-src 'self' https://"+serverHost+"; font-src 'self'; img-src 'self' *.w3.org; script-src 'self'; frame-src 'self'; style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net;")
 			c.Header("X-Frame-Options","SAMEORIGIN")
+			// INLINE_RUNTIME_CHUNK=false
 		}
 		if strings.HasPrefix(c.Request.RequestURI, "/static/") ||
 			strings.HasPrefix(c.Request.RequestURI, "/assets/") ||
