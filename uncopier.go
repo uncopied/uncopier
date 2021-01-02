@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/aviddiviner/gin-limit"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
@@ -14,13 +16,12 @@ import (
 	"github.com/uncopied/uncopier/upload"
 	"log"
 	"net/http"
-	"net/http/httptest"
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 	"time"
-	"github.com/gin-contrib/gzip"
 )
 // direct call to IPFS, http://127.0.0.1:8080/ipfs/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP
 // proxied call to IPDS http://127.0.0.1:8081/ipfs/QmYZ8w9v86HHUcxM8Yi1sBKNPgqNoL3jcitNUEtyWp5muP
@@ -115,6 +116,14 @@ func main() {
 		AllowAllOrigins: true,
 	}))
 
+	// set max number of concurrent clients
+	concurrentUsers, err := strconv.Atoi(os.Getenv("MAX_CONCURRENT_USERS"))
+	if err!=nil {
+		router.Use(limit.MaxAllowed(concurrentUsers))
+	} else {
+		fmt.Println("Oops, could not set max concurrency")
+	}
+
 	router.Use(static.ServeRoot("/", "./public")) // static files have higher priority over dynamic routes
 	router.LoadHTMLGlob("templates/*")
 	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
@@ -124,10 +133,6 @@ func main() {
 			"artistName": "Mary Stone",
 		})
 	})
-	backendServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "this call was relayed by the reverse proxy")
-	}))
-	defer backendServer.Close()
 
 	// proxy for IPFS requests
 	router.GET("/ipfs/:hash", ReverseProxyIPFS())
@@ -157,17 +162,26 @@ func main() {
 	if tls=="http" {
 		// needs redirecting 80 port to 8081
 		httpPort:=os.Getenv("SERVER_HTTP_PORT")
-		router.Run(serverHost+":"+httpPort)
+		err = router.Run(serverHost+":"+httpPort)
+		if err!=nil {
+			log.Fatal(err)
+		}
 	} else if tls=="https" {
 		// needs redirecting 443 port to 8443
 		httpsPort:=os.Getenv("SERVER_HTTPS_PORT")
 		fullChain:=os.Getenv("SERVER_HTTPS_FULLCHAIN")
 		privKey:=os.Getenv("SERVER_HTTPS_PRIVKEY")
-		router.RunTLS((serverHost+":"+httpsPort),fullChain,privKey) // listen and serve on 0.0.0.0:8443
+		err = router.RunTLS((serverHost+":"+httpsPort),fullChain,privKey) // listen and serve on 0.0.0.0:8443
+		if err!=nil {
+			log.Fatal(err)
+		}
 	} else if tls=="autocert" {
 		// needs root priviledge to run on 443
 		domain1:=os.Getenv("SERVER_DOMAIN1")
 		domain2:=os.Getenv("SERVER_DOMAIN2")
-		log.Fatal(autotls.Run(router, domain1, domain2))
+		err = autotls.Run(router, domain1, domain2)
+		if err!=nil {
+			log.Fatal(err)
+		}
 	}
 }
