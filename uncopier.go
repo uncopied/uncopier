@@ -18,6 +18,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 	"github.com/gin-contrib/gzip"
 )
@@ -48,6 +49,25 @@ func ReverseProxyIPFS() gin.HandlerFunc {
 	}
 }
 
+// https://github.com/gin-gonic/gin/issues/1543
+func headersByRequestURI() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		tls := os.Getenv("SERVER_TLS")
+		if tls == "https" {
+			// https://blog.bracebin.com/achieving-perfect-ssl-labs-score-with-go
+			c.Header("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+		}
+		if strings.HasPrefix(c.Request.RequestURI, "/static/") ||
+			strings.HasPrefix(c.Request.RequestURI, "/assets/") ||
+			strings.HasPrefix(c.Request.RequestURI, "/docs/") {
+			c.Header("Cache-Control", "max-age=86400")
+			//c.Header("Content-Description", "File Transfer")
+			//c.Header("Content-Type", "application/octet-stream")
+			//c.Header("Content-Transfer-Encoding", "binary")
+		}
+	}
+}
+
 func main() {
 
 	fmt.Println("odotenv.Load()")
@@ -65,8 +85,10 @@ func main() {
 		".png", ".gif", ".jpeg", ".jpg",
 		".pdf",
 	})))
-	// TODO - (No max-age or expires) - https://uncopied.org/static/css/main.7f31058b.chunk.css
+
+	// max-age or expires
 	// https://github.com/gin-gonic/gin/issues/1543
+	router.Use(headersByRequestURI())
 
 	// CORS for https://foo.com and https://github.com origins, allowing:
 	// - PUT and PATCH methods
@@ -110,6 +132,16 @@ func main() {
 	certificates.ApplyRoutes(router)
 	// ipfs upload
 	upload.ApplyRoutes(router)
+
+	// todo : configure some read/write timeout?
+	//https://github.com/gin-contrib/timeout
+
+	// todo : add https://prometheus.io/
+	// good checklist here
+	// https://github.com/fiorix/freegeoip
+
+	// todo : Boost Ubuntu Network Performance by Enabling TCP BBR
+	// https://www.linuxbabe.com/ubuntu/enable-google-tcp-bbr-ubuntu
 
 	tls := os.Getenv("SERVER_TLS")
 	serverHost := os.Getenv("SERVER_HOST")
