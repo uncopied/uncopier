@@ -2,7 +2,6 @@ package view
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/uncopied/uncopier/api/v1.0/middleware"
 	"os"
 )
 
@@ -46,7 +45,7 @@ func ApplyRoutes(r *gin.RouterGroup) {
 	posts := r.Group("/preview")
 	{
 		// preview by ID
-		posts.GET("/:uuid", middleware.Authorized, preview)
+		posts.GET("/:uuid", preview)
 	}
 	views := r.Group("/v")
 	{

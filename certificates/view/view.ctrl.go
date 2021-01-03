@@ -10,26 +10,11 @@ import (
 
 func preview(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	userName := c.MustGet("user")
-
-	// check if user
-	var user dbmodel.User
-	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
-		fmt.Println("User name not found ", userName)
-		c.AbortWithStatus(409)
-		return
-	}
 
 	uuid := c.Param("uuid")
 	var assetTemplate dbmodel.AssetTemplate
 	if err := db.Preload("Source.Issuer").Preload("Source").Preload("Assets").Where("object_uuid = ?", uuid).First(&assetTemplate).Error; err != nil {
 		c.AbortWithStatus(404)
-		return
-	}
-
-	if assetTemplate.Source.IssuerID != user.ID {
-		fmt.Println("User doesnt own assetTemplate ", userName)
-		c.AbortWithStatus(409)
 		return
 	}
 

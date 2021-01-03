@@ -23,6 +23,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -364,7 +365,10 @@ func TallyStickPreview (first dbmodel.Asset ) string {
 		fmt.Println("Tallystick.DrawSVG failed ")
 		return ""
 	}
-	return string(buf.Bytes())
+	svg := string(buf.Bytes())
+	// the svg should not have a fixed width/height
+	svg = strings.Replace(svg,"width=\"297mm\" height=\"210mm\"","",1)
+	return svg
 }
 
 func preview(c *gin.Context) {
