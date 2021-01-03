@@ -55,8 +55,9 @@ func headersByRequestURI() gin.HandlerFunc {
 		if tls == "https" {
 			serverHost := os.Getenv("SERVER_HOST")
 			// https://blog.bracebin.com/achieving-perfect-ssl-labs-score-with-go
+			//'https://www.paypal.com/xoplatform
 			c.Header("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
-			c.Header("Content-Security-Policy", "base-uri 'self'; default-src 'self' https://"+serverHost+"; font-src 'self' data: ; img-src 'self' data: http://www.w3.org https://t.paypal.com/; script-src 'self' 'unsafe-inline' https://www.paypal.com/; frame-src 'self' https://www.paypal.com/; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;")
+			c.Header("Content-Security-Policy", "base-uri 'self'; default-src 'self' https://"+serverHost+"; font-src 'self' data: ; connect-src 'self' https://www.paypal.com/ ; img-src 'self' data: http://www.w3.org https://t.paypal.com/; script-src 'self' 'unsafe-inline' https://www.paypal.com/; frame-src 'self' https://www.paypal.com/; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;")
 			c.Header("X-Frame-Options","SAMEORIGIN")
 			// INLINE_RUNTIME_CHUNK=false
 		}
