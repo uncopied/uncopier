@@ -17,6 +17,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"crypto/tls"
 	"os"
 	"strings"
 	"time"
@@ -147,17 +148,17 @@ func main() {
 	// todo : Boost Ubuntu Network Performance by Enabling TCP BBR
 	// https://www.linuxbabe.com/ubuntu/enable-google-tcp-bbr-ubuntu
 
-	tls := os.Getenv("SERVER_TLS")
+	tlsKind := os.Getenv("SERVER_TLS")
 	serverHost := os.Getenv("SERVER_HOST")
-	fmt.Printf("Serving with tlsMod %s\n", tls)
-	if tls=="http" {
+	fmt.Printf("Serving with tlsMod %s\n", tlsKind)
+	if tlsKind =="http" {
 		// needs redirecting 80 port to 8081
 		httpPort:=os.Getenv("SERVER_HTTP_PORT")
 		err = router.Run(serverHost+":"+httpPort)
 		if err!=nil {
 			log.Fatal(err)
 		}
-	} else if tls=="https" {
+	} else if tlsKind =="https" {
 		// needs redirecting 443 port to 8443
 		httpsPort:=os.Getenv("SERVER_HTTPS_PORT")
 		fullChain:=os.Getenv("SERVER_HTTPS_FULLCHAIN")
@@ -166,6 +167,14 @@ func main() {
 		server := &http.Server{
 			Addr:              addr,
 			Handler:           router,
+			TLSConfig: &tls.Config{
+				PreferServerCipherSuites: true,
+				CurvePreferences: []tls.CurveID{
+					tls.CurveP256,
+					tls.X25519,
+				},
+				MinVersion: tls.VersionTLS12,
+			},
 			ReadTimeout:       5 * time.Second,
 			ReadHeaderTimeout: 5 * time.Second,
 			WriteTimeout:      5 * time.Second,
@@ -179,7 +188,22 @@ func main() {
 		// to monitor files open lsof -p [PID_ID]
 		// TODO: set limits ulimit -n 65535
 		// https://medium.com/@muhammadtriwibowo/set-permanently-ulimit-n-open-files-in-ubuntu-4d61064429a
-	} else if tls=="autocert" {
+		httpPort:=os.Getenv("SERVER_HTTP_PORT")
+		addr2:=serverHost+":"+httpPort
+		// https://blog.cloudflare.com/exposing-go-on-the-internet/
+		srv := &http.Server{
+			Addr: addr2,
+			ReadTimeout:  5 * time.Second,
+			WriteTimeout: 10 * time.Second,
+			IdleTimeout:  120 * time.Second,
+			Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+				w.Header().Set("Connection", "close")
+				url := "https://" + req.Host + req.URL.String()
+				http.Redirect(w, req, url, http.StatusMovedPermanently)
+			}),
+		}
+		go func() { log.Fatal(srv.ListenAndServe()) }( )
+	} else if tlsKind =="autocert" {
 		// needs root priviledge to run on 443
 		domain1:=os.Getenv("SERVER_DOMAIN1")
 		domain2:=os.Getenv("SERVER_DOMAIN2")
