@@ -148,6 +148,12 @@ func main() {
 	// todo : Boost Ubuntu Network Performance by Enabling TCP BBR
 	// https://www.linuxbabe.com/ubuntu/enable-google-tcp-bbr-ubuntu
 
+	// add no route to redirect to / : catch all route for React
+	router.NoRoute(func(c *gin.Context) {
+		// https://stackoverflow.com/questions/27928372/react-router-urls-dont-work-when-refreshing-or-writing-manually
+		c.Redirect(http.StatusMovedPermanently, "/")
+	})
+
 	tlsKind := os.Getenv("SERVER_TLS")
 	serverHost := os.Getenv("SERVER_HOST")
 	fmt.Printf("Serving with tlsMod %s\n", tlsKind)
