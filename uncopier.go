@@ -78,6 +78,8 @@ func headersByRequestURI() gin.HandlerFunc {
 	}
 }
 
+
+
 func main() {
 
 	fmt.Println("odotenv.Load()")
@@ -91,11 +93,31 @@ func main() {
 	db.Debug()
 	router := gin.Default()
 	// gzip as per https://www.webpagetest.org/ reco
+	// but the default gzip middleware caused net::ERR_HTTP2_PROTOCOL_ERROR errors
 	//router.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{
 	//	".png", ".gif", ".jpeg", ".jpg",
 	//	".pdf",
 	//	})))
-	router.Use(gzip.DefaultHandler().Gin)
+	var otherExtensions = []string{".ttf"}
+
+	gzipHandler := gzip.NewHandler(gzip.Config{
+		// gzip compression level to use
+		CompressionLevel: 6,
+		// minimum content length to trigger gzip, the unit is in byte.
+		MinContentLength: 1024,
+		// RequestFilter decide whether or not to compress response judging by request.
+		// Filters are applied in the sequence here.
+		RequestFilter: []gzip.RequestFilter{
+			gzip.NewExtensionFilter(otherExtensions),
+			gzip.DefaultExtensionFilter(),
+		},
+		// ResponseHeaderFilter decide whether or not to compress response
+		// judging by response header
+		ResponseHeaderFilter: []gzip.ResponseHeaderFilter{
+			gzip.DefaultContentTypeFilter(),
+		},
+	})
+	router.Use(gzipHandler.Gin)
 
 	// max-age or expires
 	// https://github.com/gin-gonic/gin/issues/1543
