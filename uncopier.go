@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/gzip"
+	"github.com/nanmu42/gzip"
+	//"github.com/gin-contrib/gzip"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
@@ -90,10 +91,11 @@ func main() {
 	db.Debug()
 	router := gin.Default()
 	// gzip as per https://www.webpagetest.org/ reco
-	router.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{
-		".png", ".gif", ".jpeg", ".jpg",
-		".pdf",
-	})))
+	//router.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{
+	//	".png", ".gif", ".jpeg", ".jpg",
+	//	".pdf",
+	//	})))
+	router.Use(gzip.DefaultHandler().Gin)
 
 	// max-age or expires
 	// https://github.com/gin-gonic/gin/issues/1543
