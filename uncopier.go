@@ -175,9 +175,9 @@ func main() {
 				},
 				MinVersion: tls.VersionTLS12,
 			},
-			ReadTimeout:       5 * time.Second,
-			ReadHeaderTimeout: 5 * time.Second,
-			WriteTimeout:      5 * time.Second,
+			ReadTimeout:       30 * time.Second,
+			ReadHeaderTimeout: 30 * time.Second,
+			WriteTimeout:      120 * time.Second,
 		}
 		err := server.ListenAndServeTLS(fullChain, privKey)
 		// err = http.ListenAndServeTLS(addr, fullChain, privKey, router)
@@ -193,8 +193,8 @@ func main() {
 		// https://blog.cloudflare.com/exposing-go-on-the-internet/
 		srv := &http.Server{
 			Addr: addr2,
-			ReadTimeout:  30 * time.Second,
-			WriteTimeout: 60 * time.Second,
+			ReadTimeout:  5 * time.Second,
+			WriteTimeout: 10 * time.Second,
 			IdleTimeout:  120 * time.Second,
 			Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 				w.Header().Set("Connection", "close")
