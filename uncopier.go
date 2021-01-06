@@ -98,26 +98,7 @@ func main() {
 	//	".png", ".gif", ".jpeg", ".jpg",
 	//	".pdf",
 	//	})))
-	var otherExtensions = []string{".ttf"}
-
-	gzipHandler := gzip.NewHandler(gzip.Config{
-		// gzip compression level to use
-		CompressionLevel: 6,
-		// minimum content length to trigger gzip, the unit is in byte.
-		MinContentLength: 1024,
-		// RequestFilter decide whether or not to compress response judging by request.
-		// Filters are applied in the sequence here.
-		RequestFilter: []gzip.RequestFilter{
-			gzip.NewExtensionFilter(otherExtensions),
-			gzip.DefaultExtensionFilter(),
-		},
-		// ResponseHeaderFilter decide whether or not to compress response
-		// judging by response header
-		ResponseHeaderFilter: []gzip.ResponseHeaderFilter{
-			gzip.DefaultContentTypeFilter(),
-		},
-	})
-	router.Use(gzipHandler.Gin)
+	router.Use(gzip.DefaultHandler().Gin)
 
 	// max-age or expires
 	// https://github.com/gin-gonic/gin/issues/1543
