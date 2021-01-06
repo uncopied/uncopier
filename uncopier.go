@@ -138,15 +138,9 @@ func main() {
 	// ipfs upload
 	upload.ApplyRoutes(router)
 
-	// todo : configure some read/write timeout?
-	//https://github.com/gin-contrib/timeout
-
 	// todo : add https://prometheus.io/
 	// good checklist here
 	// https://github.com/fiorix/freegeoip
-
-	// todo : Boost Ubuntu Network Performance by Enabling TCP BBR
-	// https://www.linuxbabe.com/ubuntu/enable-google-tcp-bbr-ubuntu
 
 	// add no route to redirect to / : catch all route for React
 	router.NoRoute(func(c *gin.Context) {
@@ -199,8 +193,8 @@ func main() {
 		// https://blog.cloudflare.com/exposing-go-on-the-internet/
 		srv := &http.Server{
 			Addr: addr2,
-			ReadTimeout:  5 * time.Second,
-			WriteTimeout: 10 * time.Second,
+			ReadTimeout:  30 * time.Second,
+			WriteTimeout: 60 * time.Second,
 			IdleTimeout:  120 * time.Second,
 			Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 				w.Header().Set("Connection", "close")
