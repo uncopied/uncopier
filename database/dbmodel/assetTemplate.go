@@ -32,6 +32,9 @@ type AssetTemplate struct {
 	// Arbitrary data to be stored in the transaction
 	Note string  `sql:"type:text;"` //
 
+	// Additional properties
+	AssetProperties string `sql:"type:text;"` //
+
 	// digital asset source
 	Source   DigitalAssetSrc `gorm:"foreignKey:SourceID"`
 	SourceID uint

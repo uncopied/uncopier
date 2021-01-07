@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="54e4dffa-e567-46b4-90f9-fc00f68382d4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1.0/src/assetSrc.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/src/assetSrc.ctrl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/dbmodel/assetTemplate.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/dbmodel/assetTemplate.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/uncopier.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopier.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/upload.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/upload/upload.ctrl.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,16 +141,5 @@
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/api/v1.0/asset/asset.ctrl.go</url>
-          <line>185</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

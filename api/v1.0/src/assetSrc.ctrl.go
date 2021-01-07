@@ -56,6 +56,15 @@ func create(c *gin.Context) {
 		return
 	}
 
+	var exists dbmodel.DigitalAssetSrc
+	if err := db.Where("ip_fs_hash = ? AND issuer_id = ? AND stamp <> '' ", body.IPFSHash, user.ID).First(&exists).Error; err == nil {
+		msg := "IPFS already contains stamped file with IPFSHash "+ body.IPFSHash
+		// TODO : update or merge license etc?
+		fmt.Println("Warning : "+msg)
+		c.JSON(200, &exists)
+		return
+	}
+
 	asset := dbmodel.DigitalAssetSrc{
 		Issuer:                 user,
 		IssuerClaimsAuthorship: false,

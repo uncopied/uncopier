@@ -52,10 +52,12 @@ func upload(c *gin.Context) {
 	cid, err := sh.Add(src) //bytes.NewReader(fileData))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %s", err)
+		response.Message=err.Error()
 		c.JSON(http.StatusInternalServerError, response)
+	} else {
+		response.IPFSHash = cid
+		c.JSON(http.StatusOK, response)
 	}
-	response.IPFSHash = cid
-	c.JSON(http.StatusOK, response)
 }
 
 

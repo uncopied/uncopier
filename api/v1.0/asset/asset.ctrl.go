@@ -3,6 +3,7 @@ package asset
 import (
 	"bytes"
 	"fmt"
+	"github.com/algorand/go-algorand-sdk/encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/uncopied/uncopier/database/dbmodel"
@@ -29,11 +30,13 @@ type AssetError struct{
 //"source_id":14}
 func create(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
+
 	type RequestBody struct {
 		SourceID int `json:"source_id" binding:"required"`
 		Name string `json:"name" binding:"required"`
 		CertificateLabel string  `json:"certificate_label" binding:"required"`
 		AssetLabel string  `json:"asset_label" binding:"required"`
+		AssetProperties map[string]string `json:"asset_properties" binding:"required"`
 		Metadata string  `json:"metadata"`
 		ExternalMetadataURL string  `json:"external_metadata_url"`
 		Note string `json:"note"`
@@ -81,6 +84,7 @@ func create(c *gin.Context) {
 		c.AbortWithStatus(409)
 		return
 	}
+	propsJson := string(json.Encode(body.AssetProperties))
 
 	uuid := uuid.New().String()
 	assetTemplate := dbmodel.AssetTemplate{
@@ -90,8 +94,9 @@ func create(c *gin.Context) {
 		EditionTotal:        body.EditionTotal,
 		Name:                body.Name,
 		CertificateLabel:    body.CertificateLabel,
-		AssetLabel:    		 body.AssetLabel,
+		AssetLabel:          body.AssetLabel,
 		Note:                body.Note,
+		AssetProperties:     propsJson,
 		Source:              assetSrc,
 		ObjectUUID:          uuid,
 	}
@@ -100,7 +105,7 @@ func create(c *gin.Context) {
 	if assetTemplate.EditionTotal == 0 {
 		assetTemplate.EditionTotal = 1
 	}
-	bundle,err := evaluate(&assetTemplate)
+	bundle,err := evaluate(&assetTemplate, body.AssetProperties)
 	if err!=nil {
 		c.AbortWithStatus(500)
 		return
@@ -120,6 +125,7 @@ type TemplateParams struct {
 	IssuerName string
 	AuthorName string
 	ThumbnailURL string
+	AssetProperties map[string]string
 	EditionTotal int
 	EditionNumber int
 	ExternalAssetId int
@@ -130,11 +136,16 @@ type TemplateParams struct {
 	Note string
 }
 
-func execute(templateParams *TemplateParams, templateString string) string {
+func execute(templateParams *TemplateParams, templateString string) (string, error) {
+
 	tMetadata := template.Must(template.New("field").Parse(templateString))
 	buf := new(bytes.Buffer)
-	tMetadata.Execute(buf, templateParams)
-	return buf.String()
+	err := tMetadata.Execute(buf, templateParams)
+	if err != nil {
+		fmt.Println("oops evaluating "+templateString+" err="+err.Error())
+		return "", err
+	}
+	return buf.String(), nil
 }
 
 const maxAssetNameLength = 32
@@ -142,11 +153,11 @@ const maxCertificateLabelLength = 128
 const maxAssetLabelLength = 32
 const maxNoteLength = 1000
 
-func evaluate(assetTemplate *dbmodel.AssetTemplate) (AssetBundle, error) {
+
+func evaluate(assetTemplate *dbmodel.AssetTemplate, assetProperties map[string]string) (AssetBundle, error) {
   	assets := make([]dbmodel.Asset, 0)
   	params := make([]TemplateParams,0)
   	errors := make([]string,0)
-
 	currentTime := time.Now()
 	currentYear := strconv.Itoa(currentTime.Year())
 	for i := 1; i<= assetTemplate.EditionTotal ;i++ {
@@ -162,39 +173,56 @@ func evaluate(assetTemplate *dbmodel.AssetTemplate) (AssetBundle, error) {
 			IssuerEthereumAddress : assetTemplate.Source.Issuer.EthereumAddress,
 			ExternalSourceID : assetTemplate.Source.ExternalSourceID,
 			IssuerUserName: assetTemplate.Source.Issuer.UserName,
-
+			AssetProperties: assetProperties,
 			EditionTotal:    assetTemplate.EditionTotal,
 			ExternalAssetId: externalAssetId,
 			EditionNumber:   i,
 		}
 		// evaluate asset name first
-		assetName := execute(&templateParams, assetTemplate.Name)
+		assetName, err := execute(&templateParams, assetTemplate.Name)
+		if err!=nil {
+			errors = append(errors, "assetTemplate.Name templating error : "+err.Error())
+		}
 		if len(assetName) > maxAssetNameLength {
 			errors = append(errors, "asset name length too long : "+assetName)
 		}
 		templateParams.AssetName = assetName
 
 		// then evaluate certificate label
-		certificateLabel := execute(&templateParams, assetTemplate.CertificateLabel)
+		certificateLabel,err := execute(&templateParams, assetTemplate.CertificateLabel)
+		if err!=nil {
+			errors = append(errors, "assetTemplate.CertificateLabel templating error : "+err.Error())
+		}
 		if len(certificateLabel) > maxCertificateLabelLength {
 			errors = append(errors, "certificate label length too long : "+certificateLabel)
 		}
 
 		// then evaluate asset label
-		assetLabel := execute(&templateParams, assetTemplate.AssetLabel)
+		assetLabel,err := execute(&templateParams, assetTemplate.AssetLabel)
+		if err!=nil {
+			errors = append(errors, "assetTemplate.AssetLabel templating error : "+err.Error())
+		}
 		if len(assetLabel) > maxAssetLabelLength {
 			errors = append(errors, "asset label length too long : "+assetLabel)
 		}
-
 		templateParams.CertificateLabel = certificateLabel
-		externalMetadataURL:= execute(&templateParams, assetTemplate.ExternalMetadataURL)
+		externalMetadataURL,err:= execute(&templateParams, assetTemplate.ExternalMetadataURL)
+		if err!=nil {
+			errors = append(errors, "assetTemplate.ExternalMetadataURL templating error : "+err.Error())
+		}
 		// TODO: call it and get it
 		templateParams.ExternalMetadataURL = externalMetadataURL
-		note:=execute(&templateParams, assetTemplate.Note)
+		note,err:=execute(&templateParams, assetTemplate.Note)
+		if err!=nil {
+			errors = append(errors, "assetTemplate.Note templating error : "+err.Error())
+		}
 		if len(note) > maxNoteLength {
 			errors = append(errors, "asset note too long : "+note)
 		}
-		metadata:=execute(&templateParams, assetTemplate.Metadata)
+		metadata,err:=execute(&templateParams, assetTemplate.Metadata)
+		if err!=nil {
+			errors = append(errors, "assetTemplate.Metadata templating error : "+err.Error())
+		}
 		// TODO : json schema validation an comparison with value at externalMetadataURL
 		asset := dbmodel.Asset{
 			EditionTotal:        assetTemplate.EditionTotal,
