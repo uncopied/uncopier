@@ -5,6 +5,8 @@ DROP TABLE certificate_tokens CASCADE;
 DROP TABLE certificates CASCADE;
 DROP TABLE digital_asset_srcs CASCADE;
 DROP TABLE users CASCADE;
+DROP TABLE certificate_issuances;
+DROP TABLE orders;
 
 
 

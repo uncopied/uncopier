@@ -244,12 +244,13 @@ func evaluate(assetTemplate *dbmodel.AssetTemplate, assetProperties map[string]s
 			EditionNumber:       i,
 			ExternalAssetId:     externalAssetId,
 			Name:                assetName, // evaluated first
-			CertificateLabel: certificateLabel, // evaluated second
+			CertificateLabel:    certificateLabel, // evaluated second
+			AssetLabel:          assetLabel,
 			ExternalMetadataURL: externalMetadataURL,
 			Note:                note,
 			Metadata:            metadata,
-			IPFSHashMetadata: 	 metadataHash,
-			MetadataHash32: 	 md5Hash,
+			IPFSHashMetadata:    metadataHash,
+			MD5HashMetadata:     md5Hash,
 		}
 		assets = append(assets, asset)
 		params = append(params, templateParams)

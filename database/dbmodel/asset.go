@@ -9,8 +9,8 @@ type Asset struct {
 	gorm.Model
 
 	// The asset template metadata
-	Metadata  string `sql:"type:text;"`
-	MetadataHash32 string `sql:"type:text;"`
+	Metadata         string `sql:"type:text;"`
+	MD5HashMetadata  string `sql:"type:text;"`
 	IPFSHashMetadata string `sql:"type:text;"`
 
 	// An external metadata URL, ex. https://metadata.mintable.app/ao1YMdMJWwF39585fg9C/52
@@ -31,7 +31,7 @@ type Asset struct {
 	// Certificate label
 	CertificateLabel string `sql:"type:text;"`
 
-	// Asset label (max size : 32, auto truncated)
+	// Asset label (max size : 32)
 	AssetLabel string `sql:"type:text;"`
 
 	// Arbitrary data to be stored in the transaction

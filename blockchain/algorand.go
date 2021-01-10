@@ -91,7 +91,7 @@ func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string) (string, erro
 	note := []byte(noteStr)          // arbitrary data to be stored in the transaction; here, none is stored
 
 	//assetURL := "https://uncopied.org/c/v/"+strconv.Itoa(int(asset.ID)) // optional string pointing to a URL relating to the asset. 32 character length.
-	assetMetadataHash := asset.MetadataHash32 // optional hash commitment of some sort relating to the asset. 32 character length.
+	assetMetadataHash := asset.MD5HashMetadata // optional hash commitment of some sort relating to the asset. 32 character length.
 
 	// Get the suggested transaction parameters
 	txParams, err := algodClient.BuildSuggestedParams()
