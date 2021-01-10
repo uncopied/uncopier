@@ -2,12 +2,16 @@ package asset
 
 import (
 	"bytes"
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"github.com/algorand/go-algorand-sdk/encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/uncopied/uncopier/database/dbmodel"
 	"gorm.io/gorm"
+	"os"
 	"strconv"
 	"text/template"
 	"time"
@@ -223,6 +227,17 @@ func evaluate(assetTemplate *dbmodel.AssetTemplate, assetProperties map[string]s
 		if err!=nil {
 			errors = append(errors, "assetTemplate.Metadata templating error : "+err.Error())
 		}
+		// upload metadata to IPFS
+		ipfsNode := os.Getenv("LOCAL_IPFS_NODE_HOST")+":"+os.Getenv("LOCAL_IPFS_NODE_PORT")
+		sh := shell.NewShell(ipfsNode)
+		metadataHash, err := sh.Add(bytes.NewReader([]byte(metadata)))
+		if err != nil {
+			errors = append(errors, "assetTemplate.Metadata templating error : "+err.Error())
+		}
+		// MD5 stamp
+		hasher := md5.New()
+		hasher.Write([]byte(metadata))
+		md5Hash := hex.EncodeToString(hasher.Sum(nil))
 		// TODO : json schema validation an comparison with value at externalMetadataURL
 		asset := dbmodel.Asset{
 			EditionTotal:        assetTemplate.EditionTotal,
@@ -233,6 +248,8 @@ func evaluate(assetTemplate *dbmodel.AssetTemplate, assetProperties map[string]s
 			ExternalMetadataURL: externalMetadataURL,
 			Note:                note,
 			Metadata:            metadata,
+			IPFSHashMetadata: 	 metadataHash,
+			MetadataHash32: 	 md5Hash,
 		}
 		assets = append(assets, asset)
 		params = append(params, templateParams)

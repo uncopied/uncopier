@@ -10,16 +10,16 @@ import (
 	"os"
 )
 
-func AlgorandCreateNFT(asset *dbmodel.Asset, assetViewURL string, metadataHash string) (string, error) {
+func AlgorandCreateNFT(asset *dbmodel.Asset, assetViewURL string) (string, error) {
 	createAlgorandAsset := os.Getenv("ALGORAND_CREATE_ASSET")
 	if createAlgorandAsset == "true" {
-		return AlgorandCreateNFT_(asset, assetViewURL, metadataHash)
+		return AlgorandCreateNFT_(asset, assetViewURL)
 	} else {
 		return uuid.New().String(),nil
 	}
 }
 
-func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string, metadataHash string) (string, error) {
+func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string) (string, error) {
 
 	kmdAddress := os.Getenv("ALGORAND_KMDADDRESS")         // "http://localhost:7833"
 	kmdToken := os.Getenv("ALGORAND_KMDTOKEN")             //"206ba3f9ad1d83523fb2a303dd055cd99ce10c5be01e35ee88285fe51438f02a"
@@ -91,7 +91,7 @@ func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string, metadataHash 
 	note := []byte(noteStr)          // arbitrary data to be stored in the transaction; here, none is stored
 
 	//assetURL := "https://uncopied.org/c/v/"+strconv.Itoa(int(asset.ID)) // optional string pointing to a URL relating to the asset. 32 character length.
-	assetMetadataHash := metadataHash // optional hash commitment of some sort relating to the asset. 32 character length.
+	assetMetadataHash := asset.MetadataHash32 // optional hash commitment of some sort relating to the asset. 32 character length.
 
 	// Get the suggested transaction parameters
 	txParams, err := algodClient.BuildSuggestedParams()

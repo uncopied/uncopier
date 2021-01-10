@@ -10,6 +10,8 @@ type Asset struct {
 
 	// The asset template metadata
 	Metadata  string `sql:"type:text;"`
+	MetadataHash32 string `sql:"type:text;"`
+	IPFSHashMetadata string `sql:"type:text;"`
 
 	// An external metadata URL, ex. https://metadata.mintable.app/ao1YMdMJWwF39585fg9C/52
 	ExternalMetadataURL  string `sql:"type:text;"`

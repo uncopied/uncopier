@@ -13,7 +13,6 @@ import (
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gin-gonic/gin"
-	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/uncopied/tallystick"
 	"github.com/uncopied/uncopier/blockchain"
 	"github.com/uncopied/uncopier/certificates/view"
@@ -567,7 +566,7 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 	//# IPFSNode = "localhost:5001"
 	//LOCAL_IPFS_NODE_HOST=127.0.0.1
 	//LOCAL_IPFS_NODE_PORT=5001
-	ipfsNode := os.Getenv("LOCAL_IPFS_NODE_HOST")+":"+os.Getenv("LOCAL_IPFS_NODE_PORT")
+
 	// checkout the first
 	for _, asset := range assetTemplate.Assets {
 		assetViewURLExternal :=serverBaseURL.ServerBaseURLExternal+"/c/v/" + strconv.Itoa(int(asset.ID))
@@ -587,16 +586,8 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 			}
 			metadata=string(fallback)
 		}
-		prepareStep(db, order, user, "HASH_METADATA", assetViewURLExternal)
-		sh := shell.NewShell(ipfsNode)
-		metadataHash, err := sh.Add(bytes.NewReader([]byte(metadata)))
-		if err != nil {
-			fmt.Println("metadataHash "+err.Error())
-			prepareFail(db, order, user, "metadataHash "+err.Error())
-			return
-		}
-		prepareStep(db, order, user, "CREATE_NFT", assetViewURLExternal)
-		transactionId, err := blockchain.AlgorandCreateNFT(&asset, assetViewURLExternal, metadataHash)
+
+		transactionId, err := blockchain.AlgorandCreateNFT(&asset, assetViewURLExternal)
 		if err != nil {
 			fmt.Println("blockchain.AlgorandCreateNFT "+err.Error())
 			prepareFail(db, order, user, "blockchain.AlgorandCreateNFT "+err.Error())
@@ -609,7 +600,6 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 			Order:                 order,
 			Certificate:           certificate,
 			AlgorandTransactionID: transactionId,
-			MetadataHash : metadataHash,
 		}
 		db.Create(&certificateIssuance)
 
