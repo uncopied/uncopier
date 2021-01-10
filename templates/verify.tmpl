@@ -22,15 +22,15 @@
         </ul>
     </p>
     <p>
-        The object's <a href="http://{{ .localIPFSHost }}:{{ .localIPFSPort }}/ipfs/{{ .certificateIssuance.MetadataHash }}">metadata</a> is stored permanently in IPFS with hash {{ .certificateIssuance.MetadataHash }}.
+        The object's <a href="http://{{ .localIPFSHost }}:{{ .localIPFSPort }}/ipfs/{{ .certificateIssuance.Asset.IPFSHashMetadata }}">metadata</a> is stored permanently in IPFS with hash {{ .certificateIssuance..Asset.IPFSHashMetadata }}.
         This same information can be read from several independent sources, for example
         <ul>
-            <li><a href="http://ipfs.io/ipfs/{{ .certificateIssuance.MetadataHash }}">http://ipfs.io/ipfs/{{ .certificateIssuance.MetadataHash }}</a></li>
-            <li><a href="https://cloudflare-ipfs.com/ipfs/{{ .certificateIssuance.MetadataHash }}">https://cloudflare-ipfs.com/ipfs/{{ .certificateIssuance.MetadataHash }}</a></li>
+            <li><a href="http://ipfs.io/ipfs/{{ .certificateIssuance.Asset.IPFSHashMetadata }}">http://ipfs.io/ipfs/{{ .certificateIssuance.Asset.IPFSHashMetadata }}</a></li>
+            <li><a href="https://cloudflare-ipfs.com/ipfs/{{ .certificateIssuance.Asset.IPFSHashMetadata }}">https://cloudflare-ipfs.com/ipfs/{{ .certificateIssuance.Asset.IPFSHashMetadata }}</a></li>
         </ul>
     </p>
     <p>
-        The object's metadata hash {{ .certificateIssuance.MetadataHash }} is also stored permanently in the Algorand blockchain with transaction ID {{ .certificateIssuance.AlgorandTransactionID }}
+        The object's metadata MD5 hash {{ .certificateIssuance.Asset.MetadataHash32 }} is also stored permanently in the Algorand blockchain with transaction ID {{ .certificateIssuance.AlgorandTransactionID }}
         This same information can be read from several independent sources, for example
         <ul>
             <li><a href="https://algoexplorer.io/tx/{{ .certificateIssuance.AlgorandTransactionID }}">https://algoexplorer.io/tx/{{ .certificateIssuance.AlgorandTransactionID }}</a></li>
