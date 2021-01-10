@@ -576,15 +576,20 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 
 		// create hash with metadata
 		prepareStep(db, order, user, "READ_METADATA", assetViewURLExternal)
-		metadata, err := json.Marshal(asset)
-		if err != nil {
-			fmt.Println("json.Marshal(asset) "+err.Error())
-			prepareFail(db, order, user, "json.Marshal(asset) "+err.Error())
-			return
+		metadata := asset.Metadata
+		if metadata == "" {
+			// in case we don't have metadata, just use our asset object
+			fallback, err := json.Marshal(asset)
+			if err != nil {
+				fmt.Println("json.Marshal(asset) "+err.Error())
+				prepareFail(db, order, user, "json.Marshal(asset) "+err.Error())
+				return
+			}
+			metadata=string(fallback)
 		}
 		prepareStep(db, order, user, "HASH_METADATA", assetViewURLExternal)
 		sh := shell.NewShell(ipfsNode)
-		metadataHash, err := sh.Add(bytes.NewReader(metadata))
+		metadataHash, err := sh.Add(bytes.NewReader([]byte(metadata)))
 		if err != nil {
 			fmt.Println("metadataHash "+err.Error())
 			prepareFail(db, order, user, "metadataHash "+err.Error())

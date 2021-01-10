@@ -2,32 +2,32 @@ package blockchain
 
 import (
 	"fmt"
-	transaction "github.com/algorand/go-algorand-sdk/future"
 	"github.com/algorand/go-algorand-sdk/client/algod"
 	"github.com/algorand/go-algorand-sdk/client/kmd"
+	transaction "github.com/algorand/go-algorand-sdk/future"
 	"github.com/google/uuid"
 	"github.com/uncopied/uncopier/database/dbmodel"
 	"os"
-	"strconv"
 )
 
-func AlgorandCreateNFT(asset *dbmodel.Asset, assetViewURL string, cid string) (string, error) {
+func AlgorandCreateNFT(asset *dbmodel.Asset, assetViewURL string, metadataHash string) (string, error) {
 	createAlgorandAsset := os.Getenv("ALGORAND_CREATE_ASSET")
 	if createAlgorandAsset == "true" {
-		return AlgorandCreateNFT_(asset, assetViewURL, cid)
+		return AlgorandCreateNFT_(asset, assetViewURL, metadataHash)
 	} else {
 		return uuid.New().String(),nil
 	}
 }
 
-func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string, cid string) (string, error) {
+func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string, metadataHash string) (string, error) {
 
-	kmdAddress := os.Getenv("ALGORAND_KMDADDRESS") // "http://localhost:7833"
-	kmdToken := os.Getenv("ALGORAND_KMDTOKEN") //"206ba3f9ad1d83523fb2a303dd055cd99ce10c5be01e35ee88285fe51438f02a"
-	algodAddress := os.Getenv("ALGORAND_ALGODADDRESS") //"http://localhost:8080"
-	algodToken := os.Getenv("ALGORAND_ALGODTOKEN")  // "da61ace80780af7b1c78456c7d1d2a511758a754d2c219e1a6b37c32763f5bfe"
-	walletName := os.Getenv("ALGORAND_WALLETNAME") //"mylinuxwallet"
+	kmdAddress := os.Getenv("ALGORAND_KMDADDRESS")         // "http://localhost:7833"
+	kmdToken := os.Getenv("ALGORAND_KMDTOKEN")             //"206ba3f9ad1d83523fb2a303dd055cd99ce10c5be01e35ee88285fe51438f02a"
+	algodAddress := os.Getenv("ALGORAND_ALGODADDRESS")     //"http://localhost:8080"
+	algodToken := os.Getenv("ALGORAND_ALGODTOKEN")         // "da61ace80780af7b1c78456c7d1d2a511758a754d2c219e1a6b37c32763f5bfe"
+	walletName := os.Getenv("ALGORAND_WALLETNAME")         //"mylinuxwallet"
 	walletPassword := os.Getenv("ALGORAND_WALLETPASSWORD") // "password123"
+	accountAddr := os.Getenv("ALGORAND_ACCOUNTADDR")       //"C2MCKQYJCU4RNWCQVWWSWEHGPAD37BEMQTIMVD6XF36AUIPKOXWIZOO7ZE"
 
 	// Create a kmd client
 	kmdClient, err := kmd.MakeClient(kmdAddress, kmdToken)
@@ -74,22 +74,19 @@ func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string, cid string) (
 
 	// Extract the wallet handle
 	exampleWalletHandleToken := initResponse.WalletHandleToken
-	addr := "C2MCKQYJCU4RNWCQVWWSWEHGPAD37BEMQTIMVD6XF36AUIPKOXWIZOO7ZE"
 
-	defaultFrozen := false // whether user accounts will need to be unfrozen before transacting
-	totalIssuance := uint64(1) // total number of this asset in circulation
-	decimals := uint32(0) // hint to GUIs for interpreting base unit
-	reserve := addr // specified address is considered the asset reserve (it has no special privileges, this is only informational)
-	freeze := addr // specified address can freeze or unfreeze user asset holdings
-	clawback := addr // specified address can revoke user asset holdings and send them to other addresses
-	manager := addr // specified address can change reserve, freeze, clawback, and manager
-	unitName := "" // used to display asset units to user
+	defaultFrozen := false              // whether user accounts will need to be unfrozen before transacting
+	totalIssuance := uint64(1)          // total number of this asset in circulation
+	decimals := uint32(0)               // hint to GUIs for interpreting base unit
+	reserve := accountAddr              // specified address is considered the asset reserve (it has no special privileges, this is only informational)
+	freeze := accountAddr               // specified address can freeze or unfreeze user asset holdings
+	clawback := accountAddr             // specified address can revoke user asset holdings and send them to other addresses
+	manager := accountAddr              // specified address can change reserve, freeze, clawback, and manager
+	unitName := ""                      // used to display asset units to user
 	assetName := asset.CertificateLabel // "friendly name" of asset
-	note := []byte(asset.Note) // arbitrary data to be stored in the transaction; here, none is stored
-	// TODO use assetViewURL
-	fmt.Println("Use assetViewURL="+assetViewURL+" instead")
-	assetURL := "https://uncopied.org/c/v/"+strconv.Itoa(int(asset.ID)) // optional string pointing to a URL relating to the asset. 32 character length.
-	assetMetadataHash := cid // optional hash commitment of some sort relating to the asset. 32 character length.
+	note := []byte(asset.Note)          // arbitrary data to be stored in the transaction; here, none is stored
+	//assetURL := "https://uncopied.org/c/v/"+strconv.Itoa(int(asset.ID)) // optional string pointing to a URL relating to the asset. 32 character length.
+	assetMetadataHash := metadataHash // optional hash commitment of some sort relating to the asset. 32 character length.
 
 	// Get the suggested transaction parameters
 	txParams, err := algodClient.BuildSuggestedParams()
@@ -98,10 +95,10 @@ func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string, cid string) (
 		return "",err
 	}
 
-	// signing and sending "txn" allows "addr" to create an asset
-	txn, err := transaction.MakeAssetCreateTxn(addr, note, txParams,
+	// signing and sending "txn" allows "accountAddr" to create an asset
+	txn, err := transaction.MakeAssetCreateTxn(accountAddr, note, txParams,
 		totalIssuance, decimals, defaultFrozen, manager, reserve, freeze, clawback,
-		unitName, assetName, assetURL, assetMetadataHash)
+		unitName, assetName, assetViewURL, assetMetadataHash)
 	if err != nil {
 		fmt.Printf("Failed to make asset: %s\n", err)
 		return "",err

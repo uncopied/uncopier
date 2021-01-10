@@ -20,5 +20,5 @@ type CertificateIssuance struct {
 	AlgorandTransactionID string `sql:"type:text;"`
 
 	Metadata string  `sql:"type:text;"`
-	MetadataHash  string  `sql:"type:text;"`
+	MetadataHash string  `sql:"type:text;"`
 }
