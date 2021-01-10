@@ -83,8 +83,13 @@ func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string, metadataHash 
 	clawback := accountAddr             // specified address can revoke user asset holdings and send them to other addresses
 	manager := accountAddr              // specified address can change reserve, freeze, clawback, and manager
 	unitName := ""                      // used to display asset units to user
-	assetName := asset.CertificateLabel // "friendly name" of asset
-	note := []byte(asset.Note)          // arbitrary data to be stored in the transaction; here, none is stored
+	assetName := asset.AssetLabel       // "friendly name" of asset
+	noteStr := asset.Note
+	if noteStr == "" {
+		noteStr = asset.CertificateLabel
+	}
+	note := []byte(noteStr)          // arbitrary data to be stored in the transaction; here, none is stored
+
 	//assetURL := "https://uncopied.org/c/v/"+strconv.Itoa(int(asset.ID)) // optional string pointing to a URL relating to the asset. 32 character length.
 	assetMetadataHash := metadataHash // optional hash commitment of some sort relating to the asset. 32 character length.
 
