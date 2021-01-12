@@ -3,7 +3,7 @@
 <h1>
     {{ .asset.CertificateLabel }}
 </h1>
-<h2>Verifying Authenticity</h2>
+<h2>Verifying Certificate Authenticity</h2>
     <p>
         If you are here, you probably have access to an UNCOPIED certificate of authenticity, or an object with an UNCOPIED tag glued to it.
     </p>
@@ -22,7 +22,7 @@
         </ul>
     </p>
     <p>
-        The object's <a href="http://{{ .localIPFSHost }}:{{ .localIPFSPort }}/ipfs/{{ .certificateIssuance.Asset.IPFSHashMetadata }}">metadata</a> is stored permanently in IPFS with hash {{ .certificateIssuance.Asset.IPFSHashMetadata }}.
+        The object's <a href="/ipfs/{{ .certificateIssuance.Asset.IPFSHashMetadata }}">metadata</a> is stored permanently in IPFS with hash {{ .certificateIssuance.Asset.IPFSHashMetadata }}.
         This same information can be read from several independent sources, for example
         <ul>
             <li><a href="http://ipfs.io/ipfs/{{ .certificateIssuance.Asset.IPFSHashMetadata }}">http://ipfs.io/ipfs/{{ .certificateIssuance.Asset.IPFSHashMetadata }}</a></li>
@@ -46,7 +46,7 @@
         adding images, lending the object or transferring ownership.
     </p>
     <p>
-        If you only have access to the item itself, you send a picture along with a picture of the tally stick glued to its back. We will be able to do a first
+        If you only have access to the item itself, you can send a picture along with a picture of the tally stick glued to its back. We will be able to do a first
         level of verification based on those images.
     </p>
 </div>

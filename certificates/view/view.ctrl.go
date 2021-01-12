@@ -35,6 +35,7 @@ func view(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
 	token := c.Param("token")
+
 	// TODO change this : for now just use the ID as token
 	var asset dbmodel.Asset
 	if err := db.Where("id = ?", token).First(&asset).Error; err != nil {
@@ -47,6 +48,7 @@ func view(c *gin.Context) {
 		c.AbortWithStatus(404)
 		return
 	}
+
 	c.HTML(http.StatusOK, "view.tmpl", gin.H{
 		"asset":  asset,
 		"source": assetTemplate.Source,
