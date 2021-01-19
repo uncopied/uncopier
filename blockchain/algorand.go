@@ -19,6 +19,7 @@ func AlgorandCreateNFT(asset *dbmodel.Asset, assetViewURL string) (string, error
 	}
 }
 
+const UNCOPIED = "UNCOPIED"
 func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string) (string, error) {
 
 	kmdAddress := os.Getenv("ALGORAND_KMDADDRESS")         // "http://localhost:7833"
@@ -82,7 +83,7 @@ func AlgorandCreateNFT_(asset *dbmodel.Asset, assetViewURL string) (string, erro
 	freeze := accountAddr               // specified address can freeze or unfreeze user asset holdings
 	clawback := accountAddr             // specified address can revoke user asset holdings and send them to other addresses
 	manager := accountAddr              // specified address can change reserve, freeze, clawback, and manager
-	unitName := ""                      // used to display asset units to user
+	unitName := UNCOPIED                      // used to display asset units to user
 	assetName := asset.AssetLabel       // "friendly name" of asset
 	noteStr := asset.Note
 	if noteStr == "" {
