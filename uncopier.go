@@ -63,7 +63,7 @@ func headersByRequestURI() gin.HandlerFunc {
 			c.Header("Content-Security-Policy", "base-uri 'self'; "+
 				"default-src 'self' https://"+serverHost+"; "+
 				"font-src 'self' data: https://pro.fontawesome.com https://cdn.jsdelivr.net https://fonts.googleapis.com; " +
-				"connect-src 'self' https://www.paypal.com/ https://www.sandbox.paypal.com ; "+
+				"connect-src 'self' https://www.google-analytics.com https://www.paypal.com/ https://www.sandbox.paypal.com ; "+
 				"img-src 'self' data: http://www.w3.org https://t.paypal.com/; "+
 				"script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.paypal.com/; "+
 				"frame-src 'self' https://www.paypal.com/ https://www.sandbox.paypal.com; "+
