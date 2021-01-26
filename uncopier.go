@@ -65,7 +65,7 @@ func headersByRequestURI() gin.HandlerFunc {
 				"font-src 'self' data: https://pro.fontawesome.com https://cdn.jsdelivr.net https://fonts.googleapis.com; " +
 				"connect-src 'self' https://www.paypal.com/ https://www.sandbox.paypal.com ; "+
 				"img-src 'self' data: http://www.w3.org https://t.paypal.com/; "+
-				"script-src 'self' 'unsafe-inline' https://www.paypal.com/; "+
+				"script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.paypal.com/; "+
 				"frame-src 'self' https://www.paypal.com/ https://www.sandbox.paypal.com; "+
 				"style-src 'self' 'unsafe-inline' https://pro.fontawesome.com https://fonts.googleapis.com https://cdn.jsdelivr.net;")
 			c.Header("X-Frame-Options","SAMEORIGIN")
