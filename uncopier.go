@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/nanmu42/gzip"
@@ -18,7 +19,6 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"crypto/tls"
 	"os"
 	"strings"
 	"time"
@@ -53,8 +53,8 @@ func ReverseProxyIPFS() gin.HandlerFunc {
 // https://github.com/gin-gonic/gin/issues/1543
 func headersByRequestURI() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tls := os.Getenv("SERVER_TLS")
-		if tls == "https" {
+		serverTls := os.Getenv("SERVER_TLS")
+		if serverTls == "https" {
 			serverHost := os.Getenv("SERVER_HOST")
 			// https://blog.bracebin.com/achieving-perfect-ssl-labs-score-with-go
 			//'https://www.paypal.com/xoplatform
@@ -64,7 +64,7 @@ func headersByRequestURI() gin.HandlerFunc {
 				"default-src 'self' https://"+serverHost+"; "+
 				"font-src 'self' data: https://pro.fontawesome.com https://cdn.jsdelivr.net https://fonts.googleapis.com; " +
 				"connect-src 'self' https://www.google-analytics.com https://www.paypal.com/ https://www.sandbox.paypal.com ; "+
-				"img-src 'self' data: http://www.w3.org https://t.paypal.com/; "+
+				"img-src 'self' data: https://user-images.githubusercontent.com/ http://www.w3.org https://t.paypal.com/; "+
 				"script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.paypal.com/; "+
 				"frame-src 'self' https://www.paypal.com/ https://www.sandbox.paypal.com; "+
 				"style-src 'self' 'unsafe-inline' https://pro.fontawesome.com https://fonts.googleapis.com https://cdn.jsdelivr.net;")
@@ -210,8 +210,8 @@ func main() {
 			IdleTimeout:  120 * time.Second,
 			Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 				w.Header().Set("Connection", "close")
-				url := "https://" + req.Host + req.URL.String()
-				http.Redirect(w, req, url, http.StatusMovedPermanently)
+				reqUrl := "https://" + req.Host + req.URL.String()
+				http.Redirect(w, req, reqUrl, http.StatusMovedPermanently)
 			}),
 		}
 		go func() { log.Fatal(srv.ListenAndServe()) }( )
