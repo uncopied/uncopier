@@ -544,6 +544,8 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 	mailTo := MailTo()
 	// PDF document with all the certificates
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
+	// NB/ occasionally has https://github.com/wkhtmltopdf/wkhtmltopdf/issues/3933
+	// I should try : Issue got resolved after adding --javascript-delay 1000
 	if err != nil {
 		fmt.Println("wkhtmltopdf.NewPDFGenerator() failed ")
 		prepareFail(db, order, user, "wkhtmltopdf.NewPDFGenerator() failed ")
@@ -554,6 +556,8 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 	pdfg.Dpi.Set(300)
 	pdfg.Orientation.Set(wkhtmltopdf.OrientationPortrait)
 	pdfg.Grayscale.Set(false)
+
+
 	tallystickDocs := make([]TallystickDoc, 0)
 	filePath := "./public/doc/" + uuid + "/"
 	err = os.MkdirAll(filePath, os.ModePerm)
@@ -654,6 +658,10 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 		for i := 0; i < 4; i++ {
 			// issuer copy
 			page := wkhtmltopdf.NewPage(assetViewURLInternal)
+			// https://github.com/wkhtmltopdf/wkhtmltopdf/issues/3933
+			// Issue got resolved after adding --javascript-delay 1000
+			page.JavascriptDelay.Set(1000)
+
 			// Set options for this page
 			page.FooterRight.Set("[page]")
 			page.FooterFontSize.Set(10)
@@ -664,6 +672,7 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 	}
 	prepareStep(db, order, user, "PDF_CREATE",uuid)
 	// Create PDF document in internal buffer
+
 	err = pdfg.Create()
 	if err != nil {
 		fmt.Println("pdfg.Create() "+err.Error())
