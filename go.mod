@@ -6,12 +6,10 @@ require (
 	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.6.1
 	github.com/algorand/go-algorand-sdk v1.5.1
 	github.com/auyer/steganography v1.0.0
-	github.com/aviddiviner/gin-limit v0.0.0-20170918012823-43b5f79762c1 // indirect
 	github.com/corona10/goimagehash v1.0.3
 	github.com/gabriel-vasile/mimetype v1.1.2
 	github.com/gbrlsnchs/jwt/v3 v3.0.0
 	github.com/gin-contrib/cors v1.3.1
-	github.com/gin-contrib/gzip v0.0.3 // indirect
 	github.com/gin-contrib/static v0.0.0-20200916080430-d45d9a37d28e
 	github.com/gin-gonic/autotls v0.0.3
 	github.com/gin-gonic/gin v1.6.3
@@ -22,7 +20,7 @@ require (
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pkg/errors v0.8.1
 	github.com/qri-io/jsonschema v0.2.0
-	github.com/uncopied/tallystick v0.0.3
+	github.com/uncopied/chirograph v0.0.7
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
 	gorm.io/driver/postgres v1.0.5
 	gorm.io/gorm v1.20.8

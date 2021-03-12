@@ -68,7 +68,8 @@ func headersByRequestURI() gin.HandlerFunc {
 				"script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.paypal.com/; "+
 				"frame-src 'self' https://www.paypal.com/ https://www.sandbox.paypal.com; "+
 				"style-src 'self' 'unsafe-inline' https://pro.fontawesome.com https://fonts.googleapis.com https://cdn.jsdelivr.net;")
-			c.Header("X-Frame-Options","SAMEORIGIN")
+			// This below is no longer necessary, should be
+			// c.Header("X-Frame-Options","SAMEORIGIN")
 			// INLINE_RUNTIME_CHUNK=false
 		}
 		if strings.HasPrefix(c.Request.RequestURI, "/static/") ||

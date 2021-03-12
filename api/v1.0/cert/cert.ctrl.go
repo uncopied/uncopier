@@ -13,7 +13,7 @@ import (
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gin-gonic/gin"
-	"github.com/uncopied/tallystick"
+	"github.com/uncopied/chirograph"
 	"github.com/uncopied/uncopier/blockchain"
 	"github.com/uncopied/uncopier/certificates/view"
 	"github.com/uncopied/uncopier/database/dbmodel"
@@ -341,9 +341,9 @@ type CertPreview struct {
 	TaillyPreviewSVG string
 }
 
-func TallyStickPreview (first dbmodel.Asset ) string {
+func chirographPreview (first dbmodel.Asset ) string {
 	// create a tally stick for checkout
-	t := tallystick.Tallystick{
+	t := chirograph.Chirograph{
 		CertificateLabel:                first.CertificateLabel,
 		PrimaryLinkURL:                  PermanentCertificateURL(1),
 		SecondaryLinkURL:                PermanentCertificateURL(1),
@@ -357,11 +357,15 @@ func TallyStickPreview (first dbmodel.Asset ) string {
 		SecondaryIssuerVerifierTokenURL: PermanentCertificateTokenURL("certificate.SecondaryIssuerVerifierToken.TokenHash"),
 		MailToContentLeft:               MailTo(),
 		MailToContentRight:              MailTo(),
+		TopHelper: TopHelper(),
+		BottomHelper: BottomHelper(),
+		LeftHelper:LeftHelper(),
+		RightHelper:RightHelper(),
 	}
 	var buf bytes.Buffer
-	err := tallystick.DrawSVG(&t, &buf)
+	err := chirograph.DrawSVG(&t, &buf)
 	if err != nil {
-		fmt.Println("Tallystick.DrawSVG failed ")
+		fmt.Println("chirograph.DrawSVG failed ")
 		return ""
 	}
 	svg := string(buf.Bytes())
@@ -392,11 +396,11 @@ func preview(c *gin.Context) {
 		return
 	}
 	var first = asset.Assets[0]
-	tallystickPreviewSVG := TallyStickPreview(first)
+	chirographPreviewSVG := chirographPreview(first)
 	baseURL := view.ServerBaseURL()
 	preview := CertPreview{
 		DocPreviewURL:    baseURL.ServerBaseURLExternal+"/c/preview/"+asset.ObjectUUID,
-		TaillyPreviewSVG: tallystickPreviewSVG,
+		TaillyPreviewSVG: chirographPreviewSVG,
 	}
 	c.JSON(200, preview)
 }
@@ -431,11 +435,11 @@ func checkout(c *gin.Context) {
 		return
 	}
 	var first = asset.Assets[0]
-	tallystickPreviewSVG := TallyStickPreview(first)
+	chirographPreviewSVG := chirographPreview(first)
 	baseURL := view.ServerBaseURL()
 	preview := CertPreview {
 		DocPreviewURL:    baseURL.ServerBaseURLExternal+"/c/preview/"+asset.ObjectUUID,
-		TaillyPreviewSVG: tallystickPreviewSVG,
+		TaillyPreviewSVG: chirographPreviewSVG,
 	}
 	pricing := Pricing{
 		PriceDiy:  asset.EditionTotal * 1, // for now
@@ -518,7 +522,7 @@ func process(c *gin.Context) {
 	c.JSON(200, response)
 }
 
-type TallystickDoc struct {
+type chirographDoc struct {
 	CertificateLabel string
 	OrderUUID        string
 	Filename         string
@@ -558,7 +562,7 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 	pdfg.Grayscale.Set(false)
 
 
-	tallystickDocs := make([]TallystickDoc, 0)
+	chirographDocs := make([]chirographDoc, 0)
 	filePath := "./public/doc/" + uuid + "/"
 	err = os.MkdirAll(filePath, os.ModePerm)
 	if err != nil {
@@ -607,9 +611,9 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 		}
 		db.Create(&certificateIssuance)
 
-		prepareStep(db, order, user, "DRAW_TALLYSTICK", assetViewURLExternal)
-		// create a tally stick for checkout
-		t := tallystick.Tallystick{
+		prepareStep(db, order, user, "DRAW_chirograph", assetViewURLExternal)
+		// create a chirograph for checkout
+		t := chirograph.Chirograph{
 			CertificateLabel:                asset.CertificateLabel,
 			PrimaryLinkURL:                  PermanentCertificateURL(certificateIssuance.ID),
 			// TODO change this
@@ -624,24 +628,28 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 			SecondaryIssuerVerifierTokenURL: PermanentCertificateTokenURL(certificate.SecondaryIssuerVerifierToken.TokenHash),
 			MailToContentLeft:               mailTo,
 			MailToContentRight:              mailTo,
+			TopHelper: TopHelper(),
+			BottomHelper: BottomHelper(),
+			LeftHelper:LeftHelper(),
+			RightHelper:RightHelper(),
 		}
 		var buf bytes.Buffer
-		err = tallystick.DrawPDF(&t, &buf)
+		err = chirograph.DrawPDF(&t, &buf)
 		if err != nil {
-			fmt.Println("tallystick.DrawPDF(&t, &buf) "+err.Error())
-			prepareFail(db, order, user, "tallystick.DrawPDF(&t, &buf)"+err.Error())
+			fmt.Println("chirograph.DrawPDF(&t, &buf) "+err.Error())
+			prepareFail(db, order, user, "chirograph.DrawPDF(&t, &buf)"+err.Error())
 			return
 		}
-		tallystickDoc := TallystickDoc{
+		chirographDoc := chirographDoc{
 			OrderUUID:        uuid,
 			CertificateLabel: asset.CertificateLabel,
-			Filename:         "tallystick_" + uuid + "_" + strconv.Itoa(int(asset.ID)) + ".pdf",
+			Filename:         "chirograph_" + uuid + "_" + strconv.Itoa(int(asset.ID)) + ".pdf",
 		}
-		prepareStep(db, order, user, "SAVE_TALLYSTICK", assetViewURLExternal)
-		out, err := os.Create(filePath + tallystickDoc.Filename)
+		prepareStep(db, order, user, "SAVE_chirograph", assetViewURLExternal)
+		out, err := os.Create(filePath + chirographDoc.Filename)
 		if err != nil {
-			fmt.Println("os.Create(filePath + tallystickDoc.Filename) "+err.Error())
-			prepareFail(db, order, user, "os.Create(filePath + tallystickDoc.Filename) "+err.Error())
+			fmt.Println("os.Create(filePath + chirographDoc.Filename) "+err.Error())
+			prepareFail(db, order, user, "os.Create(filePath + chirographDoc.Filename) "+err.Error())
 			return
 		}
 		defer out.Close()
@@ -652,7 +660,7 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 			prepareFail(db, order, user, "out.Write(buf.Bytes()) "+err.Error())
 			return
 		}
-		tallystickDocs = append(tallystickDocs, tallystickDoc)
+		chirographDocs = append(chirographDocs, chirographDoc)
 		prepareStep(db, order, user, "APPEND_CERTIFICATE", assetViewURLExternal)
 		// make 4 copies
 		for i := 0; i < 4; i++ {
@@ -721,24 +729,24 @@ func prepare(db *gorm.DB, order dbmodel.Order, user dbmodel.User) {
 			return
 		}
 	}
-	for _, file := range tallystickDocs {
-		prepareStep(db, order, user, "ZIP_BUNDLE_ADD_TALLY",uuid+"/"+file.Filename)
+	for _, file := range chirographDocs {
+		prepareStep(db, order, user, "ZIP_BUNDLE_ADD_CHIROGRAPH",uuid+"/"+file.Filename)
 		f, err := w.Create(file.Filename)
 		if err != nil {
-			fmt.Println("for _, file := range tallystickDocs; w.Create(file.Filename) "+err.Error())
-			prepareFail(db, order, user, "for _, file := range tallystickDocs; w.Create(file.Filename)"+err.Error())
+			fmt.Println("for _, file := range chirographDocs; w.Create(file.Filename) "+err.Error())
+			prepareFail(db, order, user, "for _, file := range chirographDocs; w.Create(file.Filename)"+err.Error())
 			return
 		}
 		b, err := ioutil.ReadFile(filePath +file.Filename) // just pass the file name
 		if err != nil {
-			fmt.Println("for _, file := range tallystickDocs; ioutil.ReadFile(filePath +file.Filename) "+err.Error())
-			prepareFail(db, order, user, "for _, file := range tallystickDocs; ioutil.ReadFile(filePath +file.Filename) "+err.Error())
+			fmt.Println("for _, file := range chirographDocs; ioutil.ReadFile(filePath +file.Filename) "+err.Error())
+			prepareFail(db, order, user, "for _, file := range chirographDocs; ioutil.ReadFile(filePath +file.Filename) "+err.Error())
 			return
 		}
 		_, err = f.Write(b)
 		if err != nil {
-			fmt.Println("for _, file := range tallystickDocs; _, err = f.Write(b) "+err.Error())
-			prepareFail(db, order, user, "for _, file := range tallystickDocs; _, err = f.Write(b) "+err.Error())
+			fmt.Println("for _, file := range chirographDocs; _, err = f.Write(b) "+err.Error())
+			prepareFail(db, order, user, "for _, file := range chirographDocs; _, err = f.Write(b) "+err.Error())
 			return
 		}
 	}

@@ -21,4 +21,5 @@
 /certificates.pem
 /public/doc/
 /vendor/
-/.env.production
+*.production
+.env.production
