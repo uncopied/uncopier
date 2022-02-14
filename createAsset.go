@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-	transaction "github.com/algorand/go-algorand-sdk/future"
 	"github.com/algorand/go-algorand-sdk/client/algod"
 	"github.com/algorand/go-algorand-sdk/client/kmd"
+	transaction "github.com/algorand/go-algorand-sdk/future"
 	"github.com/joho/godotenv"
-	"os"
 )
 
 func main() {
@@ -17,13 +16,13 @@ func main() {
 		panic(err)
 	}
 
-	kmdAddress := os.Getenv("ALGORAND_KMDADDRESS")         // "http://localhost:7833"
-	kmdToken := os.Getenv("ALGORAND_KMDTOKEN")             //"206ba3f9ad1d83523fb2a303dd055cd99ce10c5be01e35ee88285fe51438f02a"
-	algodAddress := os.Getenv("ALGORAND_ALGODADDRESS")     //"http://localhost:8080"
-	algodToken := os.Getenv("ALGORAND_ALGODTOKEN")         // "da61ace80780af7b1c78456c7d1d2a511758a754d2c219e1a6b37c32763f5bfe"
-	walletName := os.Getenv("ALGORAND_WALLETNAME")         //"mylinuxwallet"
-	walletPassword := os.Getenv("ALGORAND_WALLETPASSWORD") // "password123"
-	accountAddr := os.Getenv("ALGORAND_ACCOUNTADDR")       //"C2MCKQYJCU4RNWCQVWWSWEHGPAD37BEMQTIMVD6XF36AUIPKOXWIZOO7ZE"
+	kmdAddress := "http://91.121.222.154:7833"
+	kmdToken := "f457576dea5d6fb59894e2d9fabeffec316fd81406a50e72704dff39da019eaa"
+	algodAddress := "http://91.121.222.154:8888"
+	algodToken := "3090f291739c0d3af6c5f53fa56bbd9f1fd90f400315c1473e572e85e37edf2e"
+	walletName := "uncopied_art"
+	walletPassword := "Ekj3M#KmUnco#Art"
+	accountAddr := "42K2TG6IVACAZSAPOQUZANFINN5DVJGIJLTVTREXAAACN4KUNMBJFD7JFI"
 
 	// Create a kmd client
 	kmdClient, err := kmd.MakeClient(kmdAddress, kmdToken)
@@ -46,7 +45,6 @@ func main() {
 		fmt.Printf("error listing wallets: %s\n", err)
 		return
 	}
-
 
 	// Find our wallet name in the list
 	var exampleWalletID string
@@ -71,17 +69,17 @@ func main() {
 	// Extract the wallet handle
 	exampleWalletHandleToken := initResponse.WalletHandleToken
 
-	defaultFrozen := false // whether user accounts will need to be unfrozen before transacting
-	totalIssuance := uint64(1) // total number of this asset in circulation
-	decimals := uint32(0) // hint to GUIs for interpreting base unit
-	reserve := accountAddr // specified address is considered the asset reserve (it has no special privileges, this is only informational)
-	freeze := accountAddr // specified address can freeze or unfreeze user asset holdings
-	clawback := accountAddr // specified address can revoke user asset holdings and send them to other addresses
-	manager := accountAddr // specified address can change reserve, freeze, clawback, and manager
-	unitName := "dummy-1" // used to display asset units to user
-	assetName := "Portrait of a Dummy (1/15)" // "friendly name" of asset
-	note := []byte("test asset create") // arbitrary data to be stored in the transaction; here, none is stored
-	assetURL := "https://uncopied.org/xEkMZj" // optional string pointing to a URL relating to the asset. 32 character length.
+	defaultFrozen := false                                  // whether user accounts will need to be unfrozen before transacting
+	totalIssuance := uint64(1)                              // total number of this asset in circulation
+	decimals := uint32(0)                                   // hint to GUIs for interpreting base unit
+	reserve := accountAddr                                  // specified address is considered the asset reserve (it has no special privileges, this is only informational)
+	freeze := accountAddr                                   // specified address can freeze or unfreeze user asset holdings
+	clawback := accountAddr                                 // specified address can revoke user asset holdings and send them to other addresses
+	manager := accountAddr                                  // specified address can change reserve, freeze, clawback, and manager
+	unitName := "dummy-1"                                   // used to display asset units to user
+	assetName := "Portrait of a Dummy (1/15)"               // "friendly name" of asset
+	note := []byte("test asset create")                     // arbitrary data to be stored in the transaction; here, none is stored
+	assetURL := "https://uncopied.org/xEkMZj"               // optional string pointing to a URL relating to the asset. 32 character length.
 	assetMetadataHash := "0bc777329a2919fd6fga96bace9a4779" // optional hash commitment of some sort relating to the asset. 32 character length.
 
 	// Get the suggested transaction parameters

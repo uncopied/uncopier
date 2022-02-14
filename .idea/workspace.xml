@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="54e4dffa-e567-46b4-90f9-fc00f68382d4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/destroyOldAssets.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.ctrl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/v1.0/cert/cert.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1.0/cert/cert.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/view.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/view.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uncopier.go" beforeDir="false" afterPath="$PROJECT_DIR$/uncopier.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/createAsset.go" beforeDir="false" afterPath="$PROJECT_DIR$/createAsset.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,12 +21,15 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" url="file://$PROJECT_DIR$/../../Go" />
+  <component name="GOROOT" url="file:///usr/local/go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="1lK8D8dnNV4GfcnrJQI6uiKvokp" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -41,9 +42,14 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="go.format.on.save.advertiser.fired" value="true" />
+    <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.import.settings.migrated" value="true" />
+    <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
     <property name="go.vendoring.notification.had.been.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../uncopied_art" />
+    <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -55,73 +61,73 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="D:\git\uncopier" />
       <recent name="D:\git\uncopier\upload" />
       <recent name="D:\git\uncopier\templates" />
       <recent name="D:\git\uncopier\certificates\verify" />
-      <recent name="D:\git\uncopier\certificates" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build uncopier.go">
-    <configuration name="go build html2pdf.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Build.go build destroyOldAssets.go">
+    <configuration name="go build createAsset.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/html2pdf.go" />
       <package value="github.com/uncopied/uncopier" />
       <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/createAsset.go" />
       <method v="2" />
     </configuration>
-    <configuration name="go build jsonTemplating.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+    <configuration name="go build destroyOldAssets.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/jsonTemplating.go" />
       <package value="github.com/uncopied/uncopier" />
       <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/destroyOldAssets.go" />
       <method v="2" />
     </configuration>
     <configuration name="go build proxyTest.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/proxyTest.go" />
       <package value="github.com/uncopied/uncopier" />
       <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/proxyTest.go" />
       <method v="2" />
     </configuration>
     <configuration name="go build uncopiedKeys.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/uncopiedKeys.go" />
       <package value="github.com/uncopied/uncopier" />
       <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/uncopiedKeys.go" />
       <method v="2" />
     </configuration>
     <configuration name="go build uncopier.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="uncopier" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/uncopier.go" />
       <package value="github.com/uncopied/uncopier" />
       <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/uncopier.go" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Go Build.go build html2pdf.go" />
-      <item itemvalue="Go Build.go build jsonTemplating.go" />
       <item itemvalue="Go Build.go build uncopiedKeys.go" />
       <item itemvalue="Go Build.go build uncopier.go" />
       <item itemvalue="Go Build.go build proxyTest.go" />
+      <item itemvalue="Go Build.go build destroyOldAssets.go" />
+      <item itemvalue="Go Build.go build createAsset.go" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build destroyOldAssets.go" />
+        <item itemvalue="Go Build.go build createAsset.go" />
         <item itemvalue="Go Build.go build uncopier.go" />
         <item itemvalue="Go Build.go build proxyTest.go" />
         <item itemvalue="Go Build.go build uncopiedKeys.go" />
-        <item itemvalue="Go Build.go build html2pdf.go" />
-        <item itemvalue="Go Build.go build jsonTemplating.go" />
       </list>
     </recent_temporary>
   </component>
@@ -139,9 +145,29 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/destroyOldAssets.go</url>
+          <line>185</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/destroyOldAssets.go</url>
+          <line>187</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/createAsset.go</url>
+          <line>107</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
